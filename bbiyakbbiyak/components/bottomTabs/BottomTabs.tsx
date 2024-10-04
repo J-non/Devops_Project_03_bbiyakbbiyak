@@ -3,6 +3,7 @@ import React from 'react'
 import Test from '../Test';
 import { GlobalTheme } from '../../constants/theme';
 import { Ionicons, Entypo } from '@expo/vector-icons'
+import Main from '../../screens/Main';
 
 
 const BottomTabs = () => {
@@ -17,7 +18,7 @@ const BottomTabs = () => {
         tabBarLabelStyle: { paddingBottom: 12, fontSize: 12, fontFamily: 'pretendard' },
         tabBarActiveTintColor: GlobalTheme.colors.accent500
       })}>
-        <BottomTabs.Screen name='test' component={Test}
+        <BottomTabs.Screen name='main' component={Main}
           options={{
             title: '삐약삐약',
             tabBarLabel: '홈',
