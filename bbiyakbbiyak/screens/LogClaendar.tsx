@@ -8,6 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { formatDate } from '../dateFormat/formatDate';
 import { useAtom } from 'jotai';
 import { selectedCalendarDateAtom } from '../store/selectedCalendarDateAtom';
+import { View } from 'react-native';
 
 
 const Stack = createNativeStackNavigator();
@@ -72,6 +73,7 @@ const LogClaendar = () => {
           [selectedDate.dateString]: { selected: true, marked: true, dotColor: true && 'red', disableTouchEvent: true },
         }}
       />
+      <View style={{ height: 12, backgroundColor: '#fff' }}></View>
       <CategoryTabs />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='medicineCalendar' component={CalendarTabs} initialParams={{ routeName: route.name }} />
