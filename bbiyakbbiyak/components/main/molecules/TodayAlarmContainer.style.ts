@@ -9,16 +9,16 @@ export const TodayAlarmContainerStyles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 18,
-    paddingTop: 20,
-    paddingBottom: 14,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    paddingTop: 24,
+    paddingBottom: 10,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
     backgroundColor: '#fff',
   },
   footer: {
-    height: 30,
+    height: 32,
     backgroundColor: '#fff',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   }
 });

@@ -3,61 +3,62 @@ import React, { LegacyRef, useEffect, useRef, useState } from 'react'
 import { Button, Pressable, Text, View } from 'react-native'
 import CategoryTabsStyles from './CategoryTabs.style';
 import { GlobalTheme } from '../../constants/theme';
+import CategoryButton from './CategoryButton';
 
 
 const CategoryTabs = () => {
   const navigation = useNavigation<any>();
   const route = useRoute();
 
-  const [category, setCategory] = useState('medicine');
 
-  const medicineButtonSelected = (selectedCategory: any) => () => {
-    setCategory(selectedCategory);
-    navigation.navigate(selectedCategory);
+  const [selectedCategory, setSelectedCategory] = useState('medicine');
+  const [calendarStr, setCalendarStr] = useState('')
+
+
+  const buttonSelectedHandler = (category: any) => () => {
+    setSelectedCategory(category);
+    navigation.navigate(category);
   }
+
+  useEffect(() => {
+    if (route.name === 'main') {
+      setCalendarStr('')
+    } else if (route.name === 'logCalendar') {
+      setCalendarStr('Calendar')
+    }
+  }, [route.name])
 
 
   return (
     <>
       <View style={CategoryTabsStyles.container}>
 
-        <View style={[CategoryTabsStyles.buttonContainer, category === 'medicine' && CategoryTabsStyles.buttonSelected]}>
-          <Pressable
-            style={CategoryTabsStyles.button}
-            onPress={medicineButtonSelected('medicine')}
-            android_ripple={{ color: GlobalTheme.colors.primary300, }}
-          >
-            <View style={CategoryTabsStyles.button}>
-              <Text style={CategoryTabsStyles.buttonText}>약</Text>
-            </View>
-          </Pressable>
-        </View>
+        <CategoryButton
+          buttonSelectedHandler={buttonSelectedHandler}
+          category={`medicine${calendarStr}`}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          routeName={route.name}
+          buttonText={'약'}
+        />
 
+        <CategoryButton
+          buttonSelectedHandler={buttonSelectedHandler}
+          category={`drink${calendarStr}`}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          routeName={route.name}
+          buttonText={'물, 음료'}
+        />
 
-        <View style={[CategoryTabsStyles.buttonContainer, category === 'drink' && CategoryTabsStyles.buttonSelected]}>
-          <Pressable
-            style={CategoryTabsStyles.button}
-            onPress={medicineButtonSelected('drink')}
-            android_ripple={{ color: GlobalTheme.colors.primary300, }}
-          >
-            <View style={CategoryTabsStyles.button}>
-              <Text style={CategoryTabsStyles.buttonText}>물, 음료</Text>
-            </View>
-          </Pressable>
-        </View>
-
-
-        <View style={[CategoryTabsStyles.buttonContainer, category === 'etc' && CategoryTabsStyles.buttonSelected]}>
-          <Pressable
-            style={CategoryTabsStyles.button}
-            onPress={medicineButtonSelected('etc')}
-            android_ripple={{ color: GlobalTheme.colors.primary300, }}
-          >
-            <View style={CategoryTabsStyles.button}>
-              <Text style={CategoryTabsStyles.buttonText}>기타</Text>
-            </View>
-          </Pressable>
-        </View>
+        <CategoryButton
+          buttonSelectedHandler={buttonSelectedHandler}
+          category={`etc${calendarStr}`}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          routeName={route.name}
+          buttonText={'기타'}
+        />
 
       </View >
     </>

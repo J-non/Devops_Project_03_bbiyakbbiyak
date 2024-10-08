@@ -4,6 +4,7 @@ import Test from '../Test';
 import { GlobalTheme } from '../../constants/theme';
 import { Ionicons, Entypo } from '@expo/vector-icons'
 import Main from '../../screens/Main';
+import LogClaendar from '../../screens/LogClaendar';
 
 
 const BottomTabs = () => {
@@ -29,7 +30,7 @@ const BottomTabs = () => {
           tabBarLabel: '알람',
           tabBarIcon: ({ color, size }) => <Ionicons name='alarm-outline' size={size} color={color} />
         }} />
-        <BottomTabs.Screen name='test3' component={Test} options={{
+        <BottomTabs.Screen name='logCalendar' component={LogClaendar} options={{
           title: '기록',
           tabBarLabel: '기록',
           tabBarIcon: ({ color, size }) => <Ionicons name='calendar-outline' size={size} color={color} />

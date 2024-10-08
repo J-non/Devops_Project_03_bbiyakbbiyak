@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import TodayAlarmContainer from "../molecules/TodayAlarmContainer";
 
 const Medicine = () => (
@@ -8,7 +9,7 @@ const Medicine = () => (
 
 const Drink = () => (
   <>
-    <TodayAlarmContainer title='????' />
+    <TodayAlarmContainer title='오늘 마셔야 할 것' />
   </>
 )
 
@@ -18,4 +19,12 @@ const Etc = () => (
   </>
 )
 
-export { Medicine, Drink, Etc }
+const CalendarTabs = ({ route: { params: { routeName } } }: any) => {
+  return (
+    <>
+      <TodayAlarmContainer routeName={routeName} />
+    </>
+  )
+}
+
+export { Medicine, Drink, Etc, CalendarTabs }

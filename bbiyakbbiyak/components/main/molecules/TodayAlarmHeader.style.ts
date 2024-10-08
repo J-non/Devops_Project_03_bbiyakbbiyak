@@ -20,13 +20,25 @@ export const TodayAlarmHeaderStyles = StyleSheet.create({
     fontFamily: 'pretendard-bold'
   },
   dateContainer: {
-    paddingBottom: 20
+    paddingBottom: 10
   },
-  date: {
+  dateText: {
     fontFamily: 'pretendard'
   },
-  days: {
+  dateTextOfCalendar: {
+    fontSize: 18,
+    fontFamily: 'pretendard-bold',
+    color: GlobalTheme.colors.accent500
+  },
+  daysText: {
+    fontFamily: 'pretendard',
     color: '#999'
+  },
+  daysTextOfCalendar: {
+    fontSize: 18,
+    fontFamily: 'pretendard-bold',
+    color: '#999',
+
   },
   countText: {
     color: '#999',

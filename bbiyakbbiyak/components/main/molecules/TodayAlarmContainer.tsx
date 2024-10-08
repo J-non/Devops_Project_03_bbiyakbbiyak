@@ -6,12 +6,15 @@ import TodayAlarmHeader from './TodayAlarmHeader'
 import { Ionicons } from '@expo/vector-icons'
 import { GlobalTheme } from '../../../constants/theme'
 import TodayAlarmList from './TodayAlarmList'
+import TodayAlarmEmpty from './TodayAlarmEmpty'
+import AlarmLogEmpty from '../../alarmLogCalendar/molecules/AlarmLogEmpty'
 
-const TodayAlarmContainer = ({ title }: any) => {
+const TodayAlarmContainer = ({ title, routeName }: any) => {
 
   const [allSpecifiedTakenByTime, setAllSpecifiedTakenByTime] = useState(false);
   const [specifiedTaken, setSpecifiedTaken] = useState(false);
 
+  // 모든 알람 완료 체크하는 상태변수 추가해야 함
 
 
   const allTakenHandler = () => {
@@ -35,7 +38,7 @@ const TodayAlarmContainer = ({ title }: any) => {
 
         style={TodayAlarmContainerStyles.container}
 
-        ListHeaderComponent={(<TodayAlarmHeader title={title} />)}
+        ListHeaderComponent={(<TodayAlarmHeader title={title} routeName={routeName} />)}
         ListHeaderComponentStyle={
           TodayAlarmContainerStyles.header
         }
@@ -47,7 +50,7 @@ const TodayAlarmContainer = ({ title }: any) => {
 
 
         // 알람이 없을 때
-        ListEmptyComponent={(<View><Text>asd</Text></View>)}
+        ListEmptyComponent={(title ? <TodayAlarmEmpty /> : <AlarmLogEmpty />)}
 
 
 

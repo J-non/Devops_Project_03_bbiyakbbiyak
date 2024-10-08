@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { GlobalTheme } from '../../../constants/theme';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { TodayAlarmDetailsStyles } from './TodayAlarmDetails.style';
 
-const TodayAlarmDetails = ({ item, allSpecifiedTakenByTime, count, setCount }: any) => {
+const TodayAlarmDetails = ({ item, itemsCount, allSpecifiedTakenByTime, count, setCount }: any) => {
   const [specifiedTaken, setSpecifiedTaken] = useState(false);
-
   const takenHandler = () => {
     setSpecifiedTaken(!specifiedTaken);
   }
@@ -23,7 +23,7 @@ const TodayAlarmDetails = ({ item, allSpecifiedTakenByTime, count, setCount }: a
   useEffect(() => {
     if (specifiedTaken) {
       setCount((count: any) => {
-        if (count === 5) return 5
+        if (count >= itemsCount) return itemsCount
         return count + 1
       })
     } else {
@@ -37,49 +37,32 @@ const TodayAlarmDetails = ({ item, allSpecifiedTakenByTime, count, setCount }: a
 
   return (
     <View style={
-      [{
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderRadius: 10,
-        borderColor: '#999',
-        // minWidth: 190,
-        height: 32,
-        marginBottom: 10,
-        overflow: 'hidden'
-      }, specifiedTaken && { borderColor: GlobalTheme.colors.primary500 }]
-
+      [
+        TodayAlarmDetailsStyles.rootContainer,
+        specifiedTaken && { borderColor: GlobalTheme.colors.primary500 }
+      ]
     }>
-      <Pressable style={{ flex: 1 }} onPress={takenHandler} >
-        <View style={
-          {
-            // flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            // minWidth: 190,
-            // maxWidth: 190,
-            height: 32,
-          }
-        }>
+      <Pressable style={TodayAlarmDetailsStyles.flex1} onPress={takenHandler} >
+        <View style={TodayAlarmDetailsStyles.innerContentContainer}>
 
-          <MaterialCommunityIcons name='pill' size={20} color={specifiedTaken ? GlobalTheme.colors.accent500 : '#999'} style={{
-            flex: 1,
-            paddingLeft: 10
-          }} />
+          <MaterialCommunityIcons
+            name='pill'
+            size={20}
+            color={specifiedTaken ? GlobalTheme.colors.accent500 : '#999'}
+            style={TodayAlarmDetailsStyles.iconPill} />
 
-          <View style={
-            { flex: 4 }
-          }>
-            <Text style={
-              {
-                color: specifiedTaken ? GlobalTheme.colors.accent500 : '#999'
-              }
-            }>{item.title}</Text>
+          <View style={TodayAlarmDetailsStyles.flex4}>
+            <Text style={{
+              color: specifiedTaken ? GlobalTheme.colors.accent500 : '#999'
+            }}>
+              {item.title}
+            </Text>
           </View>
 
-          <Ionicons name={specifiedTaken ? 'checkmark-circle' : 'checkmark-circle-outline'} size={20} color={specifiedTaken ? GlobalTheme.colors.accent500 : '#999'} style={
-            { flex: 1 }
-          } />
+          <Ionicons
+            name={specifiedTaken ? 'checkmark-circle' : 'checkmark-circle-outline'}
+            size={20} color={specifiedTaken ? GlobalTheme.colors.accent500 : '#999'}
+            style={TodayAlarmDetailsStyles.flex1} />
 
         </View>
       </Pressable>
