@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Pressable, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+import { Pressable, Text, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { CalendarHeaderStyles } from './CalendarHeader.style';
 import { useAtom } from 'jotai';

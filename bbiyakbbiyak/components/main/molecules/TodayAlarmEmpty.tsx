@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { Image, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { TodayAlarmEmptyStyles } from './TodayAlarmEmpty.style';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { GlobalTheme } from '../../../constants/theme';

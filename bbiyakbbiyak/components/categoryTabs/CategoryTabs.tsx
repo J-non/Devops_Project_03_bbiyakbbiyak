@@ -1,8 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
-import React, { LegacyRef, useEffect, useRef, useState } from 'react'
-import { Button, Pressable, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View } from 'react-native'
 import CategoryTabsStyles from './CategoryTabs.style';
-import { GlobalTheme } from '../../constants/theme';
 import CategoryButton from './CategoryButton';
 
 

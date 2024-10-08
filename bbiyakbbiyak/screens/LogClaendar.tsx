@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import CategoryTabs from '../components/categoryTabs/CategoryTabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Calendar, LocaleConfig } from 'react-native-calendars';

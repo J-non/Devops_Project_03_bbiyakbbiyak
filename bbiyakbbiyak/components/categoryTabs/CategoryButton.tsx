@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { CategoryButtonStyles } from './CategoryButton.style'
 import { GlobalTheme } from '../../constants/theme'
