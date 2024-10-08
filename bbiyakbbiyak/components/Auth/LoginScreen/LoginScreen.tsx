@@ -8,12 +8,12 @@ import {
   View,
 } from "react-native";
 import { styles } from "./LoginScreenStyle";
-import Button from "../UI/Button/Button";
-import CustomInput from "../UI/Input/CustomInput";
-import { GlobalTheme } from "../../constants/theme";
+import Header from "../../UI/Header/Header";
+import CustomInput from "../../UI/Input/CustomInput";
+import Button from "../../UI/Button/Button";
+import { GlobalTheme } from "../../../constants/theme";
+import { Valuetype, valueType } from "../../../constants/models";
 import AtagContent from "../AtagContent/AtagContent";
-import Header from "../UI/Header/Header";
-import { Valuetype, valueType } from "../../constants/models";
 
 const LoginScreen = () => {
   const dummyData = {

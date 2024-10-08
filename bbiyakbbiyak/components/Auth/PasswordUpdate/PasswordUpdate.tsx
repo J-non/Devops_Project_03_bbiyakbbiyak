@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
-import Header from "../UI/Header/Header";
-import CustomInput from "../UI/Input/CustomInput";
-import Button from "../UI/Button/Button";
-import { GlobalTheme } from "../../constants/theme";
-import { RootStackParamList } from "../../navigation/Navigation";
+import Header from "../../UI/Header/Header";
+import CustomInput from "../../UI/Input/CustomInput";
+import Button from "../../UI/Button/Button";
+import { GlobalTheme } from "../../../constants/theme";
+import { Valuetype, valueType } from "../../../constants/models";
+import { RootStackParamList } from "../../../navigation/Navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { styles } from "./PasswordUpdateStyle";
-import { Valuetype, valueType } from "../../constants/models";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 

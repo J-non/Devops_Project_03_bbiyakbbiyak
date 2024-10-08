@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
 import { styles } from "./TermConditionContainerStyle";
-import Button from "../UI/Button/Button";
-import { GlobalTheme } from "../../constants/theme";
-import Atag from "../UI/Atag/Atag";
 import TermCondition from "../termCondition/TermCondition";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../navigation/Navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../navigation/Navigation";
+import Button from "../../UI/Button/Button";
+import { GlobalTheme } from "../../../constants/theme";
+import Atag from "../../UI/Atag/Atag";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 

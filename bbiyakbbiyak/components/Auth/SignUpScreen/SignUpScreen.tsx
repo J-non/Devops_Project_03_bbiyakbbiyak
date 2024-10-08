@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { styles } from "./SignUpScreenStyle";
-import CustomInput from "../UI/Input/CustomInput";
 import TermConditionContainer from "../termConditionContainer/TermConditionContainer";
-import Alert from "../UI/Alert/Alert";
-import { Valuetype, valueType } from "../../constants/models";
-import Header from "../UI/Header/Header";
+import Header from "../../UI/Header/Header";
+import CustomInput from "../../UI/Input/CustomInput";
+import { Valuetype, valueType } from "../../../constants/models";
 
 const SignUpScreen = () => {
   // const [inputValue, setInputValues] = useState("");

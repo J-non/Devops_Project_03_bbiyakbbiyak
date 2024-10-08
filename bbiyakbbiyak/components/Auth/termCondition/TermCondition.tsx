@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Alert from "../UI/Alert/Alert";
 import { StyleProp, TextStyle } from "react-native";
 import TermConditionContent from "../termConditionContent/TermConditionContent";
+import Alert from "../../UI/Alert/Alert";
 
 interface TermConditionContentProps {
   textColor?: string;

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import Header from "../UI/Header/Header";
 import { styles } from "./FindMyIdStyle";
-import CustomInput from "../UI/Input/CustomInput";
-import Button from "../UI/Button/Button";
-import { GlobalTheme } from "../../constants/theme";
-import { Valuetype, valueType } from "../../constants/models";
+import { Valuetype, valueType } from "../../../constants/models";
+import Header from "../../UI/Header/Header";
+import CustomInput from "../../UI/Input/CustomInput";
+import Button from "../../UI/Button/Button";
+import { GlobalTheme } from "../../../constants/theme";
 
 const FindMyId = () => {
   const [findID, setFindID] = useState({

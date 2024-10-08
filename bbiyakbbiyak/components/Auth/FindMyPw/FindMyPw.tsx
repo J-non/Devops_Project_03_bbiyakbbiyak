@@ -1,14 +1,14 @@
 import React from "react";
 import { View } from "react-native";
-import Header from "../UI/Header/Header";
 import { styles } from "./FindMyPwStyle";
-import CustomInput from "../UI/Input/CustomInput";
-import Button from "../UI/Button/Button";
-import { GlobalTheme } from "../../constants/theme";
-import { RootStackParamList } from "../../navigation/Navigation";
+import Header from "../../UI/Header/Header";
+import CustomInput from "../../UI/Input/CustomInput";
+import Button from "../../UI/Button/Button";
+import { GlobalTheme } from "../../../constants/theme";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import { valueType } from "../../constants/models";
+import { RootStackParamList } from "../../../navigation/Navigation";
+import { valueType } from "../../../constants/models";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 

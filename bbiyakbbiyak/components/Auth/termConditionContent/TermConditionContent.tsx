@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./TermConditionContentStyle";
-import { GlobalTheme } from "../../constants/theme";
+import { GlobalTheme } from "../../../constants/theme";
 
 const TermConditionContent = ({
   isPressed,
