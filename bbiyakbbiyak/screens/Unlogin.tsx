@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
-import AuthScreen from "../components/AuthScreen/AuthScreen";
+import AuthScreen from "../components/Auth/AuthScreen/AuthScreen";
 
 const Unlogin = () => {
   return (

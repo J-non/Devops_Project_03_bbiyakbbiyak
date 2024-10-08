@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { styles } from "./SignUpScreenStyle";
 import TermConditionContainer from "../termConditionContainer/TermConditionContainer";
 import Header from "../../UI/Header/Header";
@@ -12,7 +12,7 @@ const SignUpScreen = () => {
   const [formValues, setFormValues] = useState({
     id: "",
     password: "",
-    nickname: "",
+    nickName: "",
   });
 
   function setValueState(inputType: Valuetype, value: string | any) {
@@ -54,11 +54,11 @@ const SignUpScreen = () => {
           placeholder="닉네임"
           style={styles.textInput}
           inputValue={setValueState}
-          inputType={valueType.nickname}
-          value={formValues.nickname}
+          inputType={valueType.nickName}
+          value={formValues.nickName}
           onChangeText={(text: any) => {
             if (setValueState) {
-              setValueState(valueType.nickname, text); // inputType을 사용하여 직접 전달
+              setValueState(valueType.nickName, text); // inputType을 사용하여 직접 전달
             }
           }}
         />

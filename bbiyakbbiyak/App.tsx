@@ -1,10 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { AuthCheck } from "./components/AuthCheck/AuthCheck";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthCheck } from "./components/Auth/AuthCheck/AuthCheck";
 
 export default function App() {
   const queryClient = new QueryClient({

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { StyleProp, TextStyle } from "react-native";
+import React from "react";
 import TermConditionContent from "../termConditionContent/TermConditionContent";
 import Alert from "../../UI/Alert/Alert";
 

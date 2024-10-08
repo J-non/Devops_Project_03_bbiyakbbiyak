@@ -4,10 +4,10 @@ import { useAtom } from "jotai";
 import { userAtom } from "../store/userAtom";
 import Unlogin from "../screens/Unlogin";
 import { Logined } from "../screens/Logined";
-import SignUpScreen from "../components/SignUpScreen/SignUpScreen";
-import FindMyId from "../components/FindMyId/FindMyId";
-import FindMyPw from "../components/FindMyPw/FindMyPw";
-import PasswordUpdate from "../components/PasswordUpdate/PasswordUpdate";
+import SignUpScreen from "../components/Auth/SignUpScreen/SignUpScreen";
+import FindMyId from "../components/Auth/FindMyId/FindMyId";
+import FindMyPw from "../components/Auth/FindMyPw/FindMyPw";
+import PasswordUpdate from "../components/Auth/PasswordUpdate/PasswordUpdate";
 
 export type RootStackParamList = {
   signupScreen: undefined;
@@ -16,6 +16,7 @@ export type RootStackParamList = {
   changePW: undefined;
   Unlogin: undefined;
   Logined: undefined;
+  test2: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, View } from "react-native";
 import { styles } from "./TermConditionContainerStyle";
 import TermCondition from "../termCondition/TermCondition";
@@ -8,6 +8,8 @@ import { RootStackParamList } from "../../../navigation/Navigation";
 import Button from "../../UI/Button/Button";
 import { GlobalTheme } from "../../../constants/theme";
 import Atag from "../../UI/Atag/Atag";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { signup } from "../../../api";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
@@ -36,12 +38,29 @@ const TermConditionContainer = ({
   const [alertText] = useState(["[필수]", "[선택]", "[선택]"]);
   const [alertColor] = useState(["red", "#eeeeee", "#eeeeee"]);
 
+  const mutation = useMutation({
+    mutationFn: (signUpValue) => signup(signUpValue),
+    onSuccess: (data) => {
+      Alert.alert("회원가입", data.data.message, [
+        {
+          text: "확인",
+          onPress: () => {
+            navigation.navigate("Unlogin");
+          },
+        },
+      ]);
+    },
+    onError: (error) => {
+      Alert.alert("에러 발생", error.message, [{ text: "확인" }]);
+    },
+  });
+
   const findPW = () => {
     navigation.navigate("findPW");
     formValues({
       id: "",
       password: "",
-      nickname: "",
+      nickName: "",
     });
     const newState = [false, false, false, false];
     setIsAgreed(newState);
@@ -76,19 +95,12 @@ const TermConditionContainer = ({
       return null;
     } else {
       // 유효성 검사 or 서버에 유저 가입 데이터 보내서 데이터 확인하기 있으면 재가입 없으면 바로 가입 진행
+      mutation.mutate(signUpValue);
       formValues({
         id: "",
         password: "",
-        nickname: "",
+        nickName: "",
       });
-      Alert.alert("회원가입", "회원가입이 완료되었습니다.", [
-        {
-          text: "확인",
-          onPress: () => {
-            navigation.navigate("Unlogin");
-          },
-        },
-      ]);
     }
   };
 
