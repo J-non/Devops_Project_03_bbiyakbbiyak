@@ -11,7 +11,11 @@ export function AuthCheck() {
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await AsyncStorage.getItem("token");
-      console.log(storedToken);
+      const storedUser = await AsyncStorage.getItem("@user");
+      // await AsyncStorage.removeItem("@user");
+      // await AsyncStorage.removeItem("token");
+      console.log(storedToken, storedUser, 111);
+      // console.log(2);
       if (storedToken) {
         setAuthCtx((prevState) => ({
           ...prevState,

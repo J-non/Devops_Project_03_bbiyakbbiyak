@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackParamList } from "../../../navigation/Navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+import { GoogleOAuth } from "../../../oauth/GoogleOAuth";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
@@ -129,12 +130,19 @@ const LoginScreen = () => {
           </Button>
         </View>
         <View style={styles.imageContainer}>
-          <TouchableOpacity style={styles.image} activeOpacity={0.6}>
+          {/* <TouchableOpacity
+            style={styles.image}
+            activeOpacity={0.6}
+            onPress={() => {
+              promptAsync();
+            }}
+          >
             <Image
               resizeMode={"contain"}
               source={require("../../../assets/images/smallGoogle.png")}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <GoogleOAuth />
           <AtagContent />
         </View>
       </View>

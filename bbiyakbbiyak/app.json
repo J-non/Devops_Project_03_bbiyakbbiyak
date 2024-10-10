@@ -6,13 +6,16 @@
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "userInterfaceStyle": "light",
+    "platforms": ["ios", "android"],
+    "scheme": "bbiyakbbiyak",
     "splash": {
       "image": "./assets/images/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffdf66"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bbiyakbbiyak.test"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,6 +27,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": ["expo-font"],
+    "extra": {
+      "eas": {
+        "projectId": "7481e918-4b54-437a-9dfb-224b6380ba05"
+      }
+    }
   }
 }

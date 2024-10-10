@@ -9,9 +9,6 @@ const Stack = createNativeStackNavigator();
 export function Logined() {
   return (
     <>
-      {/* <View style={{ flex: 1, justifyContent: "center" }}>
-        <Text>여기임?</Text>
-      </View> */}
       <Stack.Navigator>
         <Stack.Screen
           name="BottomTabs"
