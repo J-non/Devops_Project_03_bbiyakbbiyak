@@ -8,6 +8,7 @@ import BottomTabs from './components/bottomTabs/BottomTabs';
 import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
+import ManageAlarm from './screens/ManageAlarm';
 
 
 const Stack = createNativeStackNavigator();
@@ -43,6 +44,8 @@ export default function App() {
         <Stack.Navigator screenOptions={{ title: '' }}>
           <Stack.Screen name='BottomTabs' component={BottomTabs} options={{ headerShown: false, }} />
           <Stack.Screen name='test2' component={Test} options={{ headerShown: false, presentation: 'modal' }} />
+
+          <Stack.Screen name='ManageAlarm' component={ManageAlarm} options={{}} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
