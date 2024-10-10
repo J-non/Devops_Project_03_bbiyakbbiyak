@@ -25,7 +25,7 @@ LocaleConfig.defaultLocale = 'ko';
 
 
 
-const LogClaendar = () => {
+const LogCalendar = () => {
   const route = useRoute();
   const navigation = useNavigation<any>();
 
@@ -84,4 +84,4 @@ const LogClaendar = () => {
   )
 }
 
-export default LogClaendar
+export default LogCalendar
