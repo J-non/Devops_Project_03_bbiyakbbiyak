@@ -6,6 +6,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 import { JwtModule } from '@nestjs/jwt';
 import { AlarmLogsModule } from './alarm-logs/alarm-logs.module';
+import { NotificationModule } from './notification/notification.module';
 
 
 @Module({
@@ -22,13 +23,14 @@ import { AlarmLogsModule } from './alarm-logs/alarm-logs.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadModels: true,
-      synchronize: true
+      synchronize: true,
     }),
     JwtModule.register({
       secret: process.env.JWT_KEY,
       signOptions: { expiresIn: '24h' }
     }),
     AlarmLogsModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -45,7 +45,7 @@ export default OneAlarm
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 16,
+        marginBottom: 16,
         paddingHorizontal: 12,
         paddingBottom: 12,
         backgroundColor: '#fff',

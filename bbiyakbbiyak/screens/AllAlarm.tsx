@@ -35,6 +35,7 @@ const AllAlarm = () => {
         <Text style={alarmCount === 10 ? styles.alertText : styles.normalText}>등록된 알람이 {alarmCount}/10 개 있어요</Text>
       </View>
       <FlatList
+        style={styles.flatList}
         data={alarms} // 데이터 배열
         keyExtractor={(el) => { return el.id.toString() }}
         renderItem={renderAlarm} />
@@ -49,6 +50,8 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingTop: 16,
+    gap: 16,
+    flex: 1
   },
   topBar: {
     paddingVertical: 16,
@@ -62,7 +65,10 @@ const styles = StyleSheet.create({
   },
   normalText: {
     fontFamily: 'pretendard'
-  }
+  },
+  flatList: {
+    flex: 1,
+  },
 })
 
 
