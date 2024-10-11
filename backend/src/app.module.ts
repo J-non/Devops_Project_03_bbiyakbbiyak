@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 import { JwtModule } from '@nestjs/jwt';
+import { AlarmLogsModule } from './alarm-logs/alarm-logs.module';
 
 
 @Module({
@@ -27,6 +28,7 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_KEY,
       signOptions: { expiresIn: '24h' }
     }),
+    AlarmLogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

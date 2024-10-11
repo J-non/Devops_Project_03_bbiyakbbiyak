@@ -1,4 +1,12 @@
-export const formatDate = (date: Date) => {
+interface IDateForm {
+  dateString: string,
+  day: number,
+  month: number,
+  timestamp: number,
+  year: number
+}
+
+export const formatDate = (date: Date): IDateForm => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1; // getMonth()는 0부터 시작하므로 +1 필요
   const day = date.getDate();
