@@ -14,7 +14,6 @@ import { JwtModule } from '@nestjs/jwt';
       envFilePath: `.env.${process.env.NODE_ENV}`
     }),
     SequelizeModule.forRoot({
-      // dialect: process.env.DB_DIALECT as Dialect,
       dialect: process.env.DB_DIALECT as Dialect,
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
