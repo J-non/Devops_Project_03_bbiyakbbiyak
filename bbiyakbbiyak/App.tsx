@@ -1,10 +1,14 @@
 import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { useEffect } from "react";
-import * as SplashScreen from "expo-splash-screen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
+import { useEffect, useState } from "react";
+import * as SplashScreen from "expo-splash-screen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthCheck } from "./components/Auth/AuthCheck/AuthCheck";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const queryClient = new QueryClient({
@@ -44,6 +48,7 @@ export default function App() {
           <AuthCheck />
         </NavigationContainer>
       </QueryClientProvider>
+      {/* <Stack.Screen name='ManageAlarm' component={ManageAlarm} options={{}} /> */}
     </>
   );
 }
