@@ -15,7 +15,6 @@ export function AuthCheck() {
       // await AsyncStorage.removeItem("@user");
       // await AsyncStorage.removeItem("token");
       console.log(storedToken, storedUser, 111);
-      // console.log(2);
       if (storedToken) {
         setAuthCtx((prevState) => ({
           ...prevState,

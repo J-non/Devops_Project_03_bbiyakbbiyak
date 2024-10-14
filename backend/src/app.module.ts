@@ -1,34 +1,32 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LoginModule } from './login/login.module';
+import { SignupModule } from './signup/signup.module';
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Dialect } from 'sequelize';
-import { JwtModule } from '@nestjs/jwt';
-
+import { LoginService } from './login/login.service';
+import { APP_FILTER } from '@nestjs/core';
+import { ExceptionHandler } from './Exception/ExceptionHandler';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`
-    }),
+    LoginModule,
+    SignupModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     SequelizeModule.forRoot({
-      dialect: process.env.DB_DIALECT as Dialect,
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      dialect: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'test',
       autoLoadModels: true,
-      synchronize: true
-    }),
-    JwtModule.register({
-      secret: process.env.JWT_KEY,
-      signOptions: { expiresIn: '24h' }
+      synchronize: true,
+      sync: { force: false },
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ExceptionHandler],
 })
-export class AppModule { }
+export class AppModule {}

@@ -13,3 +13,5 @@ export const userAtom = atom<User>({
   authenticate: (token: string) => {},
   logout: () => {},
 });
+
+export const userUpdate = atom();

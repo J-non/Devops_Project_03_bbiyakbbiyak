@@ -10,6 +10,8 @@ interface PasswordInputProps {
   setFormValues: any;
   styles: customStyle;
   isLoginScreen: boolean;
+  placeholder: string;
+  valueType: "password" | "email" | "userName" | "rePassword" | "phone";
 }
 
 interface customStyle {
@@ -22,6 +24,8 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   setFormValues,
   styles,
   isLoginScreen,
+  placeholder,
+  valueType,
 }) => {
   const [isPressed, setIsPressed] = useState(true);
   const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
@@ -38,13 +42,13 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
     <>
       <CustomInput
         style={styles.textInput}
-        placeholder="비밀번호"
+        placeholder={placeholder}
         inputValue={setFormValues}
-        inputType={valueType.password}
+        inputType={valueType}
         value={password}
         secureTextEntry={isPressed}
         onChangeText={(text: any) => {
-          setValueState(valueType.password, text);
+          setValueState(valueType, text);
         }}
         children={
           <Ionicons

@@ -4,20 +4,21 @@ import { styles } from "./SignUpFormStyle";
 import EmailVerification from "../EmailVerification/EmailVerification";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import OtherInputs from "../OtherInput/OtherInput";
+import { valueType } from "../../../constants/models";
 
 interface SignUpFormProps {
   formValues: {
     email: string;
     password: string;
     userName: string;
-    phoneNum: string;
+    phone: string;
   };
   setFormValues: React.Dispatch<
     React.SetStateAction<{
       email: string;
       password: string;
       userName: string;
-      phoneNum: string;
+      phone: string;
     }>
   >;
   isEmailSent: boolean;
@@ -39,8 +40,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   const [inputAuthCode, setInputAuthCode] = useState("");
   const [serverAuthCode, setServerAuthCode] = useState("");
 
-  console.log(serverAuthCode);
-
   return (
     <View style={{ width: "100%", alignItems: "center" }}>
       <EmailVerification
@@ -60,6 +59,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       />
       <PasswordInput
         styles={styles}
+        placeholder="비밀번호"
+        valueType={valueType.password}
         password={formValues.password}
         setFormValues={setFormValues}
         isLoginScreen={isLoginScreen}

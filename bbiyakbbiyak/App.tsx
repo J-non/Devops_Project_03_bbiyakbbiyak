@@ -1,14 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { GlobalTheme } from "./constants/theme";
-import Test from "./components/Test";
-import BottomTabs from "./components/bottomTabs/BottomTabs";
 import { useFonts } from "expo-font";
 import { useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import ManageAlarm from "./screens/ManageAlarm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthCheck } from "./components/Auth/AuthCheck/AuthCheck";
 

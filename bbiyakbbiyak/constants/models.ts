@@ -5,7 +5,7 @@ export const valueType = {
   password: "password",
   userName: "userName",
   rePassword: "rePassword",
-  phoneNum: "phoneNum",
+  phone: "phone",
 } as const;
 
 export interface RegistrationData {

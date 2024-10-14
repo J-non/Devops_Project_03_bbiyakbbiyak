@@ -2,10 +2,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
-import { makeRedirectUri } from "expo-auth-session";
+import { Alert, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useAtom } from "jotai";
 import { userAtom } from "../store/userAtom";
+import { useMutation } from "@tanstack/react-query";
+import { signupGoogle } from "../api";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -13,6 +14,17 @@ export const GoogleOAuth = () => {
   const [googleUserInfo, setGoogleUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useAtom(userAtom);
+
+  const mutation = useMutation({
+    mutationFn: (data) => signupGoogle(data),
+    onSuccess: (data) => {
+      data.isAlreadyUser
+        ? null
+        : Alert.alert("회원가입 완료", "회원가입 되셨습니다.", [
+            { text: "확인" },
+          ]);
+    },
+  });
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId:
@@ -55,9 +67,10 @@ export const GoogleOAuth = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      await AsyncStorage.setItem("token", token);
       // 서버에 구글 유저 정보 보내서 저장하기~~~
       const userInfoResponse = await response.json();
+      mutation.mutate(userInfoResponse);
+      await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("@user", JSON.stringify(userInfoResponse));
       setGoogleUserInfo(userInfoResponse);
       setUser((prev) => ({

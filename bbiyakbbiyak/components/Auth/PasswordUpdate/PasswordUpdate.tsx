@@ -7,33 +7,60 @@ import { GlobalTheme } from "../../../constants/theme";
 import { Valuetype, valueType } from "../../../constants/models";
 import { RootStackParamList } from "../../../navigation/Navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import { styles } from "./PasswordUpdateStyle";
+import { useMutation } from "@tanstack/react-query";
+import { updatePW } from "../../../api";
+import PasswordInput from "../PasswordInput/PasswordInput";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
-const PasswordUpdate = () => {
+type ChangePWScreenProps = {
+  route: RouteProp<RootStackParamList, "changePW">; // 파라미터 타입 정의
+};
+
+const PasswordUpdate: React.FC<ChangePWScreenProps> = ({ route }) => {
+  const navigation = useNavigation<NavigationProps>();
   const [updatePassword, setUpdatePassword] = useState({
     password: "",
     rePassword: "",
   });
+  const [isLoginScreen] = useState(true);
 
-  const navigation = useNavigation<NavigationProps>();
+  const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => updatePW(data),
+    onSuccess: (data) => {
+      Alert.alert("비밀번호 변경", data.message, [
+        {
+          text: "확인",
+          onPress: () => {
+            navigation.navigate("Unlogin");
+            setUpdatePassword({ password: "", rePassword: "" });
+          },
+        },
+      ]);
+    },
+  });
 
   function Updated() {
-    Alert.alert("비밀번호 변경", "비밀번호 변경이 완료 되었습니다.", [
-      {
-        text: "확인",
-        onPress: () => {
-          navigation.navigate("Unlogin");
-        },
-      },
-    ]);
+    const dataToSend = { update: updatePassword, param: route.params.data };
+    if (
+      !regPassword.test(updatePassword.password) ||
+      !regPassword.test(updatePassword.rePassword)
+    )
+      return Alert.alert("변경 실패", "비밀번호 양식을 맞춰주세요", [
+        { text: "확인" },
+      ]);
+    if (updatePassword.password !== updatePassword.rePassword)
+      return Alert.alert("변경 실패", "비밀번호를 확인해주세요", [
+        { text: "확인" },
+      ]);
+    mutation.mutate(dataToSend);
   }
 
-  function setValueState(inputType: Valuetype, value: string | any) {
-    setUpdatePassword((prev) => ({ ...prev, [inputType]: value }));
-  }
+  const style = { textInput: styles.textInput, alert: styles.alert };
   return (
     <View style={styles.container}>
       <View style={styles.changePWcontainer}>
@@ -41,29 +68,21 @@ const PasswordUpdate = () => {
           <Header title="비밀번호변경" />
         </View>
         <View style={styles.PwSearch}>
-          <CustomInput
-            style={styles.inputStyle}
+          <PasswordInput
+            styles={style}
             placeholder="비밀번호"
-            inputValue={setValueState}
-            inputType={updatePassword.password}
-            value={updatePassword.password}
-            onChangeText={(text: any) => {
-              if (setValueState) {
-                setValueState(valueType.password, text); // inputType을 사용하여 직접 전달
-              }
-            }}
+            valueType={valueType.password}
+            password={updatePassword.password}
+            setFormValues={setUpdatePassword}
+            isLoginScreen={isLoginScreen}
           />
-          <CustomInput
-            style={styles.inputStyle}
-            placeholder="비밀번호확인"
-            inputValue={setValueState}
-            inputType={valueType.rePassword}
-            value={updatePassword.rePassword}
-            onChangeText={(text: any) => {
-              if (setValueState) {
-                setValueState(valueType.rePassword, text); // inputType을 사용하여 직접 전달
-              }
-            }}
+          <PasswordInput
+            styles={style}
+            placeholder="비밀번호 확인"
+            valueType={valueType.rePassword}
+            password={updatePassword.rePassword}
+            setFormValues={setUpdatePassword}
+            isLoginScreen={isLoginScreen}
           />
         </View>
         <View style={styles.buttonContainer}>

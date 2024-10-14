@@ -22,10 +22,6 @@ type NavigationProps = StackNavigationProp<RootStackParamList>;
 
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationProps>();
-  const dummyData = {
-    id: "test",
-    pw: "test",
-  };
 
   const [isLoginScreen, setIsLoginScreen] = useState(false);
 
@@ -40,7 +36,7 @@ const LoginScreen = () => {
   const mutation = useMutation({
     mutationFn: (stateValue: any) => loginAPI(stateValue),
     onSuccess: async (_data) => {
-      const { data, message } = _data; // 데이터 구조분해 할당
+      const { data, message, isAccept } = _data; // 데이터 구조분해 할당
       const { access_token } = data; // 토큰 값
       Alert.alert("로그인", message, [{ text: "확인" }]);
       await AsyncStorage.setItem("token", access_token);
@@ -71,22 +67,15 @@ const LoginScreen = () => {
         password: "",
       });
     },
+    onError: (error) => {
+      Alert.alert("로그인 실패", error.message, [{ text: "확인" }]);
+    },
   });
   function handleLogin() {
     console.log("ID:", stateValue.email);
     console.log("Password:", stateValue.password);
     // dummyData 나중에 서버에서 응답 받아서 응답받은 데이터로 바꾸기
-
-    if (
-      stateValue.email !== dummyData.id &&
-      stateValue.password !== dummyData.pw
-    ) {
-      Alert.alert("로그인", "아이디 또는 비밀번호를 확인해주세요", [
-        { text: "확인" },
-      ]);
-    } else {
-      mutation.mutate(stateValue);
-    }
+    mutation.mutate(stateValue);
   }
 
   function setValueState(inputType: Valuetype, value: string | any) {
@@ -116,7 +105,9 @@ const LoginScreen = () => {
             }}
           />
           <PasswordInput
+            placeholder="비밀번호"
             styles={style}
+            valueType={valueType.password}
             password={stateValue.password}
             setFormValues={setStateValue}
             isLoginScreen={isLoginScreen}
