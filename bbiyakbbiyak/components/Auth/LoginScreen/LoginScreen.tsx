@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Alert, Image, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, View } from "react-native";
 import { styles } from "./LoginScreenStyle";
 import Header from "../../UI/Header/Header";
 import CustomInput from "../../UI/Input/CustomInput";
@@ -16,6 +16,7 @@ import { RootStackParamList } from "../../../navigation/Navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { GoogleOAuth } from "../../../oauth/GoogleOAuth";
+import PasswordInput from "../PasswordInput/PasswordInput";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
@@ -26,10 +27,13 @@ const LoginScreen = () => {
     pw: "test",
   };
 
+  const [isLoginScreen, setIsLoginScreen] = useState(false);
+
   const [stateValue, setStateValue] = useState({
-    id: "",
+    email: "",
     password: "",
   });
+
   const [user, setUser] = useAtom(userAtom);
 
   // 로그인 후 토큰 기기에 저장
@@ -63,18 +67,18 @@ const LoginScreen = () => {
       }));
 
       setStateValue({
-        id: "",
+        email: "",
         password: "",
       });
     },
   });
   function handleLogin() {
-    console.log("ID:", stateValue.id);
+    console.log("ID:", stateValue.email);
     console.log("Password:", stateValue.password);
     // dummyData 나중에 서버에서 응답 받아서 응답받은 데이터로 바꾸기
 
     if (
-      stateValue.id !== dummyData.id &&
+      stateValue.email !== dummyData.id &&
       stateValue.password !== dummyData.pw
     ) {
       Alert.alert("로그인", "아이디 또는 비밀번호를 확인해주세요", [
@@ -89,6 +93,8 @@ const LoginScreen = () => {
     setStateValue((prev) => ({ ...prev, [inputType]: value }));
   }
 
+  const style = { textInput: styles.textInput, alert: styles.alert };
+
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -101,25 +107,19 @@ const LoginScreen = () => {
             style={styles.textInput}
             placeholder="아이디"
             inputValue={setValueState}
-            inputType={valueType.id}
-            value={stateValue.id}
+            inputType={valueType.email}
+            value={stateValue.email}
             onChangeText={(text: any) => {
               if (setValueState) {
-                setValueState(valueType.id, text); // inputType을 사용하여 직접 전달
+                setValueState(valueType.email, text); // inputType을 사용하여 직접 전달
               }
             }}
           />
-          <CustomInput
-            style={styles.textInput}
-            placeholder="비밀번호"
-            inputValue={setValueState}
-            inputType={valueType.password}
-            value={stateValue.password}
-            onChangeText={(text: any) => {
-              if (setValueState) {
-                setValueState(valueType.password, text); // inputType을 사용하여 직접 전달
-              }
-            }}
+          <PasswordInput
+            styles={style}
+            password={stateValue.password}
+            setFormValues={setStateValue}
+            isLoginScreen={isLoginScreen}
           />
           <Button
             buttonContainerStyle={styles.buttonStyle}
@@ -130,18 +130,6 @@ const LoginScreen = () => {
           </Button>
         </View>
         <View style={styles.imageContainer}>
-          {/* <TouchableOpacity
-            style={styles.image}
-            activeOpacity={0.6}
-            onPress={() => {
-              promptAsync();
-            }}
-          >
-            <Image
-              resizeMode={"contain"}
-              source={require("../../../assets/images/smallGoogle.png")}
-            />
-          </TouchableOpacity> */}
           <GoogleOAuth />
           <AtagContent />
         </View>

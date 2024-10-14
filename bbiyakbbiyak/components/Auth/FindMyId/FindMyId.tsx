@@ -30,7 +30,7 @@ const FindMyId = () => {
           value={findID.id}
           onChangeText={(text: any) => {
             if (setValueState) {
-              setValueState(valueType.id, text); // inputType을 사용하여 직접 전달
+              setValueState(valueType.email, text); // inputType을 사용하여 직접 전달
             }
           }}
         />

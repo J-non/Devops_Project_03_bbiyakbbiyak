@@ -7,12 +7,11 @@ export const styles = StyleSheet.create({
     minWidth: 300,
     minHeight: 300,
     zIndex: 2,
-    paddingHorizontal: 16,
     alignItems: "center",
     position: "absolute",
     top: 0,
     left: 0,
-    transform: [{ translateY: 300 }, { translateX: 20 }],
+    transform: [{ translateY: 400 }, { translateX: 20 }],
   },
   button: {
     overflow: "hidden",

@@ -16,9 +16,17 @@ type NavigationProps = StackNavigationProp<RootStackParamList>;
 const TermConditionContainer = ({
   formValues,
   signUpValue,
+  isEmailSent,
+  isCodeVerified,
+  setIsCodeVerified,
+  setIsEmailSent,
 }: {
   signUpValue: any;
   formValues: any;
+  isEmailSent: boolean;
+  isCodeVerified: boolean;
+  setIsCodeVerified: any;
+  setIsEmailSent: any;
 }) => {
   const navigation = useNavigation<NavigationProps>();
 
@@ -41,7 +49,7 @@ const TermConditionContainer = ({
   const mutation = useMutation({
     mutationFn: (signUpValue) => signup(signUpValue),
     onSuccess: (data) => {
-      Alert.alert("회원가입", data.data.message, [
+      Alert.alert("회원가입", data.data, [
         {
           text: "확인",
           onPress: () => {
@@ -58,9 +66,10 @@ const TermConditionContainer = ({
   const findPW = () => {
     navigation.navigate("findPW");
     formValues({
-      id: "",
+      email: "",
       password: "",
-      nickName: "",
+      userName: "",
+      phoneNum: "",
     });
     const newState = [false, false, false, false];
     setIsAgreed(newState);
@@ -93,13 +102,24 @@ const TermConditionContainer = ({
     if (isAgreed[0] === false) {
       Alert.alert("약관 동의", "이용약관 동의를 해주세요.", [{ text: "확인" }]);
       return null;
+    } else if (isEmailSent === false) {
+      Alert.alert("회원가입 실패", "이메일 인증을 해주세요.", [
+        { text: "확인" },
+      ]);
+    } else if (isCodeVerified === false) {
+      Alert.alert("인증 실패", "인증 코드가 일치하지 않습니다.", [
+        { text: "확인" },
+      ]);
     } else {
       // 유효성 검사 or 서버에 유저 가입 데이터 보내서 데이터 확인하기 있으면 재가입 없으면 바로 가입 진행
       mutation.mutate(signUpValue);
+      setIsEmailSent(false);
+      setIsCodeVerified(false);
       formValues({
-        id: "",
+        email: "",
         password: "",
-        nickName: "",
+        userName: "",
+        phoneNum: "",
       });
     }
   };

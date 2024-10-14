@@ -28,10 +28,6 @@ export const GoogleOAuth = () => {
   }, [response]);
 
   const handleSignInWithGoogle = async () => {
-    // await AsyncStorage.removeItem("@user");
-    // await AsyncStorage.removeItem("token");
-    // const token = await AsyncStorage.getItem("token");
-    // // console.log(token);
     if (loading) return;
     const user = await AsyncStorage.getItem("@user");
 
@@ -60,6 +56,7 @@ export const GoogleOAuth = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       await AsyncStorage.setItem("token", token);
+      // 서버에 구글 유저 정보 보내서 저장하기~~~
       const userInfoResponse = await response.json();
       await AsyncStorage.setItem("@user", JSON.stringify(userInfoResponse));
       setGoogleUserInfo(userInfoResponse);

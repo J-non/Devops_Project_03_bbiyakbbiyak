@@ -1,24 +1,32 @@
 import React from "react";
-import { styles } from "./Input";
-import { StyleProp, TextInput, TextStyle } from "react-native";
-import { valueType, Valuetype } from "../../../constants/models";
+import { TextInput, View, StyleSheet } from "react-native";
 
-const CustomInput: React.FC<any> = (props: {}) => {
+const CustomInput: React.FC<any> = (props: any) => {
+  const { children, style, ...restProps } = props;
   return (
-    <>
-      <TextInput {...props} />
-    </>
+    <View style={[styles.container, style]}>
+      <TextInput {...restProps} style={styles.input} />
+      {children && <View style={styles.test}>{children}</View>}
+    </View>
   );
 };
 
-export default CustomInput;
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    backgroundColor: "#eeeeee",
+    flexDirection: "row",
+  },
+  input: {
+    width: "90%",
+    padding: 10,
+    borderColor: "#ccc",
+  },
+  test: {
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "right",
+  },
+});
 
-// style={style}
-// placeholder={placeholder}
-// value={value}
-// typ
-// onChangeText={(text) => {
-//   if (inputValue) {
-//     inputValue(inputType, text); // inputType을 사용하여 직접 전달
-//   }
-// }}
+export default CustomInput;

@@ -1,73 +1,51 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { styles } from "./SignUpScreenStyle";
 import TermConditionContainer from "../termConditionContainer/TermConditionContainer";
 import Header from "../../UI/Header/Header";
-import CustomInput from "../../UI/Input/CustomInput";
-import { Valuetype, valueType } from "../../../constants/models";
+import SignUpForm from "../SignUpForm/SingUpForm";
 
 const SignUpScreen = () => {
-  // const [inputValue, setInputValues] = useState("");
-
+  const [isEmailSent, setIsEmailSent] = useState(false); // 메일 전송이 갔는지 안갔는지에 대한 boolean
+  const [isCodeVerified, setIsCodeVerified] = useState(false); // 유저가 인증코드 확인을 받았는지
   const [formValues, setFormValues] = useState({
-    id: "",
+    email: "",
     password: "",
-    nickName: "",
+    userName: "",
+    phoneNum: "",
   });
 
-  function setValueState(inputType: Valuetype, value: string | any) {
-    setFormValues((prev) => ({ ...prev, [inputType]: value }));
-  }
-
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Header title="회원가입" />
-        <CustomInput
-          placeholder="이메일"
-          style={styles.textInput}
-          inputValue={setValueState}
-          inputType={valueType.id}
-          value={formValues.id}
-          onChangeText={(text: any) => {
-            if (setValueState) {
-              setValueState(valueType.id, text); // inputType을 사용하여 직접 전달
-            }
-          }}
-        />
-        {/* <Alert style={styles.alert}>필수 조건 항목입니다.</Alert>
-        <Alert style={styles.alert}>6~16자의 영문자, 소문자</Alert> */}
-        <CustomInput
-          placeholder="비밀번호"
-          style={styles.textInput}
-          inputValue={setValueState}
-          inputType={valueType.password}
-          value={formValues.password}
-          onChangeText={(text: any) => {
-            if (setValueState) {
-              setValueState(valueType.password, text); // inputType을 사용하여 직접 전달
-            }
-          }}
-        />
-        {/* <Alert style={styles.alert}>필수 조건 항목입니다.</Alert> */}
-        <CustomInput
-          placeholder="닉네임"
-          style={styles.textInput}
-          inputValue={setValueState}
-          inputType={valueType.nickName}
-          value={formValues.nickName}
-          onChangeText={(text: any) => {
-            if (setValueState) {
-              setValueState(valueType.nickName, text); // inputType을 사용하여 직접 전달
-            }
-          }}
-        />
-      </View>
-      <TermConditionContainer
-        formValues={setFormValues}
-        signUpValue={formValues}
-      />
-    </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          <View style={styles.inputContainer}>
+            <Header title="회원가입" />
+            <SignUpForm
+              isCodeVerified={isCodeVerified}
+              setIsCodeVerified={setIsCodeVerified}
+              formValues={formValues}
+              setFormValues={setFormValues}
+              isEmailSent={isEmailSent}
+              setIsEmailSent={setIsEmailSent}
+            />
+          </View>
+          <View style={{ marginTop: isEmailSent ? 20 : 0 }}>
+            <TermConditionContainer
+              setIsEmailSent={setIsEmailSent}
+              setIsCodeVerified={setIsCodeVerified}
+              isEmailSent={isEmailSent}
+              isCodeVerified={isCodeVerified}
+              formValues={setFormValues}
+              signUpValue={formValues}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

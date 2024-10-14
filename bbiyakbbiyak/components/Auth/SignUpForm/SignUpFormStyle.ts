@@ -1,14 +1,18 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  alert: {
+    paddingLeft: 40,
+    alignSelf: "flex-start",
+    color: "red",
+    marginBottom: 4,
+  },
   textInput: {
-    width: "80%",
+    width: "90%",
     height: 45,
-    borderWidth: 1,
     borderRadius: 6,
     marginVertical: 4,
     paddingHorizontal: 10,
-    borderColor: "#eeeeee",
     backgroundColor: "#eeeeee",
     fontFamily: "pretendard",
   },

@@ -20,7 +20,6 @@ const TermConditionContent = ({
         style={styles.container}
         android_ripple={{ color: "#eeeeee" }}
       >
-        {/* <View style={styles.textContainer}> */}
         <Ionicons
           name="checkmark-circle"
           style={[

@@ -28,12 +28,12 @@ const FindMyPw = () => {
         <CustomInput
           style={styles.inputStyle}
           placeholder="이메일"
-          inputType={valueType.id}
+          inputType={valueType.email}
         />
         <CustomInput
           style={styles.inputStyle}
           placeholder="닉네임"
-          inputType={valueType.id} // 임시방편으로 뭐 넣을지 몰라서 일단 넣어놓음 후에 변경해야 됨
+          inputType={valueType.email} // 임시방편으로 뭐 넣을지 몰라서 일단 넣어놓음 후에 변경해야 됨
         />
       </View>
       <View style={styles.buttonContainer}>

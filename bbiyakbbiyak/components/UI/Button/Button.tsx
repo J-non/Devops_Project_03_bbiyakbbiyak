@@ -8,15 +8,18 @@ const Button = ({
   buttonContainerStyle,
   onPress,
   color,
+  disabled,
 }: {
   children: React.ReactNode;
   buttonContainerStyle?: StyleProp<TextStyle>;
   onPress?: () => void;
   color?: string;
+  disabled?: boolean;
 }) => {
   return (
     <View style={buttonContainerStyle}>
       <Pressable
+        disabled={disabled}
         style={styles.preesed}
         android_ripple={{ color: color }}
         onPress={onPress}

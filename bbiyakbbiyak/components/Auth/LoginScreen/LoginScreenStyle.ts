@@ -69,4 +69,10 @@ export const styles = StyleSheet.create({
     borderRadius: 9999,
     marginTop: 2,
   },
+  alert: {
+    paddingLeft: 40,
+    alignSelf: "flex-start",
+    color: "red",
+    marginBottom: 4,
+  },
 });

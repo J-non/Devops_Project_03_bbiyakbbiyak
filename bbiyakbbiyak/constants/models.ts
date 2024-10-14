@@ -1,14 +1,27 @@
+import { UseMutationResult } from "@tanstack/react-query";
+
 export const valueType = {
-  id: "id",
+  email: "email",
   password: "password",
-  nickName: "nickName",
+  userName: "userName",
   rePassword: "rePassword",
+  phoneNum: "phoneNum",
 } as const;
 
 export interface RegistrationData {
   id: string;
   password: string;
-  nickName: string;
+  userName: string;
 }
 
 export type Valuetype = keyof typeof valueType;
+
+interface MutationData {
+  ok: boolean;
+  msg: string;
+  authNum: string;
+}
+
+export interface MutationProps {
+  mutation: UseMutationResult<MutationData, Error, string>;
+}

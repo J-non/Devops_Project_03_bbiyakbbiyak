@@ -1,19 +1,12 @@
 import { StyleSheet } from "react-native";
+import { GlobalTheme } from "../../../constants/theme";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
     position: "relative",
-  },
-  textInput: {
-    width: "80%",
-    height: 45,
-    borderRadius: 6,
-    marginVertical: 4,
-    paddingHorizontal: 10,
-    backgroundColor: "#eeeeee",
-    fontFamily: "pretendard",
+    flexGrow: 1,
   },
   header: {
     marginVertical: 20,
@@ -22,13 +15,11 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "pretendard-bold",
   },
-
   inputContainer: {
     flex: 1,
     width: "90%",
     minWidth: 300,
     minHeight: 300,
-    // justifyContent: "center",
     alignItems: "center",
     position: "absolute",
     top: 0,
@@ -36,9 +27,14 @@ export const styles = StyleSheet.create({
     transform: [{ translateY: 50 }, { translateX: 20 }],
     zIndex: 2,
   },
-  alert: {
-    paddingLeft: 40,
-    alignSelf: "flex-start",
-    color: "red",
+
+  button: {
+    overflow: "hidden",
+    width: "90%",
+    height: 45,
+    borderRadius: 24,
+    backgroundColor: GlobalTheme.colors.primary500,
+    marginTop: 10,
+    fontFamily: "pretendard-bold",
   },
 });
