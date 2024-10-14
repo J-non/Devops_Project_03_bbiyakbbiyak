@@ -1,5 +1,5 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useState } from "react";
+import { Alert, View } from "react-native";
 import { styles } from "./FindMyPwStyle";
 import Header from "../../UI/Header/Header";
 import CustomInput from "../../UI/Input/CustomInput";
@@ -8,15 +8,36 @@ import { GlobalTheme } from "../../../constants/theme";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../navigation/Navigation";
-import { valueType } from "../../../constants/models";
+import { Valuetype, valueType } from "../../../constants/models";
+import { useMutation } from "@tanstack/react-query";
+import { findPW } from "../../../api";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
 const FindMyPw = () => {
   const navigation = useNavigation<NavigationProps>();
 
-  function findPW() {
-    navigation.navigate("changePW");
+  const [searchUser, setSearchUser] = useState({
+    email: "",
+    phone: "",
+  });
+
+  const mutation = useMutation({
+    mutationFn: (data: { email: string; phone: string }) => findPW(data),
+    onSuccess: () => {
+      navigation.navigate("changePW", { data: searchUser.email });
+    },
+    onError: (error) => {
+      Alert.alert("요청 실패", error.message, [{ text: "확인" }]);
+    },
+  });
+
+  function searchPW() {
+    mutation.mutate(searchUser);
+  }
+
+  function setValueState(inputType: Valuetype, value: string | any) {
+    setSearchUser((prev) => ({ ...prev, [inputType]: value }));
   }
 
   return (
@@ -28,17 +49,31 @@ const FindMyPw = () => {
         <CustomInput
           style={styles.inputStyle}
           placeholder="이메일"
+          value={searchUser.email}
           inputType={valueType.email}
+          inputValue={setValueState}
+          onChangeText={(text: any) => {
+            if (setValueState) {
+              setValueState(valueType.email, text);
+            }
+          }}
         />
         <CustomInput
           style={styles.inputStyle}
-          placeholder="닉네임"
-          inputType={valueType.email} // 임시방편으로 뭐 넣을지 몰라서 일단 넣어놓음 후에 변경해야 됨
+          placeholder="전화번호"
+          inputType={valueType.phone}
+          inputValue={setValueState}
+          value={searchUser.phone}
+          onChangeText={(text: any) => {
+            if (setValueState) {
+              setValueState(valueType.phone, text);
+            }
+          }}
         />
       </View>
       <View style={styles.buttonContainer}>
         <Button
-          onPress={findPW}
+          onPress={searchPW}
           buttonContainerStyle={styles.buttonStyle}
           color={GlobalTheme.colors.primary300}
         >

@@ -12,7 +12,7 @@ const SignUpScreen = () => {
     email: "",
     password: "",
     userName: "",
-    phoneNum: "",
+    phone: "",
   });
 
   return (

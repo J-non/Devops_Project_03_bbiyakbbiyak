@@ -19,7 +19,7 @@ const OtherInputs: React.FC<OtherInputsProps> = ({
   setFormValues,
   styles,
 }) => {
-  const phone = formValues.phoneNum;
+  const phone = formValues.phone;
   const regPhone = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
 
   function setValueState(inputType: Valuetype, value: string | any) {
@@ -42,11 +42,11 @@ const OtherInputs: React.FC<OtherInputsProps> = ({
         style={styles.textInput}
         placeholder="휴대폰번호"
         inputValue={setFormValues}
-        inputType={valueType.phoneNum}
-        value={formValues.phoneNum}
+        inputType={valueType.phone}
+        value={formValues.phone}
         keyboardType="numeric"
         onChangeText={(text: any) => {
-          setValueState(valueType.phoneNum, text);
+          setValueState(valueType.phone, text);
         }}
       />
       {phone && !regPhone.test(phone) && (

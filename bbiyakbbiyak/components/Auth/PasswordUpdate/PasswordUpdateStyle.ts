@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     gap: 5,
   },
-  inputStyle: {
+  textInput: {
     width: "80%",
     height: 45,
     borderRadius: 6,
@@ -45,5 +45,11 @@ export const styles = StyleSheet.create({
     borderRadius: 24,
     backgroundColor: GlobalTheme.colors.primary500,
     marginTop: 10,
+  },
+  alert: {
+    paddingLeft: 40,
+    alignSelf: "flex-start",
+    color: "red",
+    marginBottom: 4,
   },
 });

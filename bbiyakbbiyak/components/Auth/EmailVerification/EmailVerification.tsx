@@ -56,6 +56,9 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
         setServerAuthCode(_data.authNum);
       }
     },
+    onError: (error) => {
+      Alert.alert("회원가입 실패", error.message, [{ text: "확인" }]);
+    },
   });
 
   useEffect(() => {

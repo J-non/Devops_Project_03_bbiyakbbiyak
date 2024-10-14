@@ -69,7 +69,7 @@ const TermConditionContainer = ({
       email: "",
       password: "",
       userName: "",
-      phoneNum: "",
+      phone: "",
     });
     const newState = [false, false, false, false];
     setIsAgreed(newState);
@@ -119,7 +119,7 @@ const TermConditionContainer = ({
         email: "",
         password: "",
         userName: "",
-        phoneNum: "",
+        phone: "",
       });
     }
   };
