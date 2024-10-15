@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    transform: [{ translateY: 400 }, { translateX: 20 }],
+    transform: [{ translateY: 500 }, { translateX: 20 }],
   },
   button: {
     overflow: "hidden",

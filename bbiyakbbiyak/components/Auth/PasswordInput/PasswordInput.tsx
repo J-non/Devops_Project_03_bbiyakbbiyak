@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import CustomInput from "../../UI/Input/CustomInput";
-import { Valuetype, valueType } from "../../../constants/models";
+import { Valuetype } from "../../../constants/models";
 import AlertComponent from "../../UI/Alert/Alert";
 import { TextStyle, ViewStyle } from "react-native";
 

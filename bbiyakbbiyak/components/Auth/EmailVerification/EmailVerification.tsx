@@ -109,7 +109,9 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
         onChangeText={(text: any) => {
           setValueState(valueType.email, text);
         }}
-      />
+      >
+        이메일 인증
+      </CustomInputWithButton>
       {email && !regEmail.test(email) && (
         <AlertComponent style={styles.alert}>
           유효하지 않은 이메일 형식입니다.

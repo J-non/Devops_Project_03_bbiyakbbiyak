@@ -5,6 +5,8 @@ import EmailVerification from "../EmailVerification/EmailVerification";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import OtherInputs from "../OtherInput/OtherInput";
 import { valueType } from "../../../constants/models";
+import Button from "../../UI/Button/Button";
+import { GlobalTheme } from "../../../constants/theme";
 
 interface SignUpFormProps {
   formValues: {
@@ -70,6 +72,21 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         formValues={formValues}
         setFormValues={setFormValues}
       />
+      <View style={{ flexDirection: "row", gap: 10 }}>
+        <Button
+          buttonContainerStyle={styles.test}
+          color={GlobalTheme.colors.primary300}
+        >
+          이메일 인증하기
+        </Button>
+
+        <Button
+          buttonContainerStyle={styles.test}
+          color={GlobalTheme.colors.primary300}
+        >
+          휴대폰 인증하기
+        </Button>
+      </View>
     </View>
   );
 };

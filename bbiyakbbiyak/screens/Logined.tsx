@@ -1,8 +1,9 @@
 import React from "react";
 import BottomTabs from "../components/bottomTabs/BottomTabs";
-import Test from "../components/Test";
+import Test from "../components/OtherMenu/OtherMenuMain";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text, View } from "react-native";
+import OtherMenuMain from "../components/OtherMenu/OtherMenuMain";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,8 +17,8 @@ export function Logined() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="test2"
-          component={Test}
+          name="OtherMenuMain"
+          component={OtherMenuMain}
           options={{ headerShown: false, presentation: "modal" }}
         />
       </Stack.Navigator>

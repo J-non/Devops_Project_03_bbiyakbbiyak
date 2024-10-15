@@ -4,8 +4,11 @@ import Header from "../../UI/Header/Header";
 import CustomInput from "../../UI/Input/CustomInput";
 import Button from "../../UI/Button/Button";
 import { GlobalTheme } from "../../../constants/theme";
-import { Valuetype, valueType } from "../../../constants/models";
-import { RootStackParamList } from "../../../navigation/Navigation";
+import {
+  RootStackParamList,
+  Valuetype,
+  valueType,
+} from "../../../constants/models";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { styles } from "./PasswordUpdateStyle";

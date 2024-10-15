@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 
-interface User {
+export interface User {
   token: string;
   isAuthenticated: boolean;
   authenticate: (token: string) => void;

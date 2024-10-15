@@ -5,7 +5,7 @@ import { styles } from "./CustomInputWithButtonStyle";
 import { GlobalTheme } from "../../../constants/theme";
 
 const CustomInputWithButton = (props: any) => {
-  const { placeholder, onButtonPress, onChangeText, value } = props;
+  const { placeholder, onButtonPress, onChangeText, value, children } = props;
 
   return (
     <View style={styles.inputContainer}>
@@ -15,15 +15,15 @@ const CustomInputWithButton = (props: any) => {
         onChangeText={onChangeText}
         value={value}
       />
-      <Button
+      {/* <Button
         buttonContainerStyle={styles.button}
         onPress={onButtonPress}
         color={GlobalTheme.colors.primary300}
       >
         <Text style={{ fontSize: 14, fontFamily: "pretendard" }}>
-          이메일 인증
+          {children}
         </Text>
-      </Button>
+      </Button> */}
     </View>
   );
 };

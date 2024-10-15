@@ -1,7 +1,17 @@
-import { Controller, Post, Body, Res, UseFilters } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  UseFilters,
+  Param,
+  Get,
+  Req,
+  Query,
+} from '@nestjs/common';
 import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ExceptionHandler } from 'src/Exception/ExceptionHandler';
 
 @Controller('login')
@@ -39,5 +49,25 @@ export class LoginController {
     const message = '비밀번호 변경이 완료되었습니다.';
 
     res.send({ data, message });
+  }
+
+  @Get('getInfo/:id')
+  @UseFilters(new ExceptionHandler())
+  async getInfo(@Param() param: CreateLoginDto, @Res() res: Response) {
+    console.log(param);
+    const data = await this.loginService.verifyOAuth(param);
+
+    res.send(data);
+  }
+
+  @Post('getInfo/updateGoogle')
+  @UseFilters(new ExceptionHandler())
+  async updateGoogle(
+    @Body() updateGoogle: CreateLoginDto,
+    @Res() res: Response,
+  ) {
+    console.log(updateGoogle);
+    const data = await this.loginService.updateGoogle(updateGoogle);
+    res.send(data);
   }
 }

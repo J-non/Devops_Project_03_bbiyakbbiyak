@@ -93,3 +93,30 @@ export const updatePW = async (data: any) => {
     }
   }
 };
+
+export const getInfo = async (data: any) => {
+  try {
+    const url = `http://10.0.2.2:3000/login/getInfo/${data.token ? data.token : data}`;
+
+    const response = await axios.get(url);
+
+    return response.data; // 필요한 데이터 반환
+  } catch (error) {
+    console.error("Error in getInfo:", error);
+    throw error; // 오류를 호출한 곳으로 던짐
+  }
+};
+
+export const updateGoogleUserName = async (data: any) => {
+  try {
+    const response = await axios.post(
+      "http://10.0.2.2:3000/login/getInfo/updateGoogle",
+      { data }
+    );
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+};

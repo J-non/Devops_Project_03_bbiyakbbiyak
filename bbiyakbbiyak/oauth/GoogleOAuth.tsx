@@ -17,12 +17,17 @@ export const GoogleOAuth = () => {
 
   const mutation = useMutation({
     mutationFn: (data) => signupGoogle(data),
-    onSuccess: (data) => {
-      data.isAlreadyUser
-        ? null
-        : Alert.alert("회원가입 완료", "회원가입 되셨습니다.", [
-            { text: "확인" },
-          ]);
+    onSuccess: async (data) => {
+      if (data.isAlreadyUser) {
+        setGoogleUserInfo(data);
+        await AsyncStorage.setItem("@user", JSON.stringify(data));
+      } else {
+        await AsyncStorage.setItem("@user", JSON.stringify(googleUserInfo));
+        console.log(googleUserInfo, "이것은 회원가입입니다.");
+        Alert.alert("회원가입 완료", "회원가입 되셨습니다.", [
+          { text: "확인" },
+        ]);
+      }
     },
   });
 
@@ -69,10 +74,9 @@ export const GoogleOAuth = () => {
       }
       // 서버에 구글 유저 정보 보내서 저장하기~~~
       const userInfoResponse = await response.json();
+      setGoogleUserInfo(userInfoResponse);
       mutation.mutate(userInfoResponse);
       await AsyncStorage.setItem("token", token);
-      await AsyncStorage.setItem("@user", JSON.stringify(userInfoResponse));
-      setGoogleUserInfo(userInfoResponse);
       setUser((prev) => ({
         ...prev,
         token: token,

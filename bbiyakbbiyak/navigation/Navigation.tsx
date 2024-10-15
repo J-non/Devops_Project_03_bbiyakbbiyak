@@ -9,17 +9,8 @@ import FindMyId from "../components/Auth/FindMyId/FindMyId";
 import FindMyPw from "../components/Auth/FindMyPw/FindMyPw";
 import PasswordUpdate from "../components/Auth/PasswordUpdate/PasswordUpdate";
 import ManageAlarm from "../screens/ManageAlarm";
-
-export type RootStackParamList = {
-  signupScreen: undefined;
-  findID: undefined;
-  findPW: undefined;
-  changePW: { data: string };
-  Unlogin: undefined;
-  Logined: undefined;
-  test2: undefined;
-  ManageAlarm: undefined;
-};
+import { RootStackParamList } from "../constants/models";
+import MyPage from "../components/OtherMenu/MyPage/MyPage";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -55,6 +46,11 @@ export function Navigation() {
         options={{ headerShown: false, title: "뒤로가기" }}
       />
       <Stack.Screen name="ManageAlarm" component={ManageAlarm} options={{}} />
+      <Stack.Screen
+        name="MyPage"
+        component={MyPage}
+        options={{ headerShown: true, title: "뒤로가기" }}
+      />
     </Stack.Navigator>
   );
 }
