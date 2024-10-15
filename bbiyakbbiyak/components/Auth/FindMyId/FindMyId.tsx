@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
 import { styles } from "./FindMyIdStyle";
-import { Valuetype, valueType } from "../../../constants/models";
+import {
+  RootStackParamList,
+  Valuetype,
+  valueType,
+} from "../../../constants/models";
 import Header from "../../UI/Header/Header";
 import CustomInput from "../../UI/Input/CustomInput";
 import Button from "../../UI/Button/Button";
 import { GlobalTheme } from "../../../constants/theme";
 import { useMutation } from "@tanstack/react-query";
 import { findID } from "../../../api";
-import { RootStackParamList } from "../../../navigation/Navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 

@@ -2,7 +2,8 @@ import React from "react";
 import CustomInput from "../../UI/Input/CustomInput";
 import AlertComponent from "../../UI/Alert/Alert";
 import { Valuetype, valueType } from "../../../constants/models";
-import { TextStyle, ViewStyle } from "react-native";
+import { Pressable, Text, TextStyle, ViewStyle } from "react-native";
+import { View } from "react-native-animatable";
 
 interface OtherInputsProps {
   formValues: any;
@@ -12,6 +13,8 @@ interface OtherInputsProps {
 interface customStyle {
   alert: ViewStyle | TextStyle;
   textInput: ViewStyle | TextStyle;
+  textInputt: ViewStyle | TextStyle;
+  phoneButton: ViewStyle | TextStyle;
 }
 
 const OtherInputs: React.FC<OtherInputsProps> = ({
@@ -20,7 +23,7 @@ const OtherInputs: React.FC<OtherInputsProps> = ({
   styles,
 }) => {
   const phone = formValues.phone;
-  const regPhone = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
+  const regPhone = /^01([0|1|6|7|8|9])([0-9]{4})([0-9]{4})$/;
 
   function setValueState(inputType: Valuetype, value: string | any) {
     setFormValues((prev: any) => ({ ...prev, [inputType]: value }));
@@ -48,7 +51,7 @@ const OtherInputs: React.FC<OtherInputsProps> = ({
         onChangeText={(text: any) => {
           setValueState(valueType.phone, text);
         }}
-      />
+      ></CustomInput>
       {phone && !regPhone.test(phone) && (
         <AlertComponent style={styles.alert}>
           유효하지 않은 핸드폰 번호 형식입니다.

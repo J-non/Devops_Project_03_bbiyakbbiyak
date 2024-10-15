@@ -6,6 +6,7 @@ export const valueType = {
   userName: "userName",
   rePassword: "rePassword",
   phone: "phone",
+  name: "name",
 } as const;
 
 export interface RegistrationData {
@@ -25,3 +26,20 @@ interface MutationData {
 export interface MutationProps {
   mutation: UseMutationResult<MutationData, Error, string>;
 }
+
+export interface TabListType {
+  children: React.ReactNode;
+  onPress: () => void;
+}
+
+export type RootStackParamList = {
+  signupScreen: undefined;
+  findID: undefined;
+  findPW: undefined;
+  changePW: { data: string };
+  Unlogin: undefined;
+  Logined: undefined;
+  OtherMenuMain: undefined;
+  ManageAlarm: undefined;
+  MyPage: undefined;
+};

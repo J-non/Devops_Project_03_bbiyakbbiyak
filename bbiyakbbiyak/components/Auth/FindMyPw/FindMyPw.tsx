@@ -7,8 +7,11 @@ import Button from "../../UI/Button/Button";
 import { GlobalTheme } from "../../../constants/theme";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../../navigation/Navigation";
-import { Valuetype, valueType } from "../../../constants/models";
+import {
+  RootStackParamList,
+  Valuetype,
+  valueType,
+} from "../../../constants/models";
 import { useMutation } from "@tanstack/react-query";
 import { findPW } from "../../../api";
 

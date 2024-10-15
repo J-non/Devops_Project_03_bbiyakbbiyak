@@ -3,8 +3,8 @@ import { View } from "react-native";
 import { styles } from "./AtagContentStyle";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../../navigation/Navigation";
 import Atag from "../../UI/Atag/Atag";
+import { RootStackParamList } from "../../../constants/models";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 

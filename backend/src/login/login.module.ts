@@ -14,7 +14,7 @@ import { userSignUp } from 'src/model/user.model';
         const secret = config.get<string>('JWT_SECRET');
         return {
           secret,
-          signOptions: { expiresIn: '300s' },
+          signOptions: { expiresIn: '1y' },
         };
       },
     }),

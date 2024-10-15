@@ -5,14 +5,17 @@ import Header from "../../UI/Header/Header";
 import CustomInput from "../../UI/Input/CustomInput";
 import Button from "../../UI/Button/Button";
 import { GlobalTheme } from "../../../constants/theme";
-import { Valuetype, valueType } from "../../../constants/models";
+import {
+  RootStackParamList,
+  Valuetype,
+  valueType,
+} from "../../../constants/models";
 import AtagContent from "../AtagContent/AtagContent";
 import { useMutation } from "@tanstack/react-query";
 import { loginAPI } from "../../../api";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../store/userAtom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { RootStackParamList } from "../../../navigation/Navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { GoogleOAuth } from "../../../oauth/GoogleOAuth";

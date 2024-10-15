@@ -43,10 +43,12 @@ export class SignupService {
 
     if (isGoogleEmailSignedUp) {
       if (isGoogleEmailSignedUp.email === email) {
-        throw new HttpException(
-          '소셜 로그인 유저입니다.',
-          HttpStatus.BAD_REQUEST,
-        );
+        const result = {
+          ...createGoogle.data,
+          name: isGoogleEmailSignedUp.userName,
+          isAlreadyUser: true,
+        };
+        res.send(result);
       }
     }
 

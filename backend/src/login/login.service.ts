@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { userSignUp } from 'src/model/user.model';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
+import { JwtPayload } from 'jsonwebtoken';
 
 @Injectable()
 export class LoginService {
@@ -95,5 +96,70 @@ export class LoginService {
       { password: hashedPassword },
       { where: { email: updatePW.data.param } },
     );
+  }
+
+  async verifyOAuth(verifyUser: CreateLoginDto) {
+    const { id } = verifyUser;
+    let email;
+
+    const isJwtToken = id.split('.').length === 3;
+    if (isJwtToken) {
+      try {
+        const token = id;
+        const cleanedToken = token.replace(/^["']|["']$/g, '');
+        const verifiedToken = await this.jwtService.verify(cleanedToken);
+        email = verifiedToken.email;
+      } catch (error) {
+        throw new HttpException(
+          '토큰이 유효하지 않습니다.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    } else {
+      email = id;
+    }
+
+    const result = await this.userLoginLogic.findOne({
+      where: { email: email },
+    });
+
+    return result;
+  }
+
+  async updateGoogle(updateGoogleUserName: CreateLoginDto) {
+    let data;
+    if (
+      updateGoogleUserName.data.password !==
+      updateGoogleUserName.data.rePassword
+    ) {
+      throw new HttpException(
+        '비밀번호가 일치하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (updateGoogleUserName.data.isOAuthUser === false) {
+      const salt = 10;
+      const plainPassword = updateGoogleUserName.data.password;
+      const hashedPassword = await bcrypt.hash(plainPassword, salt); // 비밀번호 암호화
+      data = await this.userLoginLogic.update(
+        {
+          userName: updateGoogleUserName.data.userName,
+          password: hashedPassword,
+        },
+        { where: { email: updateGoogleUserName.data.email } },
+      );
+
+      const payload = { email: updateGoogleUserName.data.email };
+
+      return await this.jwtService.sign(payload);
+    } else {
+      await this.userLoginLogic.update(
+        { userName: updateGoogleUserName.data.name },
+        { where: { email: updateGoogleUserName.data.email } },
+      );
+      data = '업데이트 되셨습니다.';
+      return data;
+    }
   }
 }
