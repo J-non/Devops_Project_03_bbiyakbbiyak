@@ -6,11 +6,12 @@ import Header from "../../UI/Header/Header";
 import SignUpForm from "../SignUpForm/SingUpForm";
 
 const SignUpScreen = () => {
-  const [isEmailSent, setIsEmailSent] = useState(false); // 메일 전송이 갔는지 안갔는지에 대한 boolean
+  const [isAuthCodeSent, setIsAuthCodeSent] = useState(false); // 메일 전송이 갔는지 안갔는지에 대한 boolean
   const [isCodeVerified, setIsCodeVerified] = useState(false); // 유저가 인증코드 확인을 받았는지
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
+    rePassword: "",
     userName: "",
     phone: "",
   });
@@ -29,15 +30,15 @@ const SignUpScreen = () => {
               setIsCodeVerified={setIsCodeVerified}
               formValues={formValues}
               setFormValues={setFormValues}
-              isEmailSent={isEmailSent}
-              setIsEmailSent={setIsEmailSent}
+              isAuthCodeSent={isAuthCodeSent}
+              setIsAuthCodeSent={setIsAuthCodeSent}
             />
           </View>
-          <View style={{ marginTop: isEmailSent ? 20 : 0 }}>
+          <View style={{ marginTop: isAuthCodeSent ? 20 : 0 }}>
             <TermConditionContainer
-              setIsEmailSent={setIsEmailSent}
+              setIsAuthCodeSent={setIsAuthCodeSent}
               setIsCodeVerified={setIsCodeVerified}
-              isEmailSent={isEmailSent}
+              isAuthCodeSent={isAuthCodeSent}
               isCodeVerified={isCodeVerified}
               formValues={setFormValues}
               signUpValue={formValues}

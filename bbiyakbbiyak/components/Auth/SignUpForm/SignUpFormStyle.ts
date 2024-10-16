@@ -36,11 +36,4 @@ export const styles = StyleSheet.create({
     height: 45,
     backgroundColor: GlobalTheme.colors.primary500,
   },
-  test: {
-    backgroundColor: GlobalTheme.colors.primary500,
-    width: 160,
-    height: 45,
-    marginTop: 4,
-    borderRadius: 8,
-  },
 });

@@ -4,6 +4,7 @@ import Test from "../components/OtherMenu/OtherMenuMain";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text, View } from "react-native";
 import OtherMenuMain from "../components/OtherMenu/OtherMenuMain";
+import Unlogin from "./Unlogin";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export function Logined() {
           component={OtherMenuMain}
           options={{ headerShown: false, presentation: "modal" }}
         />
+        <Stack.Screen name="Unlogin" component={Unlogin} />
       </Stack.Navigator>
     </>
   );

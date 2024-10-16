@@ -1,6 +1,6 @@
 export class CreateSignupDto {
   data: any;
-  email: string; // 나중에 email로 바꿔야됨
+  email: string;
   password: string;
   userName: string;
   phone: string | number;
@@ -8,5 +8,5 @@ export class CreateSignupDto {
 }
 
 export class CreateEmail {
-  data: string;
+  data: any;
 }

@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   alert: {
-    paddingLeft: 40,
+    paddingLeft: 50,
     alignSelf: "flex-start",
     color: "red",
     marginBottom: 4,

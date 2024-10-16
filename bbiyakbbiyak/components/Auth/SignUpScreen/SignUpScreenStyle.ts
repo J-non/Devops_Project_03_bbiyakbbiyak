@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     fontFamily: "pretendard-bold",
   },
   inputContainer: {
-    flex: 1,
+    // flex: 1,
     width: "90%",
     minWidth: 300,
     minHeight: 300,
@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    transform: [{ translateY: 50 }, { translateX: 20 }],
+    transform: [{ translateY: 30 }, { translateX: 20 }],
     zIndex: 2,
   },
 

@@ -10,6 +10,7 @@ import { generateRandomNumber, smtpTransport } from 'src/config/email';
 import { Response, response } from 'express';
 import { InjectModel } from '@nestjs/sequelize';
 import { userSignUp } from 'src/model/user.model';
+import { SolapiMessageService } from 'solapi';
 
 @Injectable()
 export class SignupService {
@@ -42,61 +43,110 @@ export class SignupService {
     });
 
     if (isGoogleEmailSignedUp) {
-      if (isGoogleEmailSignedUp.email === email) {
-        const result = {
-          ...createGoogle.data,
-          name: isGoogleEmailSignedUp.userName,
-          isAlreadyUser: true,
-        };
-        res.send(result);
-      }
+      console.log(isGoogleEmailSignedUp);
+      const result = {
+        ...createGoogle.data,
+        name: isGoogleEmailSignedUp.userName,
+        isAlreadyUser: true,
+      };
+      res.send(result);
+      return;
     }
 
-    return await this.userSignupLogic.create({
+    const newUser = await this.userSignupLogic.create({
       email,
       userName: name,
       phone: '',
       password: '',
       isOAuthUser: true,
     });
+    res.send(newUser);
   }
 
-  async emailAuth(createEmailNum: CreateEmail, res: any) {
+  async verifyAuth(createAuthNum: CreateEmail, res: any) {
     const number = generateRandomNumber(111111, 999999);
+    if (createAuthNum.data.type === 'email') {
+      const isUserSignedIn = await this.userSignupLogic.findOne({
+        where: {
+          email: createAuthNum.data.email,
+        },
+      });
 
-    const isUserSignedIn = await this.userSignupLogic.findOne({
-      where: {
-        email: createEmailNum.data,
-      },
-    });
+      if (isUserSignedIn) {
+        if (isUserSignedIn.email === createAuthNum.data.email)
+          throw new HttpException(
+            '이미 가입한 아이디가 존재합니다.',
+            HttpStatus.BAD_REQUEST,
+          );
+      }
 
-    if (isUserSignedIn) {
-      if (isUserSignedIn.email === createEmailNum.data)
-        throw new HttpException(
-          '이미 가입한 아이디가 존재합니다.',
-          HttpStatus.BAD_REQUEST,
-        );
+      const mailOptions = {
+        from: 'dkswndgus0506@naver.com',
+        to: createAuthNum.data.email,
+        subject: '약 알람 bbiyakbbiyak 앱 회원 인증 관련 이메일입니다.',
+        html: '<h1>인증번호를 입력해주세요 \n\n\n\n\n\n</h1>' + number,
+      };
+
+      smtpTransport.sendMail(mailOptions, (err: any, info: any) => {
+        if (err) {
+          console.log('Error:', err);
+          return res.json({ ok: false, msg: '메일 전송에 실패하였습니다.' });
+        } else {
+          console.log('Email sent: ', info.response);
+          return res.json({
+            ok: true,
+            type: '이메일 인증',
+            msg: '메일 전송에 성공하셨습니다.',
+            authNum: number,
+          });
+        }
+      });
     }
 
-    const mailOptions = {
-      from: 'dkswndgus0506@naver.com',
-      to: createEmailNum.data,
-      subject: '약 알람 bbiyakbbiyak 앱 회원 인증 관련 이메일입니다.',
-      html: '<h1>인증번호를 입력해주세요 \n\n\n\n\n\n</h1>' + number,
-    };
+    if (createAuthNum.data.type === 'phone') {
+      const isUserSignedIn = await this.userSignupLogic.findOne({
+        where: {
+          email: createAuthNum.data.phone,
+        },
+      });
 
-    smtpTransport.sendMail(mailOptions, (err: any, info: any) => {
-      if (err) {
-        console.log('Error:', err);
-        return res.json({ ok: false, msg: '메일 전송에 실패하였습니다.' });
-      } else {
-        console.log('Email sent: ', info.response);
-        return res.json({
-          ok: true,
-          msg: '메일 전송에 성공하셨습니다.',
-          authNum: number,
-        });
+      if (isUserSignedIn) {
+        if (isUserSignedIn.phone === createAuthNum.data.phone)
+          throw new HttpException(
+            '이미 가입한 아이디가 존재합니다.',
+            HttpStatus.BAD_REQUEST,
+          );
       }
-    });
+
+      const apiKey = process.env.SOLAPI_API;
+      const apiSecret = process.env.SOLAPI_API_SECRET;
+      const messageService = new SolapiMessageService(apiKey, apiSecret);
+
+      const message = {
+        // 문자 내용 (최대 2,000Bytes / 90Bytes 이상 장문문자)
+        text: `[삐약삐약] 인증번호 [${number}]`,
+        // 수신번호 (문자 받는 이)
+        to: createAuthNum.data.phone,
+        // 발신번호 (문자 보내는 이)
+        from: '01023682587',
+      };
+
+      messageService
+        .sendOne(message)
+        .then(
+          res.json({
+            ok: true,
+            type: '핸드폰 인증',
+            msg: '인증코드 발송을 성공하셨습니다.',
+            authNum: number,
+          }),
+        )
+        .catch(
+          res.json({
+            ok: false,
+            msg: '인증코드 전송에 실패하였습니다.',
+          }),
+        );
+    }
   }
 }
