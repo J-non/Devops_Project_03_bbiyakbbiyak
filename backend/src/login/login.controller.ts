@@ -6,19 +6,20 @@ import {
   UseFilters,
   Param,
   Get,
-  Req,
-  Query,
+  UsePipes,
 } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { Request, Response } from 'express';
 import { ExceptionHandler } from 'src/Exception/ExceptionHandler';
+import { LoginPipe } from 'src/pipe/signup.pipe';
 
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post()
+  @UsePipes(LoginPipe)
   @UseFilters(new ExceptionHandler())
   async create(@Body() createLoginDto: CreateLoginDto, @Res() res: Response) {
     const data = await this.loginService.create(createLoginDto);
@@ -66,7 +67,7 @@ export class LoginController {
     @Body() updateGoogle: CreateLoginDto,
     @Res() res: Response,
   ) {
-    console.log(updateGoogle);
+    console.log(updateGoogle, 111);
     const data = await this.loginService.updateGoogle(updateGoogle);
     res.send(data);
   }

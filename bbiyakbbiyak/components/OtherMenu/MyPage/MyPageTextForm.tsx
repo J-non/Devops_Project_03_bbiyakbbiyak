@@ -51,6 +51,7 @@ const MyPageTextForm = (props: any) => {
 
   useEffect(() => {
     setBbiyakUpdate(data);
+    setBbiyakUpdate((prev: any) => ({ ...prev, password: "", rePassword: "" }));
   }, [data]);
 
   const setValueState = (inputType: Valuetype, value: string | any) => {
@@ -85,6 +86,7 @@ const MyPageTextForm = (props: any) => {
       {data?.isOAuthUser === false ? (
         <CustomInput
           placeholder="변경할 새 비밀번호"
+          value={bbiyakUpdate?.password}
           style={styles.textInput}
           secureTextEntry={isPressed}
           onChangeText={(text: string) => {
@@ -114,6 +116,7 @@ const MyPageTextForm = (props: any) => {
           placeholder="변경할 새 비밀번호 확인"
           style={styles.textInput}
           secureTextEntry={isRePressed}
+          value={bbiyakUpdate?.rePassword}
           onChangeText={(text: string) => {
             if (setValueState) {
               setValueState(valueType.rePassword, text);

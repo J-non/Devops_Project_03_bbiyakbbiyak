@@ -14,13 +14,17 @@ export const GoogleOAuth = () => {
   const [googleUserInfo, setGoogleUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useAtom(userAtom);
+  // const [isAlreadyUser, setIsAlreadyUser] = useState(false);
 
   const mutation = useMutation({
     mutationFn: (data) => signupGoogle(data),
     onSuccess: async (data) => {
       if (data.isAlreadyUser) {
-        setGoogleUserInfo(data);
-        await AsyncStorage.setItem("@user", JSON.stringify(data));
+        console.log(data);
+        // setIsAlreadyUser(true);
+        Alert.alert("요청 실패", "이미 가입된 회원입니다.", [{ text: "확인" }]);
+        // setGoogleUserInfo(data);
+        // await AsyncStorage.setItem("@user", JSON.stringify(data));
       } else {
         await AsyncStorage.setItem("@user", JSON.stringify(googleUserInfo));
         console.log(googleUserInfo, "이것은 회원가입입니다.");
@@ -76,19 +80,24 @@ export const GoogleOAuth = () => {
       const userInfoResponse = await response.json();
       setGoogleUserInfo(userInfoResponse);
       mutation.mutate(userInfoResponse);
-      await AsyncStorage.setItem("token", token);
-      setUser((prev) => ({
-        ...prev,
-        token: token,
-        isAuthenticated: true,
-        authenticate: (token: string) => {
-          setUser((prev) => ({
-            ...prev,
-            token,
-            isAuthenticated: true,
-          }));
-        },
-      }));
+      if (isAlreadyUser === false) {
+        // 현재 데이터베이스에 똑같은 이메일값이 있어도 비밀번호 안치고 그냥 로그인 되버림 토큰이 생성되어서. 후에 수정
+        console.log(isAlreadyUser, "isAlreadyUser");
+        console.log(token, "token");
+        await AsyncStorage.setItem("token", token);
+        setUser((prev) => ({
+          ...prev,
+          token: token,
+          isAuthenticated: true,
+          authenticate: (token: string) => {
+            setUser((prev) => ({
+              ...prev,
+              token,
+              isAuthenticated: true,
+            }));
+          },
+        }));
+      }
     } catch (e) {
       console.log(e);
     }

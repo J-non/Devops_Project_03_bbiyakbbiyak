@@ -29,6 +29,7 @@ const PasswordUpdate: React.FC<ChangePWScreenProps> = ({ route }) => {
     rePassword: "",
   });
   const [isLoginScreen] = useState(true);
+  const [isPasswordTrue, setIsPasswordTrue] = useState(null);
 
   const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 
@@ -78,14 +79,17 @@ const PasswordUpdate: React.FC<ChangePWScreenProps> = ({ route }) => {
             password={updatePassword.password}
             setFormValues={setUpdatePassword}
             isLoginScreen={isLoginScreen}
+            setIsPasswordTrue={setIsPasswordTrue}
           />
           <PasswordInput
             styles={style}
             placeholder="비밀번호 확인"
+            isPasswordTrue={isPasswordTrue}
             valueType={valueType.rePassword}
             password={updatePassword.rePassword}
+            rePassword={updatePassword.password}
             setFormValues={setUpdatePassword}
-            isLoginScreen={isLoginScreen}
+            setIsPasswordTrue={setIsPasswordTrue}
           />
         </View>
         <View style={styles.buttonContainer}>

@@ -16,17 +16,17 @@ type NavigationProps = StackNavigationProp<RootStackParamList>;
 const TermConditionContainer = ({
   formValues,
   signUpValue,
-  isEmailSent,
+  isAuthCodeSent,
   isCodeVerified,
   setIsCodeVerified,
-  setIsEmailSent,
+  setIsAuthCodeSent,
 }: {
   signUpValue: any;
   formValues: any;
-  isEmailSent: boolean;
+  isAuthCodeSent: boolean;
   isCodeVerified: boolean;
   setIsCodeVerified: any;
-  setIsEmailSent: any;
+  setIsAuthCodeSent: any;
 }) => {
   const navigation = useNavigation<NavigationProps>();
 
@@ -102,10 +102,8 @@ const TermConditionContainer = ({
     if (isAgreed[0] === false) {
       Alert.alert("약관 동의", "이용약관 동의를 해주세요.", [{ text: "확인" }]);
       return null;
-    } else if (isEmailSent === false) {
-      Alert.alert("회원가입 실패", "이메일 인증을 해주세요.", [
-        { text: "확인" },
-      ]);
+    } else if (isAuthCodeSent === false) {
+      Alert.alert("회원가입 실패", "본인 인증을 해주세요.", [{ text: "확인" }]);
     } else if (isCodeVerified === false) {
       Alert.alert("인증 실패", "인증 코드가 일치하지 않습니다.", [
         { text: "확인" },
@@ -113,7 +111,7 @@ const TermConditionContainer = ({
     } else {
       // 유효성 검사 or 서버에 유저 가입 데이터 보내서 데이터 확인하기 있으면 재가입 없으면 바로 가입 진행
       mutation.mutate(signUpValue);
-      setIsEmailSent(false);
+      setIsAuthCodeSent(false);
       setIsCodeVerified(false);
       formValues({
         email: "",

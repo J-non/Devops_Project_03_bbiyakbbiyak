@@ -20,6 +20,10 @@ export function AuthCheck() {
           ...prevState,
           token: storedToken,
           isAuthenticated: true,
+          logout: async () => {
+            await AsyncStorage.removeItem("@user");
+            await AsyncStorage.removeItem("token");
+          },
         }));
       }
 

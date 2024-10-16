@@ -39,7 +39,7 @@ export const loginAPI = async (data: any) => {
   }
 };
 
-export const emailAPI = async (data: string) => {
+export const emailAPI = async (data: object) => {
   try {
     const response = await axios.post("http://10.0.2.2:3000/signup/authCode", {
       data,

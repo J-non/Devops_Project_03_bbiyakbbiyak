@@ -27,6 +27,7 @@ const LoginScreen = () => {
   const navigation = useNavigation<NavigationProps>();
 
   const [isLoginScreen, setIsLoginScreen] = useState(false);
+  const [isPasswordTrue, setIsPasswordTrue] = useState(null);
 
   const [stateValue, setStateValue] = useState({
     email: "",
@@ -114,6 +115,7 @@ const LoginScreen = () => {
             password={stateValue.password}
             setFormValues={setStateValue}
             isLoginScreen={isLoginScreen}
+            setIsPasswordTrue={setIsPasswordTrue}
           />
           <Button
             buttonContainerStyle={styles.buttonStyle}
