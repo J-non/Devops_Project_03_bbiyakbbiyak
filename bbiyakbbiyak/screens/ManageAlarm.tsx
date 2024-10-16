@@ -8,22 +8,34 @@ import * as Animatable from 'react-native-animatable';
 import ContentAddButton from '../components/alarms/ContentAddButton';
 import ContentModal from '../components/alarms/ContentModal';
 import ContentDetail from '../components/alarms/ContentDetail';
-import axios from 'axios';
+import { useAtom } from 'jotai';
+import { userPushTokenAtom } from '../store/userPushTokenAtom';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createAlarms, delAlarms } from '../api/alarmApi';
+import { updateAlarms } from '../api/alarmApi';
+import { stringToDate } from '../util/stringToDate';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { GlobalTheme } from '../constants/theme';
 
 // npm install @react-native-community/datetimepicker react-native-modal-datetime-picker
-// npm i install expo-linear-gradient
 
 ////////////////////////////// 알람 수정/생성 화면 입니다 //////////////////////////////
 
 const ManageAlarm = ({ route, navigation }: any) => {
-  const [category, setCategory] = useState('약'); // 선택 카테고리
-  const [alarmTime, setAlarmTime] = useState(new Date()); // 타겟 시간
+  const [userPushToken, setUserPushToken] = useAtom(userPushTokenAtom) // 푸시토큰 전역 상태
+  const [category, setCategory] = useState('medicine'); // 선택 카테고리
+  const [alarmTime, setAlarmTime] = useState(() => {
+    const now = new Date()
+    now.setSeconds(0)
+    return now
+  }); // 타겟 시간
+
   const [isDatePickerVisible, setDatePickerVisible] = useState(false) // picker 가시성
   const [selectedDays, setSelectedDays] = useState<number[]>([]); // 선택 요일 배열
   const [alarmContent, setAlarmContent] = useState<string[]>([]); // 항목 값들
   const [modalIsVisible, setModalIsVisible] = useState(false) // 모달
   const daysList = ['일', '월', '화', '수', '목', '금', '토']
-  // const timeZoneOffsetInMinutes = new Date().getTimezoneOffset() * -1; // 타임존 설정 (한국)
   const boxRef = useRef<any>(null); // 참조 생성
 
   const showDatePicker = () => { setDatePickerVisible(true) }
@@ -38,7 +50,7 @@ const ManageAlarm = ({ route, navigation }: any) => {
   useEffect(() => {
     if (isEditing) {
       setCategory(route.params.alarmCategory);
-      setAlarmTime(new Date(route.params.alarmTime)); // Date객체 수정 필요
+      setAlarmTime(stringToDate(route.params.alarmTime));
       setSelectedDays(route.params.alarmDays);
       setAlarmContent(route.params.alarmName);
     }
@@ -105,7 +117,14 @@ const ManageAlarm = ({ route, navigation }: any) => {
     setAlarmContent(updatedAlarms);
   };
 
-  ///////////////////////////////// 알람 자체 삭제시 실행 함수
+  ///////////////////////////////// 알람 삭제
+  const delMutation = useMutation({
+    mutationFn: delAlarms,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['alarms'] })
+      navigation.goBack();
+    }
+  })
   const delAlarm = () => {
     Alert.alert(
       "알람 삭제",
@@ -114,15 +133,25 @@ const ManageAlarm = ({ route, navigation }: any) => {
         { text: "취소" },
         {
           text: "삭제", onPress: () => {
-            // 삭제 로직 추가해야함 @@@
-            navigation.goBack();
+            const userIdFromToken = 1 // 작성 유저 아이디임(token) @@@@@@@@@@@@@@@@@@@@@
+            const alarmId = route.params.alarmId
+            delMutation.mutate({ alarmId, userIdFromToken })
           }
         }
       ]
     );
   }
 
-  ///////////////////////////////// 알람 수정/등록시 실행될 함수
+  //////////////////////////// 알람 수정/등록 함수 탠스택쿼리
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: isEditing ? updateAlarms : createAlarms,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['alarms'] }) // 특정 쿼리의 캐시 무효화, 관련 컴포넌트 데이터 리패치 유도
+      navigation.goBack();
+    }
+  })
+
   const confirmAlarm = () => {
     const formattedTime = alarmTime.toLocaleTimeString('en-GB', {
       hour12: false,
@@ -131,33 +160,31 @@ const ManageAlarm = ({ route, navigation }: any) => {
       minute: '2-digit',
       second: '2-digit',
     }).replace(/:/g, ':');
-
+    // const userIdFromToken = AsyncStorage.getItem('token') // 토큰꺼내서 백에서 토큰풀어야함
+    const userIdFromToken = 1 // 작성 유저 아이디임(token) @@@@@@@@@@@@@@@@@@@@@
     const alarmData = {
-      category,
+      category: category,
       targetTime: formattedTime,
-      pushDay: selectedDays, // 0123456 로 나중에 바꾸셈
+      pushDay: selectedDays,
       itemName: alarmContent,
-      // deviceToken
+      deviceToken: userPushToken,
+      pushMessage: '알림메세지',
+      userIdFromToken: userIdFromToken, // 토큰값
     }
-    if (isEditing) { // 수정로직
-      // editingAlarmId 는 db index
+    if (isEditing) {
+      mutation.mutate({ alarmId: route.params.alarmId, alarmData })
     } else {
-      // 생성로직
-      axios.post('http://localhost:3000/notification', { alarmData })
+      mutation.mutate({ alarmData });
     }
-    // 서버로 전송, 하고나서 목록화면으로 네비게이트
-    console.log(alarmData)
-    navigation.goBack()
   }
-
 
   return (
     <View style={styles.container}>
       {/* **************************카테고리 박스************************** */}
       <View style={styles.categoryContainer}>
-        <CategoryButton label={"약"} onPress={categoryHandler} isSelected={category === '약'} />
-        <CategoryButton label={"물"} onPress={categoryHandler} isSelected={category === '물'} />
-        <CategoryButton label={"기타"} onPress={categoryHandler} isSelected={category === '기타'} />
+        <CategoryButton name={'약'} label={'medicine'} onPress={categoryHandler} isSelected={category === 'medicine'} />
+        <CategoryButton name={'물, 음료'} label={'drink'} onPress={categoryHandler} isSelected={category === 'drink'} />
+        <CategoryButton name={'기타'} label={'etc'} onPress={categoryHandler} isSelected={category === 'etc'} />
       </View>
 
       <View style={styles.alarmContainer}>
@@ -181,7 +208,6 @@ const ManageAlarm = ({ route, navigation }: any) => {
             negativeButton={{ label: '취소', textColor: 'red' }}
             positiveButton={{ label: '확인' }}
             minuteInterval={5}
-          // timeZoneOffsetInMinutes={timeZoneOffsetInMinutes}
           />
         </View>
         {/* **************************요일 박스************************** */}
@@ -202,8 +228,8 @@ const ManageAlarm = ({ route, navigation }: any) => {
           <View style={styles.summary}>
 
             <HeadText>
-              {category === '약' ? '어떤 약을 드시나요?' :
-                category === '물' ? '어떤 물을 드시나요?' :
+              {category === 'medicine' ? '어떤 약을 드시나요?' :
+                category === 'drink' ? '어떤 물을 드시나요?' :
                   '기타 알람을 등록할까요?'}
             </HeadText>
             <Text style={alarmContent.length === 10 ? styles.alertText : styles.normalText}>{alarmContent.length} / 10</Text>
@@ -222,13 +248,10 @@ const ManageAlarm = ({ route, navigation }: any) => {
           <View style={styles.buttonContainer}>
             {isEditing &&
               <Pressable style={[styles.submitButton, styles.submitButtonDel]} onPress={delAlarm}>
-                {/* <View> */}
-                <Text style={styles.submitButtonText}>삭제</Text>
-                {/* </View> */}
+                <MaterialCommunityIcons name='trash-can-outline' color={'white'} size={18} />
               </Pressable>
             }
             <Pressable onPress={confirmAlarm} style={styles.submitButton}>
-              {/* <View> */}
               {isEditing ?
                 <Text style={styles.submitButtonText}>
                   알람 수정하기
@@ -238,7 +261,6 @@ const ManageAlarm = ({ route, navigation }: any) => {
                   알람 등록하기
                 </Text>
               }
-              {/* </View> */}
             </Pressable>
           </View>
 
@@ -323,14 +345,15 @@ const styles = StyleSheet.create({
     flex: 1
   },
   submitButton: {
-    flex: 1,
+    flex: 4,
     paddingVertical: 16,
-    backgroundColor: '#ffe374',
+    backgroundColor: GlobalTheme.colors.primary300,
     alignItems: 'center',
     borderRadius: 40,
   },
   submitButtonDel: {
-    backgroundColor: '#ac0000'
+    flex: 1,
+    backgroundColor: GlobalTheme.colors.accent500
   },
   submitButtonText: {
     fontFamily: 'pretendard',

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import * as Animatable from 'react-native-animatable';
+import { GlobalTheme } from '../../constants/theme';
 
 // npm i react-native-animatable
 
@@ -39,6 +40,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     selectedBox: {
-        backgroundColor: '#ffe374',
+        backgroundColor: GlobalTheme.colors.primary300
     }
 })

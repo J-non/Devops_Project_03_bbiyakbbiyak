@@ -1,7 +1,8 @@
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { GlobalTheme } from '../../constants/theme'
 
-const CategoryButton = ({ label, onPress, isSelected }: any) => {
+const CategoryButton = ({ name, label, onPress, isSelected }: any) => {
     return (
         <Pressable
             style={({ pressed }) => {
@@ -11,7 +12,7 @@ const CategoryButton = ({ label, onPress, isSelected }: any) => {
                     isSelected && styles.selected]
             }}
             onPress={() => { onPress(label) }}>
-            <Text style={styles.buttonName}>{label}</Text>
+            <Text style={styles.buttonName}>{name}</Text>
         </Pressable>
     )
 }
@@ -35,6 +36,6 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ccc'
     // },
     selected: {
-        backgroundColor: '#ffe374',
+        backgroundColor: GlobalTheme.colors.primary500
     }
 })

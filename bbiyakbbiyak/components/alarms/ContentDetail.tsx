@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
         marginVertical: 4,
         borderRadius: 16,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     }
 })
