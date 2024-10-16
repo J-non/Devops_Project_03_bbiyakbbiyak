@@ -6,7 +6,7 @@ import { Alert, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useAtom } from "jotai";
 import { userAtom } from "../store/userAtom";
 import { useMutation } from "@tanstack/react-query";
-import { signupGoogle } from "../api";
+import { jwtToken, signupGoogle } from "../api";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -14,25 +14,13 @@ export const GoogleOAuth = () => {
   const [googleUserInfo, setGoogleUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useAtom(userAtom);
-  // const [isAlreadyUser, setIsAlreadyUser] = useState(false);
 
   const mutation = useMutation({
     mutationFn: (data) => signupGoogle(data),
-    onSuccess: async (data) => {
-      if (data.isAlreadyUser) {
-        console.log(data);
-        // setIsAlreadyUser(true);
-        Alert.alert("요청 실패", "이미 가입된 회원입니다.", [{ text: "확인" }]);
-        // setGoogleUserInfo(data);
-        // await AsyncStorage.setItem("@user", JSON.stringify(data));
-      } else {
-        await AsyncStorage.setItem("@user", JSON.stringify(googleUserInfo));
-        console.log(googleUserInfo, "이것은 회원가입입니다.");
-        Alert.alert("회원가입 완료", "회원가입 되셨습니다.", [
-          { text: "확인" },
-        ]);
-      }
-    },
+  });
+
+  const jwtMutation = useMutation({
+    mutationFn: (data) => jwtToken(data),
   });
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -67,6 +55,7 @@ export const GoogleOAuth = () => {
   const getUserInfo = async (token: string | undefined) => {
     if (!token) return;
     try {
+      console.log(token);
       const response = await fetch(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         {
@@ -78,25 +67,48 @@ export const GoogleOAuth = () => {
       }
       // 서버에 구글 유저 정보 보내서 저장하기~~~
       const userInfoResponse = await response.json();
-      setGoogleUserInfo(userInfoResponse);
-      mutation.mutate(userInfoResponse);
-      if (isAlreadyUser === false) {
-        // 현재 데이터베이스에 똑같은 이메일값이 있어도 비밀번호 안치고 그냥 로그인 되버림 토큰이 생성되어서. 후에 수정
-        console.log(isAlreadyUser, "isAlreadyUser");
-        console.log(token, "token");
-        await AsyncStorage.setItem("token", token);
-        setUser((prev) => ({
-          ...prev,
-          token: token,
-          isAuthenticated: true,
-          authenticate: (token: string) => {
-            setUser((prev) => ({
-              ...prev,
-              token,
-              isAuthenticated: true,
-            }));
-          },
-        }));
+      const result = await mutation.mutateAsync(userInfoResponse);
+      setGoogleUserInfo(result);
+      console.log(userInfoResponse);
+
+      if (result.isOAuthUser === true) {
+        if (result.isAlreadyUser === false) {
+          const jwtToken = await jwtMutation.mutateAsync(result);
+          await AsyncStorage.setItem("@token", jwtToken);
+          setUser((prev) => ({
+            ...prev,
+            token: token,
+            isAuthenticated: true,
+            authenticate: (token: string) => {
+              setUser((prev) => ({
+                ...prev,
+                token,
+                isAuthenticated: true,
+              }));
+            },
+          }));
+          Alert.alert("회원가입", "회원가입 되셨습니다.", [{ text: "확인" }]);
+        } else if (result.isAlreadyUser === true) {
+          const jwtToken = await jwtMutation.mutateAsync(result);
+          await AsyncStorage.setItem("@token", jwtToken);
+          setUser((prev) => ({
+            ...prev,
+            token: token,
+            isAuthenticated: true,
+            authenticate: (token: string) => {
+              setUser((prev) => ({
+                ...prev,
+                token,
+                isAuthenticated: true,
+              }));
+            },
+          }));
+        }
+      } else if (result.isOAuthUser === false) {
+        Alert.alert("로그인 실패", "개인 회원으로 가입한 회원입니다.", [
+          { text: "확인" },
+        ]);
+        return;
       }
     } catch (e) {
       console.log(e);

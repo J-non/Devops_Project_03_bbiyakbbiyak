@@ -1,26 +1,33 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateEmail, CreateSignupDto } from './dto/create-signup.dto';
 import * as bcrypt from 'bcrypt';
 import { generateRandomNumber, smtpTransport } from 'src/config/email';
-import { Response, response } from 'express';
+import { Response } from 'express';
 import { InjectModel } from '@nestjs/sequelize';
 import { userSignUp } from 'src/model/user.model';
 import { SolapiMessageService } from 'solapi';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class SignupService {
   constructor(
     @InjectModel(userSignUp)
     private readonly userSignupLogic: typeof userSignUp,
+    private jwtService: JwtService,
   ) {}
   async create(createSignupDto: CreateSignupDto) {
     const { data } = createSignupDto;
     const { email, userName, phone } = data;
+
+    const isAlreadyUser = await this.userSignupLogic.findOne({
+      where: { email: email, phone: phone },
+    });
+    if (isAlreadyUser !== null) {
+      throw new HttpException(
+        '이미 가입된 회원입니다.',
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
 
     const salt = 10;
     const plainPassword = createSignupDto.data.password;
@@ -48,6 +55,7 @@ export class SignupService {
         ...createGoogle.data,
         name: isGoogleEmailSignedUp.userName,
         isAlreadyUser: true,
+        isOAuthUser: isGoogleEmailSignedUp.isOAuthUser,
       };
       res.send(result);
       return;
@@ -59,12 +67,23 @@ export class SignupService {
       phone: '',
       password: '',
       isOAuthUser: true,
+      isAlreadyUser: false,
     });
     res.send(newUser);
   }
 
+  async createJwtToken(userInfo: CreateSignupDto) {
+    const user = userInfo.data;
+
+    const jwt = await this.jwtService.sign(user);
+
+    return jwt;
+  }
+
   async verifyAuth(createAuthNum: CreateEmail, res: any) {
     const number = generateRandomNumber(111111, 999999);
+
+    console.log(createAuthNum);
     if (createAuthNum.data.type === 'email') {
       const isUserSignedIn = await this.userSignupLogic.findOne({
         where: {
@@ -72,12 +91,13 @@ export class SignupService {
         },
       });
 
-      if (isUserSignedIn) {
-        if (isUserSignedIn.email === createAuthNum.data.email)
+      if (isUserSignedIn !== null) {
+        if (isUserSignedIn.isOAuthUser === true) {
           throw new HttpException(
             '이미 가입한 아이디가 존재합니다.',
             HttpStatus.BAD_REQUEST,
           );
+        }
       }
 
       const mailOptions = {
@@ -104,18 +124,31 @@ export class SignupService {
     }
 
     if (createAuthNum.data.type === 'phone') {
+      console.log(createAuthNum, '11213123211242');
       const isUserSignedIn = await this.userSignupLogic.findOne({
         where: {
-          email: createAuthNum.data.phone,
+          phone: createAuthNum.data.phone,
         },
       });
 
-      if (isUserSignedIn) {
-        if (isUserSignedIn.phone === createAuthNum.data.phone)
-          throw new HttpException(
-            '이미 가입한 아이디가 존재합니다.',
-            HttpStatus.BAD_REQUEST,
-          );
+      const isUserSignedInEmail = await this.userSignupLogic.findOne({
+        where: {
+          email: createAuthNum.data.email,
+        },
+      });
+
+      if (isUserSignedIn !== null) {
+        throw new HttpException(
+          '동일한 휴대전화로 가입한 아이디가 존재합니다.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (isUserSignedInEmail !== null) {
+        throw new HttpException(
+          '이미 가입한 아이디가 존재합니다.',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
       const apiKey = process.env.SOLAPI_API;

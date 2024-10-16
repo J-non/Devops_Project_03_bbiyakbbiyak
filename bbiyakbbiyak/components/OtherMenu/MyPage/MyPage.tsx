@@ -31,8 +31,6 @@ const MyPage = () => {
   const updateInfo = () => {
     navigation.navigate("Logined");
   };
-
-  console.log(bbiyakUpdate);
   /** 구글OAuth 닉네임 변경 */
   const mutation = useMutation({
     mutationFn: (data: MyPageType | undefined) => updateGoogleUserName(data),
@@ -45,7 +43,6 @@ const MyPage = () => {
       } else {
         await AsyncStorage.removeItem("token");
         await AsyncStorage.setItem("token", data);
-        console.log(await AsyncStorage.getItem("token"));
         setBbiyakUpdate((prev: any) => ({
           ...prev,
           password: "",
@@ -65,7 +62,6 @@ const MyPage = () => {
     if (name !== null) {
       mutation.mutate(name);
     } else {
-      console.log(bbiyakUpdate, 222);
       mutation.mutate(bbiyakUpdate);
     }
   };

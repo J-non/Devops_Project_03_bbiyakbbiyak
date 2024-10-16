@@ -22,7 +22,7 @@ export class TokenGuard implements CanActivate {
       throw new UnauthorizedException('액세스 토큰이 필요한 작업입니다.');
     }
 
-    const isBearer = authorization.startsWith('Bearer');
+    const isBearer = authorization.startsWith('bearer');
     if (!isBearer) {
       throw new UnauthorizedException('Bearer 토큰이 아님');
     }

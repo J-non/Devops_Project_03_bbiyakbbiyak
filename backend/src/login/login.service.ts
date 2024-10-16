@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { userSignUp } from 'src/model/user.model';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
-import { JwtPayload } from 'jsonwebtoken';
 
 @Injectable()
 export class LoginService {

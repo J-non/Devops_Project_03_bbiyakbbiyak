@@ -44,8 +44,6 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
     setFormValues((prev: any) => ({ ...prev, [inputType]: value }));
   }
 
-  console.log(rePassword === password);
-
   return (
     <>
       <CustomInput

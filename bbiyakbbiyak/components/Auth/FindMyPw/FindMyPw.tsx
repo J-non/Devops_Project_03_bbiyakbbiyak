@@ -14,6 +14,7 @@ import {
 } from "../../../constants/models";
 import { useMutation } from "@tanstack/react-query";
 import { findPW } from "../../../api";
+import VerifyCode from "../VerifyCode/VerifyCode";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
@@ -24,6 +25,11 @@ const FindMyPw = () => {
     email: "",
     phone: "",
   });
+  const [isAuthCodeSent, setIsAuthCodeSent] = useState(false);
+  const [isCodeVerified, setIsCodeVerified] = useState(false);
+  const [inputAuthCode, setInputAuthCode] = useState("");
+  const [serverAuthCode, setServerAuthCode] = useState("");
+  const [count, setCount] = useState(300);
 
   const mutation = useMutation({
     mutationFn: (data: { email: string; phone: string }) => findPW(data),
@@ -72,6 +78,22 @@ const FindMyPw = () => {
               setValueState(valueType.phone, text);
             }
           }}
+        />
+      </View>
+      <View style={{ alignItems: "center" }}>
+        <VerifyCode
+          formValues={searchUser}
+          setFormValues={setSearchUser}
+          isAuthCodeSent={isAuthCodeSent}
+          isCodeVerified={isCodeVerified}
+          setIsAuthCodeSent={setIsAuthCodeSent}
+          setInputAuthCode={setInputAuthCode}
+          setServerAuthCode={setServerAuthCode}
+          setIsCodeVerified={setIsCodeVerified}
+          setCount={setCount}
+          count={count}
+          inputAuthCode={inputAuthCode}
+          serverAuthCode={serverAuthCode}
         />
       </View>
       <View style={styles.buttonContainer}>
