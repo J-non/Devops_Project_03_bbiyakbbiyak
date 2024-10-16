@@ -54,14 +54,14 @@ const CalendarHeader = ({ currentDate, setCurrentDate, today }: any) => {
             </Text>
           </View>
 
-          <View style={CalendarHeaderStyles.todayButtonWrap}>
+          {/* <View style={CalendarHeaderStyles.todayButtonWrap}>
             <Pressable
               onPress={gotToToday}
               style={CalendarHeaderStyles.todayButton}
             >
               <Text style={CalendarHeaderStyles.todayText}>오늘</Text>
             </Pressable>
-          </View>
+          </View> */}
 
         </View>
 

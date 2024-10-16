@@ -9,7 +9,7 @@ interface IDateForm {
 export const formatDate = (date: Date): IDateForm => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1; // getMonth()는 0부터 시작하므로 +1 필요
-  const day = date.getDate();
+  const day = date.getDate() - 1;
   const timestamp = date.getTime(); // 타임스탬프 (밀리초)
 
   // YYYY-MM-DD 형태의 문자열 생성

@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize
 import { AlarmLogs } from "./alarmLogs.model";
 
 @Table({
-  tableName: 'alarmLogDetails',
+  tableName: 'alarmLogItems',
   timestamps: true
 })
 export class AlarmLogItems extends Model {
@@ -19,11 +19,11 @@ export class AlarmLogItems extends Model {
   })
   isTaken: boolean
 
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false
-  })
-  itemsid: number
+  // @Column({
+  //   type: DataType.INTEGER,
+  //   allowNull: false
+  // })
+  // itemsid: number
 
   @ForeignKey(() => AlarmLogs)
   @Column

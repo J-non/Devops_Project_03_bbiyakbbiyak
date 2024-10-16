@@ -3,5 +3,5 @@ import { AlarmLogsService } from './alarm-logs.service';
 
 @Controller('alarm-logs')
 export class AlarmLogsController {
-  constructor(private readonly alarmLogsService: AlarmLogsService) {}
+  constructor(private readonly alarmLogsService: AlarmLogsService) { }
 }

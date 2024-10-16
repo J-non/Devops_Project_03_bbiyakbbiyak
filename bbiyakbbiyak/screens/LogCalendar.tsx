@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CategoryTabs from '../components/categoryTabs/CategoryTabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { CalendarTabs } from '../components/main/screens/MainScreenCategories';
 import CalendarHeader from '../components/alarmLogCalendar/molecules/CalendarHeader';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { formatDate } from '../dateFormat/formatDate';
 import { useAtom } from 'jotai';
 import { selectedCalendarDateAtom } from '../store/selectedCalendarDateAtom';
 import { View } from 'react-native';
+import { useMutation } from '@tanstack/react-query';
+import { test } from '../api';
+import { GlobalTheme } from '../constants/theme';
 
 
 const Stack = createNativeStackNavigator();
@@ -26,10 +29,10 @@ LocaleConfig.defaultLocale = 'ko';
 
 
 const LogCalendar = () => {
-  const route = useRoute();
-  const navigation = useNavigation<any>();
-
+  const route = useRoute<any>();
   const today = new Date();
+
+
 
   const initDate = formatDate(today);
 
@@ -37,8 +40,8 @@ const LogCalendar = () => {
   const [currentDate, setCurrentDate] = useState(initDate);
   const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
 
-
-  const formattedToday = today.toISOString().split('T')[0]; // '2024-10-07' 형태로 변환
+  today.setDate(today.getDate() - 1);
+  const formattedMaxDate = (today).toISOString().split('T')[0]; // '2024-10-07' 형태로 변환
 
 
   return (
@@ -46,7 +49,7 @@ const LogCalendar = () => {
       <Calendar
         onDayPress={(day: any) => { setSelectedDate(day), setCurrentDate(day) }} // 누를시 날짜 선택
         onDayLongPress={(day: any) => { setSelectedDate(day), setCurrentDate(day) }} // 누를시 날짜 선택
-        maxDate={formattedToday} // 오늘 날짜까지 선택 가능
+        maxDate={formattedMaxDate} // 오늘 날짜까지 선택 가능
         // 커스텀 헤더 렌더링
         renderHeader={() =>
           <CalendarHeader
@@ -58,6 +61,7 @@ const LogCalendar = () => {
         hideArrows={true}
         initialDate={`${currentDate.year}-${currentDate.month}`}
         theme={{
+          todayTextColor: '#999',
           textSectionTitleColor: '#000',
           dotStyle: { marginTop: 8 },
           textDayFontFamily: 'pretendard',
@@ -70,7 +74,14 @@ const LogCalendar = () => {
           '2024-10-01': { marked: true, dotColor: 'red', activeOpacity: 0 },
           '2024-10-12': { marked: true, dotColor: 'blue' },
           '2024-10-15': { marked: true, dotColor: 'green' },
-          [selectedDate.dateString]: { selected: true, marked: true, dotColor: true && 'red', disableTouchEvent: true },
+          [selectedDate.dateString]: {
+            selected: true,
+            selectedColor: GlobalTheme.colors.primary300,
+            selectedTextColor: '#000',
+            marked: true,
+            dotColor: true && 'red',
+            disableTouchEvent: true
+          }
         }}
       />
       <View style={{ height: 12, backgroundColor: '#fff' }}></View>

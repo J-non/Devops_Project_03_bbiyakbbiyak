@@ -2,29 +2,38 @@ import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize
 import { Alarms } from "./alarms.model";
 
 @Table({
-    tableName: 'items',
-    timestamps: true,
-    paranoid: true,
+  tableName: 'items',
+  timestamps: true,
+  paranoid: true,
 })
 
 export class Items extends Model {
-    @Column({
-        type: DataType.STRING,
-        allowNull: false
-    })
-    itemName: string
+  @Column({
+    type: DataType.STRING,
+    allowNull: false
+  })
+  itemName: string
 
-    @Column({
-        type: DataType.BOOLEAN,
-        defaultValue: false,
-    })
-    isTaken: boolean
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  isTaken: boolean
 
 
-    @ForeignKey(() => Alarms)
-    @Column
-    fk_alarmsId: number
+  @ForeignKey(() => Alarms)
+  @Column
+  fk_alarmsId: number
 
-    @BelongsTo(() => Alarms, "fk_alarmsId")
-    alarms: Alarms
+  @BelongsTo(() => Alarms, "fk_alarmsId")
+  alarms: Alarms
+
+
+
+  //  유저 foreignKey 필요
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false
+  })
+  fk_userId: number
 }

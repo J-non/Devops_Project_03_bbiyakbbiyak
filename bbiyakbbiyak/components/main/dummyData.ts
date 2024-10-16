@@ -19,7 +19,7 @@ interface DummyDataItem {
 }
 
 // 더미 데이터 생성
-export const dummyData: DummyDataItem[] = Array.from({ length: 0 }, (_, index) => ({
+export const dummyData: DummyDataItem[] = Array.from({ length: 3 }, (_, index) => ({
   id: (index + 1).toString(),
   titles: Array.from({ length: 3 }, (_, titleIndex) => ({
     id: (titleIndex + 1).toString(),

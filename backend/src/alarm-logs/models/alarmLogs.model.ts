@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
-import { AlarmLogItems } from "./alarmLogItemss";
+import { AlarmLogItems } from "./alarmLogItems.model";
 
 @Table({
   tableName: 'alarmLogs',
@@ -9,12 +9,12 @@ export class AlarmLogs extends Model {
   @Column({
     type: DataType.STRING(10)
   })
-  date: string;
+  logDate: string;
 
   @Column({
     type: DataType.STRING(8),
   })
-  time: string;
+  targetTime: string;
 
   @Column({
     type: DataType.STRING(20),

@@ -5,7 +5,7 @@ import { dummyData } from '../dummyData'
 import { useAtom } from 'jotai'
 import { selectedCalendarDateAtom } from '../../../store/selectedCalendarDateAtom'
 
-const TodayAlarmHeader = ({ title, routeName }: any) => {
+const TodayAlarmHeader = ({ title, routeName, alarmLength }: any) => {
   const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
   const [selectedDay, setSelectedDay] = useState<number>(0);
 
@@ -42,9 +42,9 @@ const TodayAlarmHeader = ({ title, routeName }: any) => {
 
 
       {
-        dummyData.length > 0 &&
+        alarmLength > 0 &&
         <View>
-          <Text style={TodayAlarmHeaderStyles.countText}>총 0/{dummyData.length}개</Text>
+          <Text style={TodayAlarmHeaderStyles.countText}>총 0/{alarmLength}개</Text>
         </View>
       }
     </>

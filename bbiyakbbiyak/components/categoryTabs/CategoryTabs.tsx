@@ -16,7 +16,8 @@ const CategoryTabs = () => {
 
   const buttonSelectedHandler = (category: any) => () => {
     setSelectedCategory(category);
-    navigation.navigate(category);
+    let tempCategory = category.replace('Calendar', '');
+    navigation.navigate(category, { category: tempCategory });
   }
 
   useEffect(() => {
