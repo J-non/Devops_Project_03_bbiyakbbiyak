@@ -68,7 +68,7 @@ export const emailAPI = async (data: object) => {
   }
 };
 
-export const findID = async (data: { email: string } | null) => {
+export const findID = async (data: { phone: string } | null) => {
   try {
     const response = await axios.post("http://10.0.2.2:3000/login/findID", {
       data,
