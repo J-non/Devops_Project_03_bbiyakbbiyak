@@ -55,7 +55,6 @@ export class LoginController {
   @Get('getInfo/:id')
   @UseFilters(new ExceptionHandler())
   async getInfo(@Param() param: CreateLoginDto, @Res() res: Response) {
-    console.log(param);
     const data = await this.loginService.verifyOAuth(param);
 
     res.send(data);
@@ -67,7 +66,6 @@ export class LoginController {
     @Body() updateGoogle: CreateLoginDto,
     @Res() res: Response,
   ) {
-    console.log(updateGoogle, 111);
     const data = await this.loginService.updateGoogle(updateGoogle);
     res.send(data);
   }

@@ -23,6 +23,12 @@ export class SignupService {
       where: { email: email, phone: phone },
     });
     if (isAlreadyUser !== null) {
+      await this.userSignupLogic.update(
+        {
+          isAlreadyUser: true,
+        },
+        { where: { email: email, phone: phone } },
+      );
       throw new HttpException(
         '이미 가입된 회원입니다.',
         HttpStatus.BAD_GATEWAY,
@@ -49,8 +55,15 @@ export class SignupService {
       where: { email: email },
     });
 
+    console.log(isGoogleEmailSignedUp, 'isGoogleEmailSignedUp');
+
     if (isGoogleEmailSignedUp) {
-      console.log(isGoogleEmailSignedUp);
+      await this.userSignupLogic.update(
+        {
+          isAlreadyUser: true,
+        },
+        { where: { email: email } },
+      );
       const result = {
         ...createGoogle.data,
         name: isGoogleEmailSignedUp.userName,
@@ -83,7 +96,6 @@ export class SignupService {
   async verifyAuth(createAuthNum: CreateEmail, res: any) {
     const number = generateRandomNumber(111111, 999999);
 
-    console.log(createAuthNum);
     if (createAuthNum.data.type === 'email') {
       const isUserSignedIn = await this.userSignupLogic.findOne({
         where: {
@@ -124,7 +136,6 @@ export class SignupService {
     }
 
     if (createAuthNum.data.type === 'phone') {
-      console.log(createAuthNum, '11213123211242');
       const isUserSignedIn = await this.userSignupLogic.findOne({
         where: {
           phone: createAuthNum.data.phone,
