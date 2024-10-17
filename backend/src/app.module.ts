@@ -6,6 +6,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 import { JwtModule } from '@nestjs/jwt';
 import { AlarmLogsModule } from './alarm-logs/alarm-logs.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { AlarmModule } from './alarm/alarm.module';
 import { NotificationModule } from './notification/notification.module';
 
 
@@ -31,6 +33,9 @@ import { NotificationModule } from './notification/notification.module';
     }),
     AlarmLogsModule,
     NotificationModule,
+    ScheduleModule.forRoot(),// 스케쥴링 모듈
+    AlarmModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],
