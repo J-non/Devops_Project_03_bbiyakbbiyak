@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query, Res } from '@nestjs/common';
 import { AlarmLogsService } from './alarm-logs.service';
 import { Response } from 'express';
 
@@ -17,7 +17,7 @@ export class AlarmLogsController {
   }
 
 
-  @Post('get_alarm_logs')
+  @Get('get_alarm_logs')
   async getAlarmLogs(@Query('category') category: string, @Query('logDate') logDate: string, @Res() res: Response) {
     try {
       // 유저 아이디 동적을 받는 로직 추가해야함
@@ -28,6 +28,17 @@ export class AlarmLogsController {
       console.error(error)
     }
   }
+  // @Post('get_alarm_logs')
+  // async getAlarmLogs(@Query('category') category: string, @Query('logDate') logDate: string, @Res() res: Response) {
+  //   try {
+  //     // 유저 아이디 동적을 받는 로직 추가해야함
+  //     console.log(logDate)
+  //     const data = await this.alarmLogsService.selectAlarmLogsByUserId(1, category, logDate)
+  //     res.send(data)
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
 
 
   @Put('alarm_log_Items/is_taken')

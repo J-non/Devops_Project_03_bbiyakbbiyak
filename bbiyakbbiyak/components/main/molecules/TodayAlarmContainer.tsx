@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, FlatList, Text, View } from 'react-native'
 import { TodayAlarmContainerStyles } from './TodayAlarmContainer.style'
 import { dummyData } from '../dummyData'
@@ -8,7 +8,7 @@ import TodayAlarmEmpty from './TodayAlarmEmpty'
 import AlarmLogEmpty from '../../alarmLogCalendar/molecules/AlarmLogEmpty'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getAlarm, getAlarmLog } from '../../../api'
-import { useRoute } from '@react-navigation/native'
+import { useFocusEffect, useRoute } from '@react-navigation/native'
 import { useAtom } from 'jotai'
 import { selectedCalendarDateAtom } from '../../../store/selectedCalendarDateAtom'
 
@@ -21,21 +21,26 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
 
   let logDate = selectedDate.dateString;
 
-  const { data, mutate, isSuccess } = useMutation({
-    mutationFn: routeName ? getAlarmLog : getAlarm,
-    onSuccess(data) {
-    },
-    onError(error) {
-      console.error(error)
-    }
-  })
+  // const { data, mutate, isSuccess } = useMutation({
+  //   mutationFn: routeName ? getAlarmLog : getAlarm,
+  //   onSuccess(data) {
+  //   },
+  //   onError(error) {
+  //     console.error(error)
+  //   }
+  // })
 
   let category: 'medicine';
 
-  // const { data, isSuccess, refetch, } = useQuery({
-  //   queryKey: ['alarmLogList'],
-  //   queryFn: async () => routeName ? await getAlarmLog(category) : await getAlarm(category, '1')
-  // })
+  const { data, isSuccess, refetch, } = useQuery({
+    queryKey: ['alarmLogList'],
+    queryFn: async () => routeName ? await getAlarmLog({ category, token: '', logDate }) : await getAlarm({ category, token: '', logDate }),
+    // refetchOnWindowFocus: true,
+    // refetchOnMount: true
+  })
+
+
+
 
   useEffect(() => {
     if (!route.params?.category) {
@@ -44,8 +49,8 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
       category = route.params?.category;
     }
     console.log(1, category)
-    mutate({ category, token: '', logDate })
-    // refetch();
+    // mutate({ category, token: '', logDate })
+    refetch();
   }, [route.params, title, selectedDate])
 
   // if (data) {

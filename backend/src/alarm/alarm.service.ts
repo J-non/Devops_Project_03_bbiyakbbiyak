@@ -41,7 +41,7 @@ export class AlarmService {
   //////////////////////////////// 알람 등록
   async createAlarm(alarmData: CreateAlarmDto): Promise<Alarms> {
     const { category, targetTime, pushDay, itemName, deviceToken, pushMessage, userIdFromToken } = alarmData
-    // console.log(category, targetTime, pushDay, itemName, deviceToken, pushMessage, userIdFromToken)
+    console.log(category, targetTime, pushDay, itemName, deviceToken, pushMessage, userIdFromToken)
     // 트랜잭션
     const transaction = await this.sequelize.transaction();
     try {

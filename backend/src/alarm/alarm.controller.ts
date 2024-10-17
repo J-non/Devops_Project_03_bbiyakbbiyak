@@ -54,7 +54,17 @@ export class AlarmController {
 
   // 알람 목록 조회
   // 유저 id동적으로 받아오는 처리 해야함
-  @Post('get_alarm_list')
+  // @Post('get_alarm_list')
+  // async getAlarmListByCategory(@Query('category') category: string, @Query('pushDay') pushDay: number, @Res() res: Response) {
+  //   try {
+  //     // 유저 id동적으로 받아오는 처리 해야함
+  //     const data = await this.alarmService.selectAlarmListByCategory(1, category, pushDay)
+  //     res.send(data)
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
+  @Get('get_alarm_list')
   async getAlarmListByCategory(@Query('category') category: string, @Query('pushDay') pushDay: number, @Res() res: Response) {
     try {
       // 유저 id동적으로 받아오는 처리 해야함
@@ -64,16 +74,6 @@ export class AlarmController {
       console.error(error)
     }
   }
-  // @Get('get_alarm_list')
-  // async getAlarmListByCategory(@Query('category') category: any, @Res() res: Response) {
-  //   try {
-  //     // 유저 id동적으로 받아오는 처리 해야함
-  //     const data = await this.notificationService.selectAlarmListByCategory(1, category)
-  //     res.send(data)
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
 
   // 먹었는지 여부 업데이트
   @Put('items/is_takend')

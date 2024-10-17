@@ -26,7 +26,7 @@ export const createAlarmLogs = async () => {
     // 시작요일
     const logStartDay = pastDate.getDay();
 
-    const { data } = await axios.post('http://192.168.0.82:3000/notification/create_logs/1', { daysDifference, loggedDate });
+    const { data } = await axios.post('http://192.168.0.82:3000/alarm/create_logs/1', { daysDifference, loggedDate });
     // console.log(1, data);
     return data
 
@@ -39,10 +39,24 @@ export const createAlarmLogs = async () => {
 
 
 // 오늘 알람 목록 가져오기
-// export const getAlarm = async (category: string = 'medicine', token: string) => {
-//   console.log(123, category)
-//   const { data } = await axios.get(
-//     `http://192.168.0.82:3000/notification/get_alarm_list?category=${category}`,
+export const getAlarm = async ({ category, token, logDate }: { category: string, token: string, logDate: string }) => {
+  console.log(123, category)
+  const pushDay = new Date().getDay();
+  const { data } = await axios.get(
+    `http://192.168.0.82:3000/alarm/get_alarm_list?category=${category}&pushDay=${pushDay}`,
+    {
+      headers: {
+        Authorization: `bearer ${token}`
+      }
+    });
+  return data
+}
+
+// 오늘 알람 목록 가져오기
+// export const getAlarm = async ({ category, token, logDate }: { category: string, token: string, logDate: string }) => {
+//   const pushDay = new Date().getDay();
+//   const { data } = await axios.post(
+//     `http://192.168.0.82:3000/alarm/get_alarm_list?category=${category}&pushDay=${pushDay}`,
 //     {
 //       headers: {
 //         Authorization: `bearer ${token}`
@@ -51,24 +65,25 @@ export const createAlarmLogs = async () => {
 //   return data
 // }
 
-// 오늘 알람 목록 가져오기
-export const getAlarm = async ({ category, token, logDate }: { category: string, token: string, logDate: string }) => {
-  const pushDay = new Date().getDay();
-  const { data } = await axios.post(
-    `http://192.168.0.82:3000/notification/get_alarm_list?category=${category}&pushDay=${pushDay}`,
-    {
-      headers: {
-        Authorization: `bearer ${token}`
-      }
-    });
-  return data
-}
-
 // 선택된 날짜 알람 목록 가져오기
+// export const getAlarmLog = async ({ category, token, logDate }: { category: string, token: string, logDate: string }) => {
+//   console.log(3, logDate)
+
+//   const { data } = await axios.post(
+//     `http://192.168.0.82:3000/alarm-logs/get_alarm_logs?category=${category}&logDate=${logDate}`,
+//     {
+//       headers: {
+//         Authorization: `bearer ${token}`
+//       }
+//     });
+//   return data
+// }
+
+
 export const getAlarmLog = async ({ category, token, logDate }: { category: string, token: string, logDate: string }) => {
   console.log(3, logDate)
 
-  const { data } = await axios.post(
+  const { data } = await axios.get(
     `http://192.168.0.82:3000/alarm-logs/get_alarm_logs?category=${category}&logDate=${logDate}`,
     {
       headers: {
@@ -77,7 +92,6 @@ export const getAlarmLog = async ({ category, token, logDate }: { category: stri
     });
   return data
 }
-
 
 
 
@@ -96,7 +110,7 @@ export const getMonthLog = async (monthString: string) => {
 export const updateIsTaken = async ({ id, isTaken }: { id: number, isTaken: boolean }) => {
   try {
     // console.log(isTaken)
-    const data = await axios.put('http://192.168.0.82:3000/notification/items/is_takend', { id, isTaken });
+    const data = await axios.put('http://192.168.0.82:3000/alarm/items/is_takend', { id, isTaken });
     return data
   } catch (error) {
     console.error(error)

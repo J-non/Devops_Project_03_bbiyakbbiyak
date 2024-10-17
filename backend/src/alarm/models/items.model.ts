@@ -31,9 +31,9 @@ export class Items extends Model {
 
 
   //  유저 foreignKey 필요
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false
-  })
-  fk_userId: number
+  // @Column({
+  //   type: DataType.INTEGER,
+  //   allowNull: false
+  // })
+  // fk_userId: number
 }
