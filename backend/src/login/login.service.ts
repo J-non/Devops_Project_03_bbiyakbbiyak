@@ -54,9 +54,9 @@ export class LoginService {
   }
 
   async findUserID(searchID: CreateLoginDto) {
-    const { email } = searchID.data;
+    const { phone } = searchID.data;
     const result = await this.userLoginLogic.findOne({
-      where: { email: email },
+      where: { email: phone },
     });
     if (result === null) {
       throw new HttpException(

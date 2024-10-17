@@ -22,7 +22,7 @@ const FindMyId = () => {
   const navigation = useNavigation<NavigationProps>();
 
   const [userID, setUserID] = useState({
-    email: "",
+    phone: "",
   });
   const [isAuthCodeSent, setIsAuthCodeSent] = useState(false);
   const [isCodeVerified, setIsCodeVerified] = useState(false);
@@ -31,14 +31,14 @@ const FindMyId = () => {
   const [count, setCount] = useState(300);
 
   const mutation = useMutation({
-    mutationFn: (data: { email: string } | null) => findID(data),
+    mutationFn: (data: { phone: string } | null) => findID(data),
     onSuccess: (data) => {
       Alert.alert("찾은 아이디", data, [
         {
           text: "확인",
           onPress: () => {
             navigation.navigate("Unlogin");
-            setUserID({ email: "" });
+            setUserID({ phone: "" });
           },
         },
       ]);
@@ -64,10 +64,10 @@ const FindMyId = () => {
       <View style={styles.IdSearch}>
         <CustomInput
           style={styles.inputStyle}
-          placeholder="ABCDE@gmail.com"
+          placeholder="01000000000"
           inputValue={setValueState}
-          inputType={valueType.password}
-          value={userID.email}
+          inputType={valueType.phone}
+          value={userID.phone}
           onChangeText={(text: any) => {
             if (setValueState) {
               setValueState(valueType.email, text); // inputType을 사용하여 직접 전달
