@@ -31,27 +31,18 @@ const MyPage = () => {
   const updateInfo = () => {
     navigation.navigate("Logined");
   };
-  /** 구글OAuth 닉네임 변경 */
+  // 현재 구글 닉네임 변경안됨 10/17 후에 수정해야됨
   const mutation = useMutation({
     mutationFn: (data: MyPageType | undefined) => updateGoogleUserName(data),
     onSuccess: async (data) => {
-      if (name) {
-        await AsyncStorage.removeItem("@user");
-        await AsyncStorage.setItem("@user", JSON.stringify(name));
-
-        Alert.alert("정보 변경", data, [{ text: "확인" }]);
-      } else {
-        await AsyncStorage.removeItem("token");
-        await AsyncStorage.setItem("token", data);
-        setBbiyakUpdate((prev: any) => ({
-          ...prev,
-          password: "",
-          rePassword: "",
-        }));
-        Alert.alert("정보 변경", "정보 변경이 완료되셨습니다.", [
-          { text: "확인", onPress: updateInfo },
-        ]);
-      }
+      setBbiyakUpdate((prev: any) => ({
+        ...prev,
+        password: "",
+        rePassword: "",
+      }));
+      Alert.alert("정보 변경", "정보 변경이 완료되셨습니다.", [
+        { text: "확인", onPress: updateInfo },
+      ]);
     },
     onError: (error) => {
       Alert.alert("요청 실패", error.message, [{ text: "확인" }]);
@@ -59,11 +50,8 @@ const MyPage = () => {
   });
 
   const handleUpdate = () => {
-    if (name !== null) {
-      mutation.mutate(name);
-    } else {
-      mutation.mutate(bbiyakUpdate);
-    }
+    console.log(bbiyakUpdate);
+    mutation.mutate(bbiyakUpdate);
   };
 
   return (

@@ -96,7 +96,6 @@ const VerifyCode: React.FC<EmailVerificationProps> = ({
 
   const handleCode = (type: string) => {
     if (!regEmail.test(email) && !regPhone.test(phone)) return;
-    console.log(222);
     mutation.mutate({ email, phone, type: type });
   };
 

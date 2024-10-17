@@ -55,7 +55,6 @@ export const GoogleOAuth = () => {
   const getUserInfo = async (token: string | undefined) => {
     if (!token) return;
     try {
-      console.log(token);
       const response = await fetch(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         {
@@ -69,15 +68,15 @@ export const GoogleOAuth = () => {
       const userInfoResponse = await response.json();
       const result = await mutation.mutateAsync(userInfoResponse);
       setGoogleUserInfo(result);
-      console.log(userInfoResponse);
 
       if (result.isOAuthUser === true) {
         if (result.isAlreadyUser === false) {
+          console.log("회원가입 됨");
           const jwtToken = await jwtMutation.mutateAsync(result);
           await AsyncStorage.setItem("@token", jwtToken);
           setUser((prev) => ({
             ...prev,
-            token: token,
+            token: jwtToken,
             isAuthenticated: true,
             authenticate: (token: string) => {
               setUser((prev) => ({
@@ -89,11 +88,12 @@ export const GoogleOAuth = () => {
           }));
           Alert.alert("회원가입", "회원가입 되셨습니다.", [{ text: "확인" }]);
         } else if (result.isAlreadyUser === true) {
+          console.log("로그인 됨");
           const jwtToken = await jwtMutation.mutateAsync(result);
           await AsyncStorage.setItem("@token", jwtToken);
           setUser((prev) => ({
             ...prev,
-            token: token,
+            token: jwtToken,
             isAuthenticated: true,
             authenticate: (token: string) => {
               setUser((prev) => ({

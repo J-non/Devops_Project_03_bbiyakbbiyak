@@ -7,6 +7,7 @@ import { RootStackParamList } from "../../constants/models";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
@@ -16,16 +17,27 @@ const OtherMenuMain = () => {
   const updateInfo = () => {
     navigation.navigate("MyPage");
   };
-  const [logout] = useAtom(userAtom);
+  const [authCtx, setAuthCtx] = useAtom(userAtom);
 
   const logOutHandler = () => {
     Alert.alert("로그아웃", "로그아웃 하시겠습니까?", [
       { text: "취소" },
       {
         text: "확인",
-        onPress: () => {
-          logout.logout();
-          navigation.navigate("Unlogin");
+        onPress: async () => {
+          await AsyncStorage.removeItem("@token");
+          setAuthCtx((prev) => ({
+            ...prev,
+            token: "", // 토큰을 빈 값으로 설정
+            isAuthenticated: false, // 인증 상태를 false로 설정
+            authenticate: (token: string) => {
+              setAuthCtx((prev: any) => ({
+                ...prev,
+                token,
+                isAuthenticated: true,
+              }));
+            },
+          }));
         },
       },
     ]);

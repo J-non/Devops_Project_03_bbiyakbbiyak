@@ -22,7 +22,6 @@ export function Logined() {
           component={OtherMenuMain}
           options={{ headerShown: false, presentation: "modal" }}
         />
-        <Stack.Screen name="Unlogin" component={Unlogin} />
       </Stack.Navigator>
     </>
   );
