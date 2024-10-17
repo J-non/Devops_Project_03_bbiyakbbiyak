@@ -48,9 +48,7 @@ const MyPage = () => {
       Alert.alert("요청 실패", error.message, [{ text: "확인" }]);
     },
   });
-
   const handleUpdate = () => {
-    console.log(bbiyakUpdate);
     mutation.mutate(bbiyakUpdate);
   };
 

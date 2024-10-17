@@ -2,8 +2,7 @@ import React from "react";
 import CustomInput from "../../UI/Input/CustomInput";
 import AlertComponent from "../../UI/Alert/Alert";
 import { Valuetype, valueType } from "../../../constants/models";
-import { Pressable, Text, TextStyle, ViewStyle } from "react-native";
-import { View } from "react-native-animatable";
+import { TextStyle, ViewStyle } from "react-native";
 
 interface OtherInputsProps {
   formValues: any;

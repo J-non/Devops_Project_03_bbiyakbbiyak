@@ -8,4 +8,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: GlobalTheme.colors.gray300,
   },
+  logOutText: {
+    color: "black",
+  },
+  deleteText: {
+    color: GlobalTheme.colors.accent500,
+  },
 });

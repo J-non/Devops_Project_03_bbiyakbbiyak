@@ -1,4 +1,5 @@
 import { UseMutationResult } from "@tanstack/react-query";
+import { StyleProp, TextStyle } from "react-native";
 
 export const valueType = {
   email: "email",
@@ -43,3 +44,9 @@ export type RootStackParamList = {
   ManageAlarm: undefined;
   MyPage: undefined;
 };
+
+export interface logoutNdelete {
+  onPress: () => void;
+  children: React.ReactNode;
+  styles: StyleProp<TextStyle>;
+}
