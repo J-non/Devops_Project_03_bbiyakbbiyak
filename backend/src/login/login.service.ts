@@ -54,7 +54,6 @@ export class LoginService {
     const result = await this.userLoginLogic.findOne({
       where: { email: email },
     });
-    console.log(result);
     if (result === null) {
       throw new HttpException(
         '찾을 수 없는 아이디입니다.',

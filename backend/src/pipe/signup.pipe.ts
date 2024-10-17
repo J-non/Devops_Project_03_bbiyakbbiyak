@@ -15,7 +15,6 @@ export class SignUpPipe implements PipeTransform {
     }
 
     const { email, password } = value.data;
-    console.log(value, 11111);
 
     if (!email || !password) {
       throw new BadRequestException('아이디 또는 비밀번호를 잘 입력해줘');
