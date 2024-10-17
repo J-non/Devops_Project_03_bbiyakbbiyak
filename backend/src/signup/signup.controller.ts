@@ -39,4 +39,11 @@ export class SignupController {
     // isEmail에서 이메일 값이 들어오는데 db에 같은 이메일 있는지 확인하기@@@@@@@@@@@@@@
     const result = await this.signupService.verifyAuth(isVerifyCode, res);
   }
+
+  @Post('jwtToken')
+  async getToken(@Body() isUserInfo: CreateSignupDto, @Res() res: Response) {
+    const result = await this.signupService.createJwtToken(isUserInfo);
+
+    res.send(result);
+  }
 }

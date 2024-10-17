@@ -10,19 +10,15 @@ export function AuthCheck() {
 
   useEffect(() => {
     async function fetchToken() {
-      const storedToken = await AsyncStorage.getItem("token");
-      const storedUser = await AsyncStorage.getItem("@user");
-      // await AsyncStorage.removeItem("@user");
-      // await AsyncStorage.removeItem("token");
-      console.log(storedToken, storedUser, 111);
+      const storedToken = await AsyncStorage.getItem("@token");
+      console.log(storedToken, 111);
       if (storedToken) {
         setAuthCtx((prevState) => ({
           ...prevState,
           token: storedToken,
           isAuthenticated: true,
           logout: async () => {
-            await AsyncStorage.removeItem("@user");
-            await AsyncStorage.removeItem("token");
+            await AsyncStorage.removeItem("@token");
           },
         }));
       }

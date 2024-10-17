@@ -27,8 +27,6 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
     setFormValues((prev: any) => ({ ...prev, [inputType]: value }));
   }
 
-  console.log(email);
-
   return (
     <View style={{ width: "100%", alignItems: "center" }}>
       <CustomInputWithButton

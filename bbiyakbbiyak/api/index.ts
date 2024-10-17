@@ -27,6 +27,21 @@ export const signupGoogle = async (data: any) => {
   }
 };
 
+export const jwtToken = async (data: any) => {
+  try {
+    const response = await axios.post("http://10.0.2.2:3000/signup/jwtToken", {
+      data,
+    });
+    const _data = response.data;
+
+    return _data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+};
+
 export const loginAPI = async (data: any) => {
   try {
     const response = await axios.post("http://10.0.2.2:3000/login", { data });

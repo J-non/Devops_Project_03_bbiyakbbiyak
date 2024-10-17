@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 import { styles } from "./SignUpFormStyle";
 import EmailVerification from "../EmailVerification/EmailVerification";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import OtherInputs from "../OtherInput/OtherInput";
 import { valueType } from "../../../constants/models";
-import Button from "../../UI/Button/Button";
-import { GlobalTheme } from "../../../constants/theme";
 import VerifyCode from "../VerifyCode/VerifyCode";
 
 interface SignUpFormProps {
@@ -79,17 +77,17 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       />
       <VerifyCode
         formValues={formValues}
-        setFormValues={setFormValues}
         isAuthCodeSent={isAuthCodeSent}
+        isCodeVerified={isCodeVerified}
+        setFormValues={setFormValues}
         setIsAuthCodeSent={setIsAuthCodeSent}
         setInputAuthCode={setInputAuthCode}
         setServerAuthCode={setServerAuthCode}
         setIsCodeVerified={setIsCodeVerified}
+        setCount={setCount}
+        count={count}
         inputAuthCode={inputAuthCode}
         serverAuthCode={serverAuthCode}
-        count={count}
-        setCount={setCount}
-        isCodeVerified={isCodeVerified}
       />
     </View>
   );

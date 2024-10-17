@@ -50,7 +50,7 @@ const VerifyCode: React.FC<EmailVerificationProps> = ({
   const phone = formValues.phone;
   const regPhone = /^01([0|1|6|7|8|9])([0-9]{4})([0-9]{4})$/;
 
-  const [authType, setAuthType] = useState("");
+  const [authType, setAuthType] = useState<string | undefined>();
 
   const mutation = useMutation({
     mutationFn: (data: object) => emailAPI(data),
@@ -95,14 +95,9 @@ const VerifyCode: React.FC<EmailVerificationProps> = ({
   };
 
   const handleCode = (type: string) => {
-    if (!regEmail.test(email)) return;
-    if (type === "email") {
-      mutation.mutate({ email, type });
-    }
-    if (!regPhone.test(phone)) return;
-    if (type === "phone") {
-      mutation.mutate({ phone, type });
-    }
+    if (!regEmail.test(email) && !regPhone.test(phone)) return;
+    console.log(222);
+    mutation.mutate({ email, phone, type: type });
   };
 
   function setValueState(inputType: Valuetype, value: string | any) {
@@ -115,12 +110,13 @@ const VerifyCode: React.FC<EmailVerificationProps> = ({
       {
         text: "확인",
         onPress: () => {
-          if (type === "email") {
-            handleCode("email");
-            setAuthType("email");
-          } else {
-            handleCode("phone");
-            setAuthType("phone");
+          if (regPhone.test(phone) && regEmail.test(email)) {
+            handleCode(type);
+            setAuthType(type);
+          } else if (!regPhone.test(phone) && !regEmail.test(email)) {
+            Alert.alert("요청 실패", "올바르지 않은 요청입니다.", [
+              { text: "확인" },
+            ]);
           }
         },
       },

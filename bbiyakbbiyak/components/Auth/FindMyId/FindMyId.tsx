@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { findID } from "../../../api";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+import VerifyCode from "../VerifyCode/VerifyCode";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
@@ -23,6 +24,11 @@ const FindMyId = () => {
   const [userID, setUserID] = useState({
     email: "",
   });
+  const [isAuthCodeSent, setIsAuthCodeSent] = useState(false);
+  const [isCodeVerified, setIsCodeVerified] = useState(false);
+  const [inputAuthCode, setInputAuthCode] = useState("");
+  const [serverAuthCode, setServerAuthCode] = useState("");
+  const [count, setCount] = useState(300);
 
   const mutation = useMutation({
     mutationFn: (data: { email: string } | null) => findID(data),
@@ -67,6 +73,22 @@ const FindMyId = () => {
               setValueState(valueType.email, text); // inputType을 사용하여 직접 전달
             }
           }}
+        />
+      </View>
+      <View style={{ alignItems: "center" }}>
+        <VerifyCode
+          formValues={userID}
+          setFormValues={setUserID}
+          isAuthCodeSent={isAuthCodeSent}
+          isCodeVerified={isCodeVerified}
+          setIsAuthCodeSent={setIsAuthCodeSent}
+          setInputAuthCode={setInputAuthCode}
+          setServerAuthCode={setServerAuthCode}
+          setIsCodeVerified={setIsCodeVerified}
+          setCount={setCount}
+          count={count}
+          inputAuthCode={inputAuthCode}
+          serverAuthCode={serverAuthCode}
         />
       </View>
       <View style={styles.buttonContainer}>

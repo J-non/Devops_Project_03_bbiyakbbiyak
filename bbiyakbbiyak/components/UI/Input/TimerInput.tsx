@@ -41,11 +41,7 @@ const TimerInput = ({
   const reSend = () => {
     if (count !== 0) return;
     setCount(300); // 카운터 다시 300으로 설정하고 인증메일 다시보내기
-    if (type === "email") {
-      mutation.mutate(email);
-    } else if (type === "phone") {
-      mutation.mutate(phone);
-    }
+    mutation.mutate({ phone, email, type });
   };
 
   const acceptUser = () => {
