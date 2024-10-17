@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { updateIsTaken, updateLogIsTaken } from '../../../api';
 
 const TodayAlarmDetails = ({ item, itemsCount, allSpecifiedTakenByTime, count, setCount, routeName }: any) => {
+  console.log('detailItem', item)
   const [specifiedTaken, setSpecifiedTaken] = useState<boolean>(item.isTaken);
 
   const [initState, setInitState] = useState(0)

@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import ManageAlarm from './screens/ManageAlarm';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { test } from './api';
 import Test from './api/Test';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logDateFn } from './dateFormat/logDateAsyncStorage';

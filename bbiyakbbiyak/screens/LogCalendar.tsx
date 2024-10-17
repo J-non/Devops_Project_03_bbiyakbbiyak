@@ -10,8 +10,8 @@ import { useAtom } from 'jotai';
 import { selectedCalendarDateAtom } from '../store/selectedCalendarDateAtom';
 import { View } from 'react-native';
 import { useMutation } from '@tanstack/react-query';
-import { test } from '../api';
 import { GlobalTheme } from '../constants/theme';
+import { getAlarmLog, getMonthLog } from '../api';
 
 
 const Stack = createNativeStackNavigator();
@@ -31,14 +31,22 @@ LocaleConfig.defaultLocale = 'ko';
 const LogCalendar = () => {
   const route = useRoute<any>();
   const today = new Date();
-
-
-
   const initDate = formatDate(today);
 
 
   const [currentDate, setCurrentDate] = useState(initDate);
   const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
+
+
+  const { data: calendarData, mutate: calendarDataMutate } = useMutation({
+    mutationFn: getMonthLog
+  })
+
+  // const { data: currentDateData, mutate: currentDateDataMutate } = useMutation({
+  //   mutationFn: getAlarmLog
+  // })
+
+
 
   today.setDate(today.getDate() - 1);
   const formattedMaxDate = (today).toISOString().split('T')[0]; // '2024-10-07' 형태로 변환
@@ -56,6 +64,7 @@ const LogCalendar = () => {
             currentDate={currentDate}
             setCurrentDate={setCurrentDate}
             today={initDate}
+            calendarDataMutate={calendarDataMutate}
           />
         } // 커스텀 헤더 렌더링
         hideArrows={true}
@@ -71,15 +80,15 @@ const LogCalendar = () => {
 
         // markingType={'multi-dot'} // 카테고리별 도트
         markedDates={{
-          '2024-10-01': { marked: true, dotColor: 'red', activeOpacity: 0 },
+          '2024-10-01': { marked: true, dotColor: 'blue', activeOpacity: 0 },
           '2024-10-12': { marked: true, dotColor: 'blue' },
-          '2024-10-15': { marked: true, dotColor: 'green' },
+          '2024-10-15': { marked: true, dotColor: 'blue' },
           [selectedDate.dateString]: {
             selected: true,
             selectedColor: GlobalTheme.colors.primary300,
             selectedTextColor: '#000',
             marked: true,
-            dotColor: true && 'red',
+            dotColor: 'blue',
             disableTouchEvent: true
           }
         }}

@@ -29,6 +29,13 @@ export class AlarmLogs extends Model {
   // @BelongsTo(()=> Users)
   // users: Users
 
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false
+  })
+  fk_usersId: number
+  // fk_userId: number
+
   @HasMany(() => AlarmLogItems, {
     sourceKey: 'id',
     foreignKey: 'fk_alarmLogsId',

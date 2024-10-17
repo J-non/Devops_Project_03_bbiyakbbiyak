@@ -41,7 +41,6 @@ export class NotificationService {
 
 
   // main, log로직
-
   // 로그테이블 저장을 위한 가공
   formatLogData(data) {
     // console.log(data)
@@ -90,8 +89,9 @@ export class NotificationService {
     return { alarms, alarmDays, alarmItems }
   }
 
-  // 로그 생성
-  async createLogs(fk_userId: number) {
+  // 로그 생성을 위한 데이터 조회
+  async selectAlarmsByUserId(fk_userId: number) {
+    // 토큰 복호화 로직 필요(userId)
     const data = await this.AlarmsModel.findAll({ where: { fk_userId }, include: [Days, Items] })
     const formattedLogData = this.formatLogData(data)
 
@@ -105,17 +105,17 @@ export class NotificationService {
   }
 
   // 알람 목록 가져오기
-  async selectAlarmListByCategory(id: number, category: string) {
+  async selectAlarmListByCategory(id: number, category: string, pushDay: number) {
     const data = await this.AlarmsModel.findAll({
       where: { fk_userId: id, category },
       order: [['targetTime', 'ASC']],
-      include: [{ model: Days, where: { pushDay: 0 } }, Items]
+      include: [{ model: Days, where: { pushDay } }, Items]
     })
     return data
   }
 
   // 먹었는지 업데이트
-  async updateItemsIsTakend(id: number, isTaken: boolean) {
+  async updateItemsIsTaken(id: number, isTaken: boolean) {
     const data = await this.ItemsModel.update({ isTaken }, { where: { id } });
     if (!data) {
       throw new NotFoundException("존재하지 않는 index로 접근하고 있습니다.");

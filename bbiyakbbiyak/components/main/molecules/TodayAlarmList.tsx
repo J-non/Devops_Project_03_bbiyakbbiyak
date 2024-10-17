@@ -7,15 +7,17 @@ import TodayAlarmDetails from './TodayAlarmDetails'
 import { TodayAlarmListStyles } from './TodayAlarmList.style'
 
 const TodayAlarmList = ({ item, routeName }: any) => {
-  let initCount = item.alarmItem.filter(alarmItem => alarmItem.isTaken === true).length;
-  const initAllSpecifiedTakenByTime = initCount === item.alarmItem.length ? true : false
-  const [allSpecifiedTakenByTime, setAllSpecifiedTakenByTime] = useState(initAllSpecifiedTakenByTime);
 
-  const [count, setCount] = useState(initCount);
-
-  const itemsCount = item.alarmItem.length;
 
   const time = item.targetTime.slice(0, 5)
+
+  // let initCount = item.alarmItem.filter(alarmItem => alarmItem.isTaken === true).length;
+  // const initAllSpecifiedTakenByTime = initCount === item.alarmItem.length ? true : false
+  // const [allSpecifiedTakenByTime, setAllSpecifiedTakenByTime] = useState(initAllSpecifiedTakenByTime);
+
+  // const [count, setCount] = useState(initCount);
+
+  // const itemsCount = item.alarmItem.length;
 
 
   // if (item.targetTime)
@@ -78,7 +80,7 @@ const TodayAlarmList = ({ item, routeName }: any) => {
 
         {/* 세부 알람 컴포넌트 */}
         <FlatList
-          data={item.alarmItem}
+          data={item?.alarmItem ? item.alarmItem : item.alarmLogItems}
 
           style={TodayAlarmListStyles.detailFlatListContainer}
 
@@ -86,10 +88,10 @@ const TodayAlarmList = ({ item, routeName }: any) => {
           (
             <TodayAlarmDetails
               item={item}
-              itemsCount={itemsCount}
-              count={count}
-              setCount={setCount}
-              allSpecifiedTakenByTime={allSpecifiedTakenByTime}
+              // itemsCount={itemsCount}
+              // count={count}
+              // setCount={setCount}
+              // allSpecifiedTakenByTime={allSpecifiedTakenByTime}
               routeName={routeName}
             />
           )

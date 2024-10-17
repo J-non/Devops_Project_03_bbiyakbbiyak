@@ -6,13 +6,20 @@ import TodayAlarmHeader from './TodayAlarmHeader'
 import TodayAlarmList from './TodayAlarmList'
 import TodayAlarmEmpty from './TodayAlarmEmpty'
 import AlarmLogEmpty from '../../alarmLogCalendar/molecules/AlarmLogEmpty'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { getAlarm, getAlarmLog } from '../../../api'
 import { useRoute } from '@react-navigation/native'
+import { useAtom } from 'jotai'
+import { selectedCalendarDateAtom } from '../../../store/selectedCalendarDateAtom'
 
 
 const TodayAlarmContainer = ({ title, routeName }: any) => {
   const route = useRoute<any>();
+  // console.log(routeName)
+
+  const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
+
+  let logDate = selectedDate.dateString;
 
   const { data, mutate, isSuccess } = useMutation({
     mutationFn: routeName ? getAlarmLog : getAlarm,
@@ -23,24 +30,27 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
     }
   })
 
+  let category: 'medicine';
+
+  // const { data, isSuccess, refetch, } = useQuery({
+  //   queryKey: ['alarmLogList'],
+  //   queryFn: async () => routeName ? await getAlarmLog(category) : await getAlarm(category, '1')
+  // })
+
   useEffect(() => {
-    let category: string;
     if (!route.params?.category) {
       category = 'medicine'
     } else {
       category = route.params?.category;
     }
-    console.log(category)
-    mutate(category);
-  }, [route.params])
+    console.log(1, category)
+    mutate({ category, token: '', logDate })
+    // refetch();
+  }, [route.params, title, selectedDate])
 
-  if (data) {
-    console.log(data[0])
-
-  }
-
-
-
+  // if (data) {
+  //   console.log('alarmData', data[0])
+  // }
 
 
   const [allSpecifiedTakenByTime, setAllSpecifiedTakenByTime] = useState(false);

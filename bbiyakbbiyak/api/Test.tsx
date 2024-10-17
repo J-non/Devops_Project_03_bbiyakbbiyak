@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import BottomTabs from '../components/bottomTabs/BottomTabs';
 import ManageAlarm from '../screens/ManageAlarm';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { test } from '.';
+import { createAlarmLogs } from '.';
 import * as SplashScreen from 'expo-splash-screen';
 
 const Stack = createNativeStackNavigator();
@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 const Test = () => {
 
   const { mutate, isSuccess } = useMutation({
-    mutationFn: test,
+    mutationFn: createAlarmLogs,
     onSuccess() { },
     onError(error) { }
   })
