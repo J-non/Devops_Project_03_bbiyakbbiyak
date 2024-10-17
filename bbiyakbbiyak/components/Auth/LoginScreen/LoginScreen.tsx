@@ -40,10 +40,10 @@ const LoginScreen = () => {
   const mutation = useMutation({
     mutationFn: (stateValue: any) => loginAPI(stateValue),
     onSuccess: async (_data) => {
-      const { data, message, isAccept } = _data; // 데이터 구조분해 할당
+      const { data, message } = _data; // 데이터 구조분해 할당
       const { access_token } = data; // 토큰 값
       Alert.alert("로그인", message, [{ text: "확인" }]);
-      await AsyncStorage.setItem("token", access_token);
+      await AsyncStorage.setItem("@token", access_token);
       // 또한 유저 정보 atom에 저장해놓기
       setUser((prev) => ({
         ...prev,

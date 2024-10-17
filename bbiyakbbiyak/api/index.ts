@@ -135,3 +135,24 @@ export const updateGoogleUserName = async (data: any) => {
     }
   }
 };
+
+export const deleteUser = async (data: string) => {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${data}`,
+        "Content-Type": "application/json", // 필요에 따라 추가
+      },
+    };
+    const response = await axios.post(
+      "http://10.0.2.2:3000/signup/deleteUser",
+      {},
+      config
+    );
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+};

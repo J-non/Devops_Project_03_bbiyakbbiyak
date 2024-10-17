@@ -18,7 +18,11 @@ export class LoginService {
 
     const user = await this.validateUser(email, password);
 
-    const payload = { email: email };
+    const payload = {
+      email: email,
+      phone: user.phone,
+      isOAuthUser: user.isOAuthUser,
+    };
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -153,7 +157,7 @@ export class LoginService {
       return await this.jwtService.sign(payload);
     } else {
       await this.userLoginLogic.update(
-        { userName: updateGoogleUserName.data.name },
+        { userName: updateGoogleUserName.data.userName },
         { where: { email: updateGoogleUserName.data.email } },
       );
       data = '업데이트 되셨습니다.';

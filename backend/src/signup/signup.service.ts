@@ -193,4 +193,34 @@ export class SignupService {
         );
     }
   }
+
+  async deleteUser(checkToken: string) {
+    const token = checkToken.split(' ').pop();
+
+    const tokenPayload = await this.jwtService.verifyAsync(token);
+
+    try {
+      if (
+        tokenPayload.isOAuthUser === true &&
+        tokenPayload.email_verified === true
+      ) {
+        await this.userSignupLogic.destroy({
+          where: {
+            email: tokenPayload.email,
+            isOAuthUser: tokenPayload.isOAuthUser,
+          },
+        });
+        console.log('Oauth 유저 회원 탈퇴함');
+        return;
+      } else if (tokenPayload.email && tokenPayload.isOAuthUser === false) {
+        await this.userSignupLogic.destroy({
+          where: { email: tokenPayload.email, phone: tokenPayload.phone },
+        });
+        console.log('개인회원 유저 회원 탈퇴함');
+        return;
+      }
+    } catch (error) {
+      throw new HttpException('회원탈퇴 실패', HttpStatus.FORBIDDEN);
+    }
+  }
 }

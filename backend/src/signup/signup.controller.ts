@@ -46,4 +46,12 @@ export class SignupController {
 
     res.send(result);
   }
+
+  @Post('deleteUser')
+  async deleteUser(@Res() res: Response, @Req() req: Request) {
+    const { authorization } = req.headers;
+    await this.signupService.deleteUser(authorization);
+
+    res.send({ message: '회원 탈퇴 되셨습니다.', isDeleted: true });
+  }
 }
