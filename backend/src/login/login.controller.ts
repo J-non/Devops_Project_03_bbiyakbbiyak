@@ -30,9 +30,9 @@ export class LoginController {
   @Post('findID')
   @UseFilters(new ExceptionHandler())
   async findID(@Body() searchID: CreateLoginDto, @Res() res: Response) {
-    const data = await this.loginService.findUserID(searchID);
+    const data = await this.loginService.findUserID(searchID, res);
 
-    res.send(data);
+    return data;
   }
 
   @Post('findPW')

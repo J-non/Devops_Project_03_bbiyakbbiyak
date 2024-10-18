@@ -62,7 +62,7 @@ const VerifyCode: React.FC<EmailVerificationProps> = ({
       }
     },
     onError: (error) => {
-      Alert.alert("회원가입 실패", error.message, [{ text: "확인" }]);
+      Alert.alert("요청 실패", error.message, [{ text: "확인" }]);
     },
   });
 

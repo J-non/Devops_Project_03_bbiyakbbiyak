@@ -35,7 +35,7 @@ export class TokenGuard implements CanActivate {
     try {
       const payload = await this.jwtService.verifyAsync(accessToken);
 
-      const user = await this.loginService.findUserID(payload.email);
+      const user = await this.loginService.findID(payload.email);
       if (!user) {
         throw new UnauthorizedException('사용할 수 없는 토큰');
       }
