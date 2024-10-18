@@ -38,4 +38,11 @@ export const styles = StyleSheet.create({
     backgroundColor: GlobalTheme.colors.primary500,
     marginTop: 10,
   },
+  button: {
+    backgroundColor: GlobalTheme.colors.primary500,
+    width: 160,
+    height: 45,
+    marginTop: 4,
+    borderRadius: 8,
+  },
 });

@@ -28,7 +28,7 @@ const TimerInput = ({
   email: string;
   mutation: any;
   type: string;
-  phone: string;
+  phone: string | { phone: string };
 }) => {
   const formatTime = (time: any) => {
     const minutes = Math.floor(time / 60);

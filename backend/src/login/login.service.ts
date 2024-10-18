@@ -4,6 +4,9 @@ import { JwtService } from '@nestjs/jwt';
 import { userSignUp } from 'src/model/user.model';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
+import { SolapiMessageService } from 'solapi';
+import { generateRandomNumber } from 'src/config/email';
+import { Response } from 'express';
 
 @Injectable()
 export class LoginService {
@@ -53,10 +56,16 @@ export class LoginService {
     return isUserVerified;
   }
 
-  async findUserID(searchID: CreateLoginDto) {
+  async findID(searchID: CreateLoginDto) {
+    return await this.userLoginLogic.findOne({
+      where: { email: searchID },
+    });
+  }
+
+  async findUserID(searchID: CreateLoginDto, res: any) {
     const { phone } = searchID.data;
     const result = await this.userLoginLogic.findOne({
-      where: { email: phone },
+      where: { phone: phone },
     });
     if (result === null) {
       throw new HttpException(
@@ -64,8 +73,38 @@ export class LoginService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    const number = generateRandomNumber(111111, 999999);
 
-    return result.email;
+    const apiKey = process.env.SOLAPI_API;
+    const apiSecret = process.env.SOLAPI_API_SECRET;
+    const messageService = new SolapiMessageService(apiKey, apiSecret);
+
+    const message = {
+      // 문자 내용 (최대 2,000Bytes / 90Bytes 이상 장문문자)
+      text: `[삐약삐약] 인증번호 [${number}]`,
+      // 수신번호 (문자 받는 이)
+      to: phone,
+      // 발신번호 (문자 보내는 이)
+      from: process.env.DEVELOP_PHONE,
+    };
+
+    messageService
+      .sendOne(message)
+      .then(
+        res.json({
+          ok: true,
+          type: '핸드폰 인증',
+          msg: '인증코드 발송을 성공하셨습니다.',
+          authNum: number,
+          result: result.email,
+        }),
+      )
+      .catch(
+        res.json({
+          ok: false,
+          msg: '인증코드 전송에 실패하였습니다.',
+        }),
+      );
   }
 
   async findUserPW(searchID: CreateLoginDto) {

@@ -172,7 +172,7 @@ export class SignupService {
         // 수신번호 (문자 받는 이)
         to: createAuthNum.data.phone,
         // 발신번호 (문자 보내는 이)
-        from: '01023682587',
+        from: process.env.DEVELOP_PHONE,
       };
 
       messageService
