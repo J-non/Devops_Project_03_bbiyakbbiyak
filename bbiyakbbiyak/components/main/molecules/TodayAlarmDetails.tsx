@@ -6,8 +6,7 @@ import { TodayAlarmDetailsStyles } from './TodayAlarmDetails.style';
 import { useMutation } from '@tanstack/react-query';
 import { updateIsTaken, updateLogIsTaken } from '../../../api';
 
-const TodayAlarmDetails = ({ item, itemsCount, allSpecifiedTakenByTime, count, setCount, routeName }: any) => {
-  console.log('detailItem', item)
+const TodayAlarmDetails = ({ item, itemsCount, allSpecifiedTakenByTime, count, setCount, routeName, category }: any) => {
   const [specifiedTaken, setSpecifiedTaken] = useState<boolean>(item.isTaken);
 
   const [initState, setInitState] = useState(0)
@@ -17,7 +16,7 @@ const TodayAlarmDetails = ({ item, itemsCount, allSpecifiedTakenByTime, count, s
     onSuccess(data, variables, context) {
     },
     onError(error) {
-      console.log(error);
+      console.error(error);
     }
   })
 
@@ -70,10 +69,11 @@ const TodayAlarmDetails = ({ item, itemsCount, allSpecifiedTakenByTime, count, s
         <View style={TodayAlarmDetailsStyles.innerContentContainer}>
 
           <MaterialCommunityIcons
-            name='pill'
+            name={category === 'medicine' ? 'pill' : category === 'drink' ? 'beer-outline' : 'clock-outline'}
             size={20}
             color={specifiedTaken ? GlobalTheme.colors.accent500 : '#999'}
-            style={TodayAlarmDetailsStyles.iconPill} />
+            style={TodayAlarmDetailsStyles.iconPill}
+          />
 
           <View style={TodayAlarmDetailsStyles.flex4}>
             <Text style={{

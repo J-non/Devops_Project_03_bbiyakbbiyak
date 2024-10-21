@@ -1,15 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { FlatList, Pressable, Text, View } from 'react-native'
+import React from 'react'
+import { FlatList, Text, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { dummyData } from '../dummyData'
 import { GlobalTheme } from '../../../constants/theme'
 import TodayAlarmDetails from './TodayAlarmDetails'
 import { TodayAlarmListStyles } from './TodayAlarmList.style'
 
 const TodayAlarmList = ({ item, routeName }: any) => {
 
+  const category = item?.category;
 
-  const time = item.targetTime.slice(0, 5)
+  const convertToAmPm = (timeString) => {
+    // 시간 문자열을 "시:분:초" 형식으로 분할
+    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+
+    // 24시간을 12시간제로 변환
+    const period = hours >= 12 ? '오후' : '오전'; // 오후는 12시 이후
+    const adjustedHours = hours % 12 || 12; // 12시를 기준으로 계산, 0시는 12시로 변환
+
+    // AM/PM 형식으로 변환
+    return `${period} ${adjustedHours}:${minutes.toString().padStart(2, '0')}`;
+  }
+
+  const time = convertToAmPm(item.targetTime);
+
 
   // let initCount = item.alarmItem.filter(alarmItem => alarmItem.isTaken === true).length;
   // const initAllSpecifiedTakenByTime = initCount === item.alarmItem.length ? true : false
@@ -33,7 +46,6 @@ const TodayAlarmList = ({ item, routeName }: any) => {
   // }
 
   // useEffect(() => {
-  //   console.log('2222222222', count)
   //   if (count === (item.alarmItem.length)) {
   //     setAllSpecifiedTakenByTime(true)
   //   } else if (count < item.alarmItem.length) {
@@ -93,6 +105,7 @@ const TodayAlarmList = ({ item, routeName }: any) => {
               // setCount={setCount}
               // allSpecifiedTakenByTime={allSpecifiedTakenByTime}
               routeName={routeName}
+              category={category}
             />
           )
           } />

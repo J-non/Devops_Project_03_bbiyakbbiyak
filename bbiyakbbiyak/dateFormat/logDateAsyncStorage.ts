@@ -4,7 +4,6 @@ export const logDateFn = async () => {
   try {
     const loggedDate = await AsyncStorage.getItem('@loggedDate')
     const date = new Date().toISOString().split('T')[0];
-    console.log(1, loggedDate)
     if (loggedDate === null) {
       await AsyncStorage.setItem('@loggedDate', date);
     } else if (loggedDate === date) {
@@ -13,6 +12,6 @@ export const logDateFn = async () => {
       return;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

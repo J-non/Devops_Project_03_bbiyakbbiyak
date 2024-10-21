@@ -9,7 +9,7 @@ const TodayAlarmEmpty = () => {
   const navigation = useNavigation<any>();
 
   const goToSetAlarmHandler = () => {
-    navigation.navigate('ManageAlarm')
+    navigation.navigate('Alarm')
   }
 
   return (

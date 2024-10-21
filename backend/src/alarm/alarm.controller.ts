@@ -80,7 +80,6 @@ export class AlarmController {
   async updateItemsIstaken(@Body() body: any, @Res() res: Response) {
     try {
       const { id, isTaken } = body;
-      console.log(id, isTaken)
       const data = await this.alarmService.updateItemsIsTaken(id, isTaken);
       res.send(data);
     } catch (error) {

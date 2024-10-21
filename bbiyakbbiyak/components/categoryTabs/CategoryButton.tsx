@@ -5,7 +5,6 @@ import { GlobalTheme } from '../../constants/theme'
 
 const CategoryButton = ({ buttonSelectedHandler, category, selectedCategory, setSelectedCategory, routeName, buttonText }: any) => {
 
-
   useEffect(() => {
     if (routeName === 'main') {
       setSelectedCategory('medicine')

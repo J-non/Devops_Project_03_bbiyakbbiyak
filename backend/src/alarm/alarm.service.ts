@@ -5,6 +5,7 @@ import { Alarms } from './models/alarms.model';
 import { Days } from './models/days.model';
 import { Items } from './models/items.model';
 import { Sequelize } from 'sequelize-typescript';
+import { IFormatLogData } from 'src/alarm-logs/dto/alarmLogs.dto';
 
 
 @Injectable()
@@ -106,80 +107,102 @@ export class AlarmService {
 
   // main, log로직
   // 로그테이블 저장을 위한 가공
-  formatLogData(data) {
-    // console.log(data)
-    // console.log(data[0].alarmDay)
-    const alarms = data.map(alarmsData => {
-      return {
-        targetTime: alarmsData.dataValues.targetTime,
-        category: alarmsData.dataValues.category,
-        fk_userId: alarmsData.dataValues.fk_userId
-      };
-    });
+  formatLogData(data: any): IFormatLogData {
+    try {
+      const alarms = data.map((alarmsData: any) => {
+        return {
+          targetTime: alarmsData.dataValues.targetTime,
+          category: alarmsData.dataValues.category,
+          fk_userId: alarmsData.dataValues.fk_userId
+        };
+      });
 
+      const alarmDaysTemp = data.map((alarmsData: any) => {
+        return alarmsData.alarmDay
 
-    const alarmDaysTemp = data.map(alarmsData => {
-      return alarmsData.alarmDay
+      })
+      const alarmDays = alarmDaysTemp.map((alarmDayData: any) => {
+        return alarmDayData.map((days: any) => {
+          return days.dataValues.pushDay
+        })
 
-    })
-
-    const alarmDays = alarmDaysTemp.map(alarmDayData => {
-      return alarmDayData.map((days) => {
-        return days.dataValues.pushDay
       })
 
-    })
-
-
-    const alarmItemsTemp = data.map((alarmItemsData) => {
-      return alarmItemsData.alarmItem
-    })
-
-    const alarmItems = alarmItemsTemp.map(alarmItemData => {
-      return {
-        alarmItem: alarmItemData.map((items) => {
-          return items.dataValues.itemName
-        }),
-        isTaken: alarmItemData.map((items) => {
-          return items.dataValues.isTaken
-        }),
-        fk_alarmsId: alarmItemData[0].dataValues.fk_alarmsId
-      }
-    })
-    // console.log(alarms);
-    // console.log(alarmDays)
-    // console.log(alarmItems)
-    // fk_alarmsId는 필요 없을지도? 순서 그대로 뽑아오는거라서?
-    return { alarms, alarmDays, alarmItems }
+      const alarmItemsTemp = data.map((alarmItemsData: any) => {
+        return alarmItemsData.alarmItem
+      })
+      const alarmItems = alarmItemsTemp.map((alarmItemData: any) => {
+        return {
+          alarmItem: alarmItemData.map((items: any) => {
+            return items.dataValues.itemName
+          }),
+          isTaken: alarmItemData.map((items: any) => {
+            return items.dataValues.isTaken
+          }),
+          // fk_alarmId: alarmItemData[0].dataValues.fk_alarmId
+        }
+      })
+      // console.log(alarms);
+      // console.log(alarmDays)
+      // console.log(alarmItems)
+      // fk_alarmsId는 필요 없을지도? 순서 그대로 뽑아오는거라서?
+      return { alarms, alarmDays, alarmItems }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   // 로그 생성을 위한 데이터 조회
-  async selectAlarmsByUserId(fk_userId: number) {
+  async selectAlarmsByUserId(fk_userId: number): Promise<IFormatLogData> {
     // 토큰 복호화 로직 필요(userId)
     const data = await this.alarmsModel.findAll({ where: { fk_userId }, include: [Days, Items] })
+    if (!data) {
+      throw new NotFoundException("일치하는 데이터 없음.");
+    }
     const formattedLogData = this.formatLogData(data)
 
     return formattedLogData
   }
 
   // 세부 알람 복용 여부 초기화
-  async resetItemsIsTaken(fk_userId: number) {
-    const data = await this.itemsModel.update({ isTaken: false }, { where: { fk_userId } })
+  async resetItemsIsTaken(fk_userId: number): Promise<[affectedCount: number]> {
+    const alarmData = await this.alarmsModel.findAll({ attributes: ['id'], where: { fk_userId }, include: [Items] });
+    if (!alarmData) {
+      throw new NotFoundException("일치하는 데이터 없음.");
+    }
+
+    const itemIds = alarmData.flatMap(alarm =>
+      alarm.alarmItem.map(item => item.id) // alarmItem 배열에서 각 item의 id 추출
+    );
+
+
+    const data = await this.itemsModel.update({ isTaken: false }, { where: { id: itemIds } });
+    if (!data) {
+      throw new BadRequestException("update query 실패.");
+    }
     return data
   }
+  // async resetItemsIsTaken(fk_userId: number) {
+  //   const data = await this.itemsModel.update({ isTaken: false }, { where: { fk_userId } })
+  //   return data
+  // }
 
   // 알람 목록 가져오기
-  async selectAlarmListByCategory(id: number, category: string, pushDay: number) {
+  async selectAlarmListByCategory(id: number, category: string, pushDay: number): Promise<Alarms[]> {
     const data = await this.alarmsModel.findAll({
       where: { fk_userId: id, category },
       order: [['targetTime', 'ASC']],
       include: [{ model: Days, where: { pushDay } }, Items]
     })
+    if (!data) {
+      throw new NotFoundException("일치하는 데이터 없음.");
+    }
+
     return data
   }
 
   // 먹었는지 업데이트
-  async updateItemsIsTaken(id: number, isTaken: boolean) {
+  async updateItemsIsTaken(id: number, isTaken: boolean): Promise<[affectedCount: number]> {
     const data = await this.itemsModel.update({ isTaken }, { where: { id } });
     if (!data) {
       throw new NotFoundException("존재하지 않는 index로 접근하고 있습니다.");

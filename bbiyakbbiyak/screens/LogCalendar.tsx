@@ -9,9 +9,9 @@ import { formatDate } from '../dateFormat/formatDate';
 import { useAtom } from 'jotai';
 import { selectedCalendarDateAtom } from '../store/selectedCalendarDateAtom';
 import { View } from 'react-native';
-import { useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { GlobalTheme } from '../constants/theme';
-import { getAlarmLog, getMonthLog } from '../api';
+import { getMonthLog } from '../api';
 
 
 const Stack = createNativeStackNavigator();
@@ -38,14 +38,25 @@ const LogCalendar = () => {
   const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
 
 
-  const { data: calendarData, mutate: calendarDataMutate } = useMutation({
-    mutationFn: getMonthLog
+  const { data: calendarData, refetch: calendarDataRefetch, isSuccess } = useQuery({
+    queryKey: [],
+    queryFn: async () => await getMonthLog(`${currentDate.year}-${currentDate.month.toString().padStart(2, '0')}`)
   })
+
+
+  useEffect(() => {
+    calendarDataRefetch();
+  }, [currentDate.month])
 
   // const { data: currentDateData, mutate: currentDateDataMutate } = useMutation({
   //   mutationFn: getAlarmLog
   // })
 
+  // 선택된 날짜에 기록이 있는지 여부
+  let isSelectedDateInCalendarData: boolean;
+  if (isSuccess) {
+    isSelectedDateInCalendarData = calendarData[selectedDate.dateString] !== undefined;
+  }
 
 
   today.setDate(today.getDate() - 1);
@@ -64,7 +75,8 @@ const LogCalendar = () => {
             currentDate={currentDate}
             setCurrentDate={setCurrentDate}
             today={initDate}
-            calendarDataMutate={calendarDataMutate}
+            // calendarDataMutate={calendarDataMutate}
+            calendarDataRefetch={calendarDataRefetch}
           />
         } // 커스텀 헤더 렌더링
         hideArrows={true}
@@ -80,14 +92,12 @@ const LogCalendar = () => {
 
         // markingType={'multi-dot'} // 카테고리별 도트
         markedDates={{
-          '2024-10-01': { marked: true, dotColor: 'blue', activeOpacity: 0 },
-          '2024-10-12': { marked: true, dotColor: 'blue' },
-          '2024-10-15': { marked: true, dotColor: 'blue' },
+          ...calendarData,
           [selectedDate.dateString]: {
             selected: true,
             selectedColor: GlobalTheme.colors.primary300,
             selectedTextColor: '#000',
-            marked: true,
+            marked: isSelectedDateInCalendarData,
             dotColor: 'blue',
             disableTouchEvent: true
           }

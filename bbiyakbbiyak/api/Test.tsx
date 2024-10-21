@@ -43,8 +43,6 @@ const Test = () => {
       <NavigationContainer >
         <Stack.Navigator screenOptions={{ title: '' }}>
           <Stack.Screen name='BottomTabs' component={BottomTabs} options={{ headerShown: false, }} />
-          <Stack.Screen name='test2' component={Test} options={{ headerShown: false, presentation: 'modal' }} />
-
           <Stack.Screen name='ManageAlarm' component={ManageAlarm} options={{}} />
         </Stack.Navigator>
       </NavigationContainer>

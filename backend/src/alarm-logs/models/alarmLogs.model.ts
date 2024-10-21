@@ -24,7 +24,7 @@ export class AlarmLogs extends Model {
 
   // @ForeignKey(() => Users)
   // @Column
-  // fk_usersId: number
+  // fk_userId: number
 
   // @BelongsTo(()=> Users)
   // users: Users
@@ -33,8 +33,7 @@ export class AlarmLogs extends Model {
     type: DataType.INTEGER,
     allowNull: false
   })
-  fk_usersId: number
-  // fk_userId: number
+  fk_userId: number
 
   @HasMany(() => AlarmLogItems, {
     sourceKey: 'id',

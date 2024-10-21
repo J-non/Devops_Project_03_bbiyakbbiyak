@@ -19,11 +19,6 @@ export class AlarmLogItems extends Model {
   })
   isTaken: boolean
 
-  // @Column({
-  //   type: DataType.INTEGER,
-  //   allowNull: false
-  // })
-  // itemsid: number
 
   @ForeignKey(() => AlarmLogs)
   @Column

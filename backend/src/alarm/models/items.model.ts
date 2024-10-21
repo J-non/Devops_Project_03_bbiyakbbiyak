@@ -31,6 +31,7 @@ export class Items extends Model {
 
 
   //  유저 foreignKey 필요
+  // 먹었는지 여부 일괄 업데이트 시 필요함
   // @Column({
   //   type: DataType.INTEGER,
   //   allowNull: false

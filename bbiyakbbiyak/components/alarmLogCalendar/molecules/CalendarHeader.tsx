@@ -20,7 +20,7 @@ const CalendarHeader = ({ currentDate, setCurrentDate, today, calendarDataMutate
         tempMonth = 12
         tempYear--
       }
-      calendarDataMutate(`${tempYear}-${tempMonth.toString().padStart(2, '0')}`);
+      // calendarDataMutate(`${tempYear}-${tempMonth.toString().padStart(2, '0')}`);
       return { ...prevData, month: tempMonth, year: tempYear }
     })
   };
@@ -34,7 +34,7 @@ const CalendarHeader = ({ currentDate, setCurrentDate, today, calendarDataMutate
         tempMonth = 1
         tempYear++
       }
-      calendarDataMutate(`${tempYear}-${tempMonth.toString().padStart(2, '0')}`);
+      // calendarDataMutate(`${tempYear}-${tempMonth.toString().padStart(2, '0')}`);
       return { ...prevData, month: tempMonth, year: tempYear }
     })
   };
