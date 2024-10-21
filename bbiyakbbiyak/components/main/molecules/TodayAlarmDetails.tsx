@@ -6,7 +6,7 @@ import { TodayAlarmDetailsStyles } from './TodayAlarmDetails.style';
 import { useMutation } from '@tanstack/react-query';
 import { updateIsTaken, updateLogIsTaken } from '../../../api';
 
-const TodayAlarmDetails = ({ item, itemsCount, allSpecifiedTakenByTime, count, setCount, routeName, category }: any) => {
+const TodayAlarmDetails = ({ item, routeName, category }: any) => {
   const [specifiedTaken, setSpecifiedTaken] = useState<boolean>(item.isTaken);
 
   const [initState, setInitState] = useState(0)
@@ -32,30 +32,6 @@ const TodayAlarmDetails = ({ item, itemsCount, allSpecifiedTakenByTime, count, s
   }
 
 
-  // useEffect(() => {
-  //   if (allSpecifiedTakenByTime) {
-  //     setSpecifiedTaken(true);
-  //   } else if (!allSpecifiedTakenByTime && count === 0) {
-  //     setSpecifiedTaken(false);
-  //   };
-  // }, [allSpecifiedTakenByTime])
-
-
-  // useEffect(() => {
-  //   if (specifiedTaken) {
-  //     setInitState(initState + 1)
-  //     setCount((count: any) => {
-  //       if (count >= itemsCount) return itemsCount
-  //       return count + 1
-  //     })
-  //   } else {
-  //     setInitState(initState + 1)
-  //     setCount((count: any) => {
-  //       if (count === 0) return 0
-  //       return count - 1
-  //     })
-  //   }
-  // }, [specifiedTaken])
 
 
   return (
