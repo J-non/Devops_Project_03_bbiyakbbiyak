@@ -3,10 +3,11 @@ import { Pressable, StyleSheet, Switch, Text, View } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
 import { timeConvert } from '../../util/timeConvert';
-import { GlobalTheme } from '../../constants/theme';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toggleAlarms } from '../../api/alarmApi';
 
 ////////////////////////////// 알람 개별 컴포넌트 입니다 //////////////////////////////
-const OneAlarm = ({ alarmData, onToggle }: any) => {
+const OneAlarm = ({ alarmData }: any) => {
     const navigation = useNavigation<any>();
     ////////////////////////////// 클릭시 실행 함수
     const alarmPressHandler = () => {
@@ -28,6 +29,23 @@ const OneAlarm = ({ alarmData, onToggle }: any) => {
     const formattedDays = alarmData.alarmDay.map((el: any) => { return dayMap[el.pushDay] }).join(', ');
     // 항목 이름 변환
     const itemNames = alarmData.alarmItem.map((el: any) => { return el.itemName });
+
+    const queryClient = useQueryClient();
+    const toggleMutation = useMutation({
+        mutationFn: toggleAlarms,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['alarms'] })
+        }
+    })
+
+    const onToggle = () => {
+        const userToken = 1
+        const alarmId = alarmData.id // 유저 아이디(토큰)
+        toggleMutation.mutate({ alarmId, userToken })
+    }
+
+
+
 
     return (
         <Pressable style={styles.container} onPress={alarmPressHandler}>

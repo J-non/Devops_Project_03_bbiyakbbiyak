@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import OneAlarm from '../components/alarms/OneAlarm'
 import { useAtom } from 'jotai'
@@ -6,14 +6,10 @@ import { alarmCountAtom } from '../store/alarmCountAtom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAlarms } from '../api/alarmApi'
 
-// // 활성화 상태 토글 함수
-// const toggleSwitch = () => { }
-
-
 // 개별 Pressable 알람 한덩이 !~
 const renderAlarm = ({ item }: any) => {
   return (
-    <OneAlarm alarmData={item} onToggle={() => { return }} /> // onToggle수정
+    <OneAlarm alarmData={item} /> // onToggle수정
   )
 }
 
@@ -23,7 +19,7 @@ const AllAlarm = () => {
 
   const userId = 1 // 이거 토큰으로 !!!!!
 
-  const { data: alarms } = useQuery({ // POST로 바꿔야함.....ㅅㅂㅅㅂㅅㅂㅅㅂㅅㅂㅅㅂ
+  const { data: alarms } = useQuery({
     queryKey: ['alarms'],
     queryFn: () => fetchAlarms({ userId }),
   });

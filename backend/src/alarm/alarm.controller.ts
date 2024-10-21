@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Get, Query, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Put, Get, Query, Param, Delete, Header, Req } from '@nestjs/common';
 import { AlarmService } from './alarm.service';
 import { CreateAlarmDto } from './dto/create-alarm.dto';
 
@@ -28,6 +28,21 @@ export class AlarmController {
   @Delete('delete/:alarmId')
   async deleteAlarm(@Param('alarmId') alarmId: number, @Body('userIdFromToken') userIdFromToken: any) {
     return await this.alarmService.deleteAlarm(alarmId, userIdFromToken)
+  }
+
+  ////////////////////// 토글 요청
+  @Put('toggle/:alarmId')
+  async toggleAlarm(@Param('alarmId') alarmId: number, @Req() req: Request, @Body('userToken') userToken: number) {
+    console.log(alarmId)
+    console.log(userToken)
+    // console.log(req.headers.authorized)
+    return await this.alarmService.toggleAlarm(alarmId, userToken)
+  }
+
+  ////////////////////// 토큰 저장
+  @Post('savepushtoken')
+  async saveUserPushToken(@Body() userData: any) { // 유저 인덱스 유저 토큰으로 가져아ㅗ야함
+    return await this.alarmService.saveUserPushToken(userData)
   }
 
 }

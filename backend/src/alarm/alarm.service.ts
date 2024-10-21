@@ -5,6 +5,7 @@ import { Alarms } from './models/alarms.model';
 import { Days } from './models/days.model';
 import { Items } from './models/items.model';
 import { Sequelize } from 'sequelize-typescript';
+import { ExpoPushTokens } from './models/expoPushTokens.model';
 
 
 @Injectable()
@@ -13,12 +14,13 @@ export class AlarmService {
     @InjectModel(Alarms) private readonly alarmsModel: typeof Alarms,
     @InjectModel(Days) private readonly daysModel: typeof Days,
     @InjectModel(Items) private readonly itemsModel: typeof Items,
+    @InjectModel(ExpoPushTokens) private readonly expoPushTokensModel: typeof ExpoPushTokens,
     private readonly sequelize: Sequelize
   ) { }
 
   //////////////////////////////// 유저 인덱스로 알람 읽기
   async getAlarmsByUserId(userId: number): Promise<Alarms[]> {
-    console.log(userId)
+    // console.log(userId)
     return this.alarmsModel.findAll({
       where: { fk_userId: userId },
       include: [
@@ -81,11 +83,11 @@ export class AlarmService {
         updateAlarm.pushMessage = pushMessage
       await updateAlarm.save({ transaction }); // update해줌
 
-      await this.daysModel.destroy({ where: { fk_alarmsId: updateAlarm.id }, transaction }) // 기존 컬럼 삭제
+      await this.daysModel.destroy({ where: { fk_alarmsId: updateAlarm.id }, force: true, transaction }) // 기존 컬럼 삭제
       const newDays = pushDay.map((el) => ({ pushDay: el, fk_alarmsId: updateAlarm.id })); // 새로 생성
       await this.daysModel.bulkCreate(newDays, { transaction }) // 여러개의 레코드를 삽입
 
-      await this.itemsModel.destroy({ where: { fk_alarmsId: updateAlarm.id }, transaction })
+      await this.itemsModel.destroy({ where: { fk_alarmsId: updateAlarm.id }, force: true, transaction })
       const newItems = itemName.map((el) => ({ itemName: el, fk_alarmsId: updateAlarm.id }))
       await this.itemsModel.bulkCreate(newItems, { transaction })
 
@@ -101,5 +103,27 @@ export class AlarmService {
     return await this.alarmsModel.destroy({ where: { id: alarmId, fk_userId: userIdFromToken }, force: true })
   }
 
+  /////////////////////////////// 알람 토글
+  async toggleAlarm(alarmId: number, userToken: number) {
+    // console.log(alarmId, userToken)
+    await this.alarmsModel.update(
+      { isActive: Sequelize.literal('NOT isActive') }, // 현재 상태를 반전(literal 원시 SQL 구문을 Sequelize 쿼리에 직접 삽입)
+      { where: { id: alarmId, fk_userId: userToken } }
+    );
+    return
+  }
 
+  ////////////////////// 토큰 저장
+  async saveUserPushToken(userData: any) {
+    console.log(userData)
+    // const { userId, token } = userData
+    try {
+      return await this.expoPushTokensModel.create({
+        fk_userId: userData.userId,
+        deviceToken: userData.token
+      })
+    } catch (error) {
+      return
+    }
+  }
 }
