@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GlobalTheme } from './constants/theme';
@@ -9,11 +9,9 @@ import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import ManageAlarm from './screens/ManageAlarm';
-import { userPushTokenAtom } from './store/userPushTokenAtom';
-import { useAtom } from 'jotai';
 import * as Notifications from 'expo-notifications';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import axios from 'axios';
 
 Notifications.setNotificationHandler({
   // 알림 포그라운드에서 어떻게 처리할것인지
@@ -26,39 +24,51 @@ Notifications.setNotificationHandler({
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: {
-
-    }
+    queries: {}
   }
 });
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  // 푸시토큰
-  const [userPushToken, setUserPushToken] = useAtom(userPushTokenAtom) // 푸시토큰 전역 상태
+
   useEffect(() => {
     const registerForPushNotifications = async () => {
-      // 기존에 저장된 토큰 가져오기
-      const storedToken = await AsyncStorage.getItem('pushToken');
-      if (storedToken) {
-        setUserPushToken(storedToken);
-        return;
-      }
       // 푸시 알림 권한 요청 및 토큰 획득
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== 'granted') {
-        alert('푸시 알림 권한이 필요합니다.');
+        Alert.alert('푸시 알림 권한이 필요합니다.');
         return;
       }
-      const token = (await Notifications.getExpoPushTokenAsync()).data; // 디바이스 푸시 토큰 값 가져오기
-      setUserPushToken(token);
+      const token = (await Notifications.getExpoPushTokenAsync()).data; // expo푸시 토큰 가져오기
 
-      // 로컬 저장소에 토큰 저장
-      await AsyncStorage.setItem('pushToken', token);
+      const userId = 1
+      await sendToken(userId, token)
     }
     registerForPushNotifications()
-    // 토큰 갱신 처리 tokenListener 필요함
+
+    // 서버에 토큰 전송 함수
+    const sendToken = async (userId: number, token: string) => {
+      try {
+        console.log(userId, token)
+        await axios.post('http://192.168.0.252:3000/alarm/savepushtoken', { userId, token })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    // // 토큰 갱신 처리 tokenListener
+    // const tokenListener = Notifications.addPushTokenListener(tokenData => {
+    //   const newToken = tokenData.data;
+    //   console.log(`뉴토큰${newToken}`)
+    //   setUserPushToken(newToken);
+    //   // 서버에 새 토큰 전송
+    //   // sendTokenToServer(newToken);
+    // });
+    // return () => {
+    //   tokenListener.remove();
+    // };
+
   }, [])
 
 
