@@ -8,10 +8,11 @@ import { Items } from './models/items.model';
 import { AlarmLogsService } from 'src/alarm-logs/alarm-logs.service';
 import { AlarmLogs } from 'src/alarm-logs/models/alarmLogs.model';
 import { AlarmLogItems } from 'src/alarm-logs/models/alarmLogItems.model';
+import { ExpoPushTokens } from './models/expoPushTokens.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Alarms, Days, Items, AlarmLogs, AlarmLogItems]),
+    SequelizeModule.forFeature([Alarms, Days, Items, AlarmLogs, AlarmLogItems, ExpoPushTokens])
   ],
   controllers: [AlarmController],
   providers: [AlarmService, AlarmLogsService],

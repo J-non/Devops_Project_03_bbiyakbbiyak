@@ -16,16 +16,10 @@ export class Alarms extends Model {
   category: string
 
   @Column({
-    type: DataType.TIME,
-    allowNull: false
-  })
-  targetTime: string
-
-  @Column({
     type: DataType.STRING,
     allowNull: false
   })
-  deviceToken: string
+  targetTime: string
 
   @Column({
     type: DataType.STRING,

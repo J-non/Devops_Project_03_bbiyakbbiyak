@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Alert, Button, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import CategoryButton from '../components/alarms/CategoryButton'
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import HeadText from '../components/alarms/HeadText';
@@ -8,10 +8,7 @@ import * as Animatable from 'react-native-animatable';
 import ContentAddButton from '../components/alarms/ContentAddButton';
 import ContentModal from '../components/alarms/ContentModal';
 import ContentDetail from '../components/alarms/ContentDetail';
-import { useAtom } from 'jotai';
-import { userPushTokenAtom } from '../store/userPushTokenAtom';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createAlarms, delAlarms } from '../api/alarmApi';
 import { updateAlarms } from '../api/alarmApi';
 import { stringToDate } from '../util/stringToDate';
@@ -23,7 +20,7 @@ import { GlobalTheme } from '../constants/theme';
 ////////////////////////////// 알람 수정/생성 화면 입니다 //////////////////////////////
 
 const ManageAlarm = ({ route, navigation }: any) => {
-  const [userPushToken, setUserPushToken] = useAtom(userPushTokenAtom) // 푸시토큰 전역 상태
+  // const [userPushToken, setUserPushToken] = useAtom(userPushTokenAtom) // 푸시토큰 전역 상태
   const [category, setCategory] = useState('medicine'); // 선택 카테고리
   const [alarmTime, setAlarmTime] = useState(() => {
     const now = new Date()
@@ -167,8 +164,7 @@ const ManageAlarm = ({ route, navigation }: any) => {
       targetTime: formattedTime,
       pushDay: selectedDays,
       itemName: alarmContent,
-      deviceToken: userPushToken,
-      pushMessage: '알림메세지',
+      pushMessage: '알림메세지알림메세지',
       userIdFromToken: userIdFromToken, // 토큰값
     }
     if (isEditing) {
@@ -331,9 +327,6 @@ const styles = StyleSheet.create({
     fontFamily: 'pretendard-bold'
   },
   scrollView: {
-    // backgroundColor: '#666',
-    // minHeight: 300,
-    // maxHeight: 300,
     paddingHorizontal: 8,
     // flex: 1
   },
