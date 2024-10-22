@@ -6,13 +6,19 @@
         "orientation": "portrait",
         "icon": "./assets/images/logo.png",
         "userInterfaceStyle": "light",
+        "platforms": [
+            "ios",
+            "android"
+        ],
+        "scheme": "bbiyakbbiyak",
         "splash": {
             "image": "./assets/images/logo.png",
             "resizeMode": "contain",
             "backgroundColor": "#ffdf66"
         },
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "com.bbiyakbbiyak.test"
         },
         "android": {
             "adaptiveIcon": {

@@ -9,10 +9,15 @@ import { AlarmLogsModule } from './alarm-logs/alarm-logs.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AlarmModule } from './alarm/alarm.module';
 import { NotificationModule } from './notification/notification.module';
+import { LoginModule } from './login/login.module';
+import { SignupModule } from './signup/signup.module';
+import { ExceptionHandler } from './Exception/ExceptionHandler';
 
 
 @Module({
   imports: [
+    LoginModule,
+    SignupModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`
@@ -38,6 +43,7 @@ import { NotificationModule } from './notification/notification.module';
     NotificationModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ExceptionHandler],
 })
 export class AppModule { }
+
