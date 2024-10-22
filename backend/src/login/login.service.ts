@@ -14,7 +14,7 @@ export class LoginService {
     @InjectModel(userSignUp)
     private readonly userLoginLogic: typeof userSignUp,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async create(createLoginDto: CreateLoginDto) {
     const { email, password } = createLoginDto.data;
@@ -22,13 +22,15 @@ export class LoginService {
     const user = await this.validateUser(email, password);
 
     const payload = {
-      email: email,
+      id: user.id,
+      email: user.email,
       phone: user.phone,
       isOAuthUser: user.isOAuthUser,
     };
 
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload)
     };
   }
 

@@ -21,10 +21,11 @@ export const createAlarmLogs = async () => {
     const timeDifference = currentDateOnly.getTime() - pastDateOnly.getTime();
     const daysDifference = Math.floor(timeDifference / (24 * 60 * 60 * 1000));
 
-    console.log(`과거 날짜로부터 ${daysDifference}일이 지났습니다.`);
+    if (isNaN(daysDifference)) {
+      return null;
+    }
 
-    // 시작요일
-    const logStartDay = pastDate.getDay();
+    console.log(`과거 날짜로부터 ${daysDifference}일이 지났습니다.`);
 
     const { data } = await axios.post('http://192.168.0.82:3000/alarm/create_logs/1', { daysDifference, loggedDate });
     return data
@@ -38,7 +39,8 @@ export const createAlarmLogs = async () => {
 
 
 // 오늘 알람 목록 가져오기
-export const getAlarm = async ({ category, token, logDate }: { category: string, token: string, logDate: string }) => {
+export const getAlarm = async ({ category, logDate }: { category: string, logDate: string }) => {
+  const token = await AsyncStorage.getItem('@token');
   const pushDay = new Date().getDay();
   const { data } = await axios.get(
     `http://192.168.0.82:3000/alarm/get_alarm_list?category=${category}&pushDay=${pushDay}`,
@@ -51,7 +53,8 @@ export const getAlarm = async ({ category, token, logDate }: { category: string,
 }
 
 // 선택된 날짜 알람 목록 가져오기
-export const getAlarmLog = async ({ category, token, logDate }: { category: string, token: string, logDate: string }) => {
+export const getAlarmLog = async ({ category, logDate }: { category: string, logDate: string }) => {
+  const token = await AsyncStorage.getItem('@token');
   const { data } = await axios.get(
     `http://192.168.0.82:3000/alarm-logs/get_alarm_logs?category=${category}&logDate=${logDate}`,
     {
@@ -238,7 +241,7 @@ export const deleteUser = async (data: string) => {
   try {
     const config = {
       headers: {
-        Authorization: `Bearer ${data}`,
+        Authorization: `bearer ${data}`,
         "Content-Type": "application/json", // 필요에 따라 추가
       },
     };

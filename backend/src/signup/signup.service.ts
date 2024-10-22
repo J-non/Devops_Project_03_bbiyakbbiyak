@@ -14,7 +14,7 @@ export class SignupService {
     @InjectModel(userSignUp)
     private readonly userSignupLogic: typeof userSignUp,
     private jwtService: JwtService,
-  ) {}
+  ) { }
   async create(createSignupDto: CreateSignupDto) {
     const { data } = createSignupDto;
     const { email, userName, phone } = data;
@@ -55,7 +55,6 @@ export class SignupService {
       where: { email: email },
     });
 
-    console.log(isGoogleEmailSignedUp, 'isGoogleEmailSignedUp');
 
     if (isGoogleEmailSignedUp) {
       await this.userSignupLogic.update(
@@ -88,7 +87,7 @@ export class SignupService {
   async createJwtToken(userInfo: CreateSignupDto) {
     const user = userInfo.data;
 
-    const jwt = await this.jwtService.sign(user);
+    const jwt = this.jwtService.sign(user);
 
     return jwt;
   }

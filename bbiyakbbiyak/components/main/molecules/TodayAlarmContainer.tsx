@@ -11,6 +11,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useAtom } from 'jotai'
 import { selectedCalendarDateAtom } from '../../../store/selectedCalendarDateAtom'
 import { categoryAtom, logCategoryAtom } from '../../../store/categoryAtom'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const TodayAlarmContainer = ({ title, routeName }: any) => {
@@ -21,14 +22,13 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
 
   let logDate = selectedDate.dateString;
 
-
   const { data: alarmLogData, isSuccess: alarmLogIsSuccess, refetch: alarmLogRefetch, } = useQuery({
     queryKey: ['alarmLogList'],
-    queryFn: async () => await getAlarmLog({ category: queryLogCategory, token: '', logDate }),
+    queryFn: async () => await getAlarmLog({ category: queryLogCategory, logDate }),
   })
   const { data: alarmData, isSuccess: alarmIsSuccess, refetch: alarmRefetch, } = useQuery({
     queryKey: ['alarmList'],
-    queryFn: async () => await getAlarm({ category: queryCategory, token: '', logDate }),
+    queryFn: async () => await getAlarm({ category: queryCategory, logDate }),
   })
 
 
@@ -43,10 +43,6 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
       }
     }, [alarmRefetch, selectedDate])
   );
-
-
-  const [allSpecifiedTakenByTime, setAllSpecifiedTakenByTime] = useState(false);
-  const [specifiedTaken, setSpecifiedTaken] = useState(false);
 
 
 

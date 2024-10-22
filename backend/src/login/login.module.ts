@@ -1,24 +1,17 @@
 import { Module } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginController } from './login.controller';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { userSignUp } from 'src/model/user.model';
+import { CommonModule } from 'src/common/common.module';
+
 
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        const secret = config.get<string>('JWT_KEY');
-        return {
-          secret,
-          signOptions: { expiresIn: '1y' },
-        };
-      },
-    }),
     SequelizeModule.forFeature([userSignUp]),
+    // JwtModule
+    CommonModule
   ],
   controllers: [LoginController],
   providers: [LoginService],

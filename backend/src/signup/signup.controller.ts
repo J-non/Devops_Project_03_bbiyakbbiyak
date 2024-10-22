@@ -11,11 +11,11 @@ import { SignupService } from './signup.service';
 import { CreateEmail, CreateSignupDto } from './dto/create-signup.dto';
 import { Request, Response } from 'express';
 import { ExceptionHandler } from 'src/Exception/ExceptionHandler';
-import { SignUpPipe } from 'src/pipe/signup.pipe';
+import { SignUpPipe } from 'src/common/pipe/signup.pipe';
 
 @Controller('signup')
 export class SignupController {
-  constructor(private readonly signupService: SignupService) {}
+  constructor(private readonly signupService: SignupService) { }
 
   @Post()
   @UsePipes(SignUpPipe)

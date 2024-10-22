@@ -12,7 +12,7 @@ export class TokenGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly loginService: LoginService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<any>();
@@ -41,6 +41,7 @@ export class TokenGuard implements CanActivate {
       }
       request.user = user;
       request.role = payload.role;
+      request.payload = payload;
     } catch (error) {
       throw new UnauthorizedException('사용할 수 없는 토큰');
     }

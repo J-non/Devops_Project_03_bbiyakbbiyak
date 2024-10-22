@@ -164,13 +164,8 @@ export class AlarmService {
           isTaken: alarmItemData.map((items: any) => {
             return items.dataValues.isTaken
           }),
-          // fk_alarmId: alarmItemData[0].dataValues.fk_alarmId
         }
       })
-      // console.log(alarms);
-      // console.log(alarmDays)
-      // console.log(alarmItems)
-      // fk_alarmsId는 필요 없을지도? 순서 그대로 뽑아오는거라서?
       return { alarms, alarmDays, alarmItems }
     } catch (error) {
       console.error(error)
@@ -222,7 +217,6 @@ export class AlarmService {
     if (!data) {
       throw new NotFoundException("일치하는 데이터 없음.");
     }
-
     return data
   }
 
