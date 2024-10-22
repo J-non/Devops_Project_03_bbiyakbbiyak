@@ -27,7 +27,15 @@ export const createAlarmLogs = async () => {
 
     console.log(`과거 날짜로부터 ${daysDifference}일이 지났습니다.`);
 
-    const { data } = await axios.post('http://192.168.0.82:3000/alarm/create_logs/1', { daysDifference, loggedDate });
+    const userToken = await AsyncStorage.getItem('@token');
+
+    const { data } = await axios.post('http://192.168.0.82:3000/alarm/create_logs', { daysDifference, loggedDate },
+      {
+        headers: {
+          Authorization: `bearer ${userToken}`
+        }
+      }
+    );
     return data
 
   } catch (error) {
@@ -40,49 +48,69 @@ export const createAlarmLogs = async () => {
 
 // 오늘 알람 목록 가져오기
 export const getAlarm = async ({ category, logDate }: { category: string, logDate: string }) => {
-  const token = await AsyncStorage.getItem('@token');
+  const userToken = await AsyncStorage.getItem('@token');
   const pushDay = new Date().getDay();
   const { data } = await axios.get(
     `http://192.168.0.82:3000/alarm/get_alarm_list?category=${category}&pushDay=${pushDay}`,
     {
       headers: {
-        Authorization: `bearer ${token}`
+        Authorization: `bearer ${userToken}`
       }
-    });
+    }
+  );
   return data
 }
 
 // 선택된 날짜 알람 목록 가져오기
 export const getAlarmLog = async ({ category, logDate }: { category: string, logDate: string }) => {
-  const token = await AsyncStorage.getItem('@token');
+  const userToken = await AsyncStorage.getItem('@token');
   const { data } = await axios.get(
     `http://192.168.0.82:3000/alarm-logs/get_alarm_logs?category=${category}&logDate=${logDate}`,
     {
       headers: {
-        Authorization: `bearer ${token}`
+        Authorization: `bearer ${userToken}`
       }
-    });
+    }
+  );
   return data
 }
 
 
 // 복용 기록 달력 알람 존재 여부
 export const getMonthLog = async (monthString: string) => {
-  const id = 1;
-  const { data } = await axios.get(`http://192.168.0.82:3000/alarm-logs/get_month_log?fk_userId=${id}&monthString=${monthString}`)
+  try {
+    const userToken = await AsyncStorage.getItem('@token');
+    const { data } = await axios.get(`http://192.168.0.82:3000/alarm-logs/get_month_log?monthString=${monthString}`,
+      {
+        headers: {
+          Authorization: `bearer ${userToken}`
+        }
+      }
+    );
 
-  const formattedData = data.reduce((acc, item) => {
-    acc[item.logDate] = { marked: true, dotColor: 'blue' };
-    return acc;
-  }, {});
-  return formattedData
+    const formattedData = data.reduce((acc, item) => {
+      acc[item.logDate] = { marked: true, dotColor: 'blue' };
+      return acc;
+    }, {});
+
+    return formattedData
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 
 // 오늘 알람 복용여부
 export const updateIsTaken = async ({ id, isTaken }: { id: number, isTaken: boolean }) => {
   try {
-    const data = await axios.put('http://192.168.0.82:3000/alarm/items/is_takend', { id, isTaken });
+    const userToken = await AsyncStorage.getItem('@token');
+    const data = await axios.put('http://192.168.0.82:3000/alarm/items/is_takend', { id, isTaken },
+      {
+        headers: {
+          Authorization: `bearer ${userToken}`
+        }
+      }
+    );
     return data
   } catch (error) {
     console.error(error)
@@ -92,7 +120,14 @@ export const updateIsTaken = async ({ id, isTaken }: { id: number, isTaken: bool
 // 복용 기록 복용 여부
 export const updateLogIsTaken = async ({ id, isTaken }: { id: number, isTaken: boolean }) => {
   try {
-    const data = await axios.put('http://192.168.0.82:3000/alarm-logs/alarm_log_Items/is_taken', { id, isTaken })
+    const userToken = await AsyncStorage.getItem('@token');
+    const data = await axios.put('http://192.168.0.82:3000/alarm-logs/alarm_log_Items/is_taken', { id, isTaken },
+      {
+        headers: {
+          Authorization: `bearer ${userToken}`
+        }
+      }
+    )
     return data
   } catch (error) {
     console.error(error)

@@ -1,8 +1,10 @@
-import { Controller, Post, Body, Put, Get, Query, Param, Delete, Header, Req, Res } from '@nestjs/common';
+import { Controller, Post, Body, Put, Get, Query, Param, Delete, Header, Req, Res, UseGuards } from '@nestjs/common';
 import { AlarmService } from './alarm.service';
 import { CreateAlarmDto } from './dto/create-alarm.dto';
 import { AlarmLogsService } from 'src/alarm-logs/alarm-logs.service';
 import { Response } from 'express';
+import { TokenGuard } from 'src/common/guard/login.guard';
+import { Payload } from 'src/common/decorator/payload.decorator';
 
 @Controller('alarm')
 export class AlarmController {
@@ -55,13 +57,14 @@ export class AlarmController {
 
   // main, log로직
   // log찍기
-  @Post('create_logs/:id')
-  async createLogs(@Param('id') id: any, @Body() body, @Res() res: Response) {
+  @Post('create_logs')
+  @UseGuards(TokenGuard)
+  async createLogs(@Payload('id') fk_userId: number, @Body() body, @Res() res: Response) {
     try {
       const { daysDifference, loggedDate } = body;
-      const formattedLogData = await this.alarmService.selectAlarmsByUserId(id);
-      await this.alarmLogsService.createAlarmLogs(id, formattedLogData, daysDifference, loggedDate)
-      await this.alarmService.resetItemsIsTaken(id)
+      const formattedLogData = await this.alarmService.selectAlarmsByUserId(fk_userId);
+      await this.alarmLogsService.createAlarmLogs(fk_userId, formattedLogData, daysDifference, loggedDate)
+      await this.alarmService.resetItemsIsTaken(fk_userId)
       res.end();
     } catch (error) {
       console.error(error)
@@ -71,10 +74,11 @@ export class AlarmController {
   // 알람 목록 조회
   // 유저 id동적으로 받아오는 처리 해야함
   @Get('get_alarm_list')
-  async getAlarmListByCategory(@Query('category') category: string, @Query('pushDay') pushDay: number, @Res() res: Response) {
+  @UseGuards(TokenGuard)
+  async getAlarmListByCategory(@Payload('id') fk_userId: number, @Query('category') category: string, @Query('pushDay') pushDay: number, @Res() res: Response) {
     try {
       // 유저 id동적으로 받아오는 처리 해야함
-      const data = await this.alarmService.selectAlarmListByCategory(1, category, pushDay)
+      const data = await this.alarmService.selectAlarmListByCategory(fk_userId, category, pushDay)
       res.send(data)
     } catch (error) {
       console.error(error)
@@ -83,6 +87,7 @@ export class AlarmController {
 
   // 먹었는지 여부 업데이트
   @Put('items/is_takend')
+  @UseGuards(TokenGuard)
   async updateItemsIstaken(@Body() body: any, @Res() res: Response) {
     try {
       const { id, isTaken } = body;
