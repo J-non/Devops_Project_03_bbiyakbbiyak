@@ -6,7 +6,7 @@ import ManageAlarm from "./ManageAlarm";
 import { useMutation } from "@tanstack/react-query";
 import { createAlarmLogs } from "../api";
 import * as Notifications from 'expo-notifications';
-import { Alert } from "react-native";
+import { ActivityIndicator, Alert, View } from "react-native";
 import axios from "axios";
 
 const Stack = createNativeStackNavigator();
@@ -62,6 +62,14 @@ export function Logined() {
     // };
 
   }, [])
+
+  if (!isSuccess) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ActivityIndicator size="large" color="#999" />
+      </View>
+    )
+  }
 
   return (
     <>
