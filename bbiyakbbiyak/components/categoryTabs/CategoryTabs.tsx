@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import CategoryTabsStyles from './CategoryTabs.style';
 import CategoryButton from './CategoryButton';
+import { useAtom } from 'jotai';
+import { categoryAtom, logCategoryAtom } from '../../store/categoryAtom';
 
 
 const CategoryTabs = () => {
@@ -13,10 +15,19 @@ const CategoryTabs = () => {
   const [selectedCategory, setSelectedCategory] = useState('medicine');
   const [calendarStr, setCalendarStr] = useState('')
 
+  const [queryCategory, setQueryCategory] = useAtom(categoryAtom);
+  const [queryLogCategory, setQueryLogCategory] = useAtom(logCategoryAtom);
+
 
   const buttonSelectedHandler = (category: any) => () => {
     setSelectedCategory(category);
-    navigation.navigate(category);
+    let tempCategory = category.replace('Calendar', '');
+    if (category.includes('Calendar')) {
+      setQueryLogCategory(tempCategory);
+    } else {
+      setQueryCategory(tempCategory);
+    }
+    navigation.navigate(category, { category: tempCategory });
   }
 
   useEffect(() => {

@@ -1,13 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Dialect } from 'sequelize';
 import { JwtModule } from '@nestjs/jwt';
+import { AlarmLogsModule } from './alarm-logs/alarm-logs.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AlarmModule } from './alarm/alarm.module';
 import { NotificationModule } from './notification/notification.module';
+import { LoginModule } from './login/login.module';
+import { SignupModule } from './signup/signup.module';
+import { ExceptionHandler } from './Exception/ExceptionHandler';
+import { CommonModule } from './common/common.module';
 
 
 @Module({
@@ -26,15 +31,17 @@ import { NotificationModule } from './notification/notification.module';
       autoLoadModels: true,
       synchronize: true,
     }),
-    JwtModule.register({
-      secret: process.env.JWT_KEY,
-      signOptions: { expiresIn: '24h' }
-    }),
+    CommonModule,
+    LoginModule,
+    SignupModule,
+    AlarmLogsModule,
+    NotificationModule,
     ScheduleModule.forRoot(),// 스케쥴링 모듈
     AlarmModule,
-    NotificationModule
+    NotificationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ExceptionHandler],
 })
 export class AppModule { }
+

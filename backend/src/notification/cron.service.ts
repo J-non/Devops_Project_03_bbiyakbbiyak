@@ -15,7 +15,7 @@ export class CronService {
 
 
     // 매 분마다 실행
-    @Cron(CronExpression.EVERY_MINUTE)
+    // @Cron(CronExpression.EVERY_10_SECONDS)
     async handleCron() {
         const now = new Date();
         // const currentTime = now.toTimeString().split(' ')[0]; // 'HH:MM:SS' 타임 변환

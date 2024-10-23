@@ -4,7 +4,5 @@ export class CreateAlarmDto {
     targetTime: string
     pushDay: string[]
     itemName: string[]
-    deviceToken: string
     pushMessage: string
-    userIdFromToken: number
 }

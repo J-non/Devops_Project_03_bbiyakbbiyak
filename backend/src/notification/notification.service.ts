@@ -26,7 +26,7 @@ export class NotificationService {
     const payloads = validallDevicesTokens.map(token => ({
       to: token,
       sound: 'default',
-      // title: alarm.title,
+      title: '삐약삐약',
       body: alarm.pushMessage,
     }));
 

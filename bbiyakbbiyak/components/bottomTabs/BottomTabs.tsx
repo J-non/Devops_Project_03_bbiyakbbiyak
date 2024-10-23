@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react'
-import Test from '../Test';
 import { GlobalTheme } from '../../constants/theme';
 import { Ionicons, Entypo } from '@expo/vector-icons'
 import Main from '../../screens/Main';
@@ -9,8 +8,8 @@ import IconButton from '../UI/IconButton';
 import AllAlarm from '../../screens/AllAlarm';
 import { alarmCountAtom } from '../../store/alarmCountAtom';
 import { useAtom } from 'jotai';
-import { Alert } from 'react-native';
-
+import { Alert, View } from 'react-native';
+import OtherMenu from "../OtherMenu/OtherMenuMain";
 
 const BottomTabs = () => {
   const [alarmCount, setAlarmCount] = useAtom(alarmCountAtom)
@@ -55,14 +54,20 @@ const BottomTabs = () => {
           tabBarLabel: '기록',
           tabBarIcon: ({ color, size }) => <Ionicons name='calendar-outline' size={size} color={color} />
         }} />
-        <BottomTabs.Screen name='test4' component={Test} options={{
-          title: '더보기',
-          tabBarLabel: '더보기',
-          tabBarIcon: ({ color, size }) => <Entypo name='dots-three-horizontal' size={size} color={color} />
-        }} />
+        <BottomTabs.Screen
+          name="MyProfile"
+          component={OtherMenu}
+          options={{
+            title: "더보기",
+            tabBarLabel: "더보기",
+            tabBarIcon: ({ color, size }) => (
+              <Entypo name="dots-three-horizontal" size={size} color={color} />
+            ),
+          }}
+        />
       </BottomTabs.Navigator>
     </>
-  )
-}
+  );
+};
 
-export default BottomTabs
+export default BottomTabs;
