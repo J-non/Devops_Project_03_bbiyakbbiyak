@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, View } from "react-native";
+import { Alert, Image, Text, View } from "react-native";
 import { styles } from "./MainStyle";
 import TabList from "./TabList/TabList";
 import { useNavigation } from "@react-navigation/native";
@@ -21,6 +21,7 @@ const OtherMenuMain = () => {
   const updateInfo = () => {
     navigation.navigate("MyPage");
   };
+
 
   const mutation = useMutation({
     mutationFn: (data: string) => deleteUser(data),
@@ -80,8 +81,17 @@ const OtherMenuMain = () => {
   return (
     <>
       <View style={styles.container}>
+        <View style={{
+          flex: 2, justifyContent: 'center',
+          alignContent: 'center', aspectRatio: 1, overflow: 'hidden', borderRadius: 9999, marginVertical: 32
+        }}>
+          <View style={styles.otherGoogle}>
+            {/* <Text style={styles.profileText}>삐약삐약</Text> */}
+            <Image style={{ width: '80%', height: '80%' }} source={require('../../assets/images/centered_padded_logo.png')} width={1} height={1} />
+          </View>
+        </View>
         <TabList onPress={updateInfo}>정보 변경</TabList>
-        <View style={{ flexDirection: "row", gap: 40 }}>
+        <View style={{ flexDirection: "row", gap: 40, flex: 3, }}>
           <DeleteNLogout onPress={logOutHandler} styles={styles.logOutText}>
             로그아웃
           </DeleteNLogout>
