@@ -6,12 +6,15 @@ import {
   Req,
   UseFilters,
   UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 import { SignupService } from './signup.service';
 import { CreateEmail, CreateSignupDto } from './dto/create-signup.dto';
 import { Request, Response } from 'express';
 import { ExceptionHandler } from 'src/Exception/ExceptionHandler';
 import { SignUpPipe } from 'src/common/pipe/signup.pipe';
+import { TokenGuard } from 'src/common/guard/login.guard';
+import { Payload } from 'src/common/decorator/payload.decorator';
 
 @Controller('signup')
 export class SignupController {
@@ -48,9 +51,9 @@ export class SignupController {
   }
 
   @Post('deleteUser')
-  async deleteUser(@Res() res: Response, @Req() req: Request) {
-    const { authorization } = req.headers;
-    await this.signupService.deleteUser(authorization);
+  @UseGuards(TokenGuard)
+  async deleteUser(@Res() res: Response, @Req() req: Request, @Payload('id') payload: number) {
+    await this.signupService.deleteUser(payload);
 
     res.send({ message: '회원 탈퇴 되셨습니다.', isDeleted: true });
   }

@@ -1,4 +1,6 @@
-import { Column, DataType, Default, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, Default, HasMany, Model, Table } from 'sequelize-typescript';
+import { AlarmLogs } from 'src/alarm-logs/models/alarmLogs.model';
+import { Alarms } from 'src/alarm/models/alarms.model';
 
 @Table({
   tableName: 'userDB',
@@ -51,4 +53,17 @@ export class userSignUp extends Model {
     allowNull: false,
   })
   isAlreadyUser: false;
+
+  @HasMany(() => AlarmLogs, {
+    foreignKey: 'fk_userId',
+    onDelete: 'CASCADE'
+  })
+  alarmLogs: AlarmLogs[];
+
+
+  @HasMany(() => Alarms, {
+    foreignKey: 'fk_userId',
+    onDelete: 'CASCADE'
+  })
+  alarms: Alarms[];
 }

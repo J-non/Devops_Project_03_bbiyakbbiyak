@@ -1,5 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { AlarmLogItems } from "./alarmLogItems.model";
+import { userSignUp } from "src/model/user.model";
 
 @Table({
   tableName: 'alarmLogs',
@@ -22,18 +23,12 @@ export class AlarmLogs extends Model {
   })
   category: string
 
-  // @ForeignKey(() => Users)
-  // @Column
-  // fk_userId: number
-
-  // @BelongsTo(()=> Users)
-  // users: Users
-
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false
-  })
+  @ForeignKey(() => userSignUp)
+  @Column
   fk_userId: number
+
+  @BelongsTo(() => userSignUp)
+  users: userSignUp
 
   @HasMany(() => AlarmLogItems, {
     sourceKey: 'id',

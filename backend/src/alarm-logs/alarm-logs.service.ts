@@ -99,10 +99,8 @@ export class AlarmLogsService {
 
   // 선택된 날짜 로그 가져오기
   async selectAlarmLogsByUserId(fk_userId: number, category: string, logDate: string): Promise<AlarmLogs[]> {
-    // const fk_userId = 1;
     const data = await this.AlarmLogsModel.findAll({
       where: { fk_userId, logDate, category },
-      // where: { fk_userId, logDate },
       order: [['targetTime', 'ASC']],
       include: [AlarmLogItems]
     })
