@@ -3,10 +3,14 @@
     "name": "bbiyakbbiyak",
     "slug": "bbiyakbbiyak",
     "version": "1.0.0",
+    "projectId": "dced64aa-76ae-40c8-bb78-8529ab1b887d",
     "orientation": "portrait",
     "icon": "./assets/images/playstore.png",
     "userInterfaceStyle": "light",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "scheme": "bbiyakbbiyak",
     "splash": {
       "image": "./assets/images/centered_padded_logo.png",
@@ -18,15 +22,19 @@
       "bundleIdentifier": "com.bbiyakbbiyak.test"
     },
     "android": {
-      "package": "com.bbiyakbbiyak.test"
+      "package": "com.bbiyakbbiyak.test",
+      "googleServicesFile": "./android/app/google-services.json",
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"],
+    "plugins": [
+      "expo-font"
+    ],
     "extra": {
       "eas": {
-        "projectId": "7481e918-4b54-437a-9dfb-224b6380ba05"
+        "projectId": "dced64aa-76ae-40c8-bb78-8529ab1b887d"
       }
     }
   }

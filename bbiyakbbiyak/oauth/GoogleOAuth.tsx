@@ -61,6 +61,7 @@ export const GoogleOAuth = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log(response);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

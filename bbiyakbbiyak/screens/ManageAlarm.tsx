@@ -14,6 +14,7 @@ import { updateAlarms } from '../api/alarmApi';
 import { stringToDate } from '../util/stringToDate';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { GlobalTheme } from '../constants/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // npm install @react-native-community/datetimepicker react-native-modal-datetime-picker
 
@@ -65,7 +66,7 @@ const ManageAlarm = ({ route, navigation }: any) => {
     if (alarmContent.length > 0 || selectedDays.length > 0) {
       Alert.alert(
         "경고",
-        "카테고리 변경시 현재 작성중인 정보가 사라집니다. 변경하시겠습니까?",
+        "카테고리 변경시 현재 작성중인 정보가 사라져요. 변경할까요?",
         [
           { text: "취소" },
           {
@@ -122,7 +123,8 @@ const ManageAlarm = ({ route, navigation }: any) => {
       navigation.goBack();
     }
   })
-  const delAlarm = () => {
+  const delAlarm = async () => {
+    const userToken = await AsyncStorage.getItem('@token')
     Alert.alert(
       "알람 삭제",
       "정말 이 알람을 삭제하시겠습니까?",
@@ -130,9 +132,8 @@ const ManageAlarm = ({ route, navigation }: any) => {
         { text: "취소" },
         {
           text: "삭제", onPress: () => {
-            const userIdFromToken = 1 // 작성 유저 아이디임(token) @@@@@@@@@@@@@@@@@@@@@
             const alarmId = route.params.alarmId
-            delMutation.mutate({ alarmId, userIdFromToken })
+            delMutation.mutate({ alarmId, userToken })
           }
         }
       ]
@@ -149,7 +150,7 @@ const ManageAlarm = ({ route, navigation }: any) => {
     }
   })
 
-  const confirmAlarm = () => {
+  const confirmAlarm = async () => {
     const formattedTime = alarmTime.toLocaleTimeString('en-GB', {
       hour12: false,
       timeZone: 'Asia/Seoul',
@@ -157,20 +158,19 @@ const ManageAlarm = ({ route, navigation }: any) => {
       minute: '2-digit',
       second: '2-digit',
     }).replace(/:/g, ':');
-    // const userIdFromToken = AsyncStorage.getItem('token') // 토큰꺼내서 백에서 토큰풀어야함
-    const userIdFromToken = 1 // 작성 유저 아이디임(token) @@@@@@@@@@@@@@@@@@@@@
+    const userToken = await AsyncStorage.getItem('@token')
+    const message = category === 'medicine' ? '약 먹을' : category === 'drink' ? '물 마실' : '기타 알람'
     const alarmData = {
       category: category,
       targetTime: formattedTime,
       pushDay: selectedDays,
       itemName: alarmContent,
-      pushMessage: '알림메세지알림메세지',
-      userIdFromToken: userIdFromToken, // 토큰값
+      pushMessage: `${message} 시간이에요!`,
     }
     if (isEditing) {
-      mutation.mutate({ alarmId: route.params.alarmId, alarmData })
+      mutation.mutate({ alarmId: route.params.alarmId, alarmData, userToken })
     } else {
-      mutation.mutate({ alarmData });
+      mutation.mutate({ alarmData, userToken });
     }
   }
 
@@ -247,7 +247,14 @@ const ManageAlarm = ({ route, navigation }: any) => {
                 <MaterialCommunityIcons name='trash-can-outline' color={'white'} size={18} />
               </Pressable>
             }
-            <Pressable onPress={confirmAlarm} style={styles.submitButton}>
+            <Pressable onPress={async () => {
+              if (selectedDays.length === 0 || alarmContent.length === 0) {
+                Alert.alert('등록 오류', '알람 정보를 입력해주세요!')
+              } else {
+                await confirmAlarm()
+              }
+            }
+            } style={styles.submitButton}>
               {isEditing ?
                 <Text style={styles.submitButtonText}>
                   알람 수정하기

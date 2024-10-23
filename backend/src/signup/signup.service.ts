@@ -87,6 +87,7 @@ export class SignupService {
   async createJwtToken(userInfo: CreateSignupDto) {
     const user = userInfo.data;
 
+
     const jwt = this.jwtService.sign(user);
 
     return jwt;
@@ -112,7 +113,7 @@ export class SignupService {
       }
 
       const mailOptions = {
-        from: 'dkswndgus0506@naver.com',
+        from: process.env.DEVELOP_EMAIL,
         to: createAuthNum.data.email,
         subject: '약 알람 bbiyakbbiyak 앱 회원 인증 관련 이메일입니다.',
         html: '<h1>인증번호를 입력해주세요 \n\n\n\n\n\n</h1>' + number,

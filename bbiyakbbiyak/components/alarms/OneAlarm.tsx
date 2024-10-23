@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { timeConvert } from '../../util/timeConvert';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleAlarms } from '../../api/alarmApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 ////////////////////////////// 알람 개별 컴포넌트 입니다 //////////////////////////////
 const OneAlarm = ({ alarmData }: any) => {
@@ -38,9 +39,9 @@ const OneAlarm = ({ alarmData }: any) => {
     }
   })
 
-  const onToggle = () => {
-    const userToken = 1
-    const alarmId = alarmData.id // 유저 아이디(토큰)
+  const onToggle = async () => {
+    const userToken = await AsyncStorage.getItem('@token')
+    const alarmId = alarmData.id
     toggleMutation.mutate({ alarmId, userToken })
   }
 

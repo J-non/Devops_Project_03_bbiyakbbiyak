@@ -2,14 +2,13 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const Payload = createParamDecorator((data: any, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest();
-
-  if (!request.payload) {
+  if (!request.user) {
     return null;
   }
 
   if (data) {
-    return request.payload[data];
+    return request.user[data];
   }
 
-  return request.payload;
+  return request.user;
 })
