@@ -22,13 +22,13 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
 
   let logDate = selectedDate.dateString;
 
-  const { data: alarmLogData, isSuccess: alarmLogIsSuccess, refetch: alarmLogRefetch, } = useQuery({
-    queryKey: ['alarmLogList'],
-    queryFn: async () => await getAlarmLog({ category: queryLogCategory, logDate }),
-  })
-  const { data: alarmData, isSuccess: alarmIsSuccess, refetch: alarmRefetch, } = useQuery({
+  const { data: alarmData, isSuccess: alarmIsSuccess, refetch: alarmRefetch, isRefetching: alarmIsRefetching } = useQuery({
     queryKey: ['alarmList'],
     queryFn: async () => await getAlarm({ category: queryCategory, logDate }),
+  })
+  const { data: alarmLogData, isSuccess: alarmLogIsSuccess, refetch: alarmLogRefetch, isRefetching: alarmLogIsRefetching } = useQuery({
+    queryKey: ['alarmLogList'],
+    queryFn: async () => await getAlarmLog({ category: queryLogCategory, logDate }),
   })
 
 
@@ -46,13 +46,14 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
 
 
 
-  if (!alarmIsSuccess || !alarmLogIsSuccess) {
+  if (!alarmIsSuccess || !alarmLogIsSuccess || alarmIsRefetching || alarmLogIsRefetching) {
     return (
       <View>
         <ActivityIndicator size="large" color="#999" />
       </View>
     )
   }
+
 
   return (
     <>

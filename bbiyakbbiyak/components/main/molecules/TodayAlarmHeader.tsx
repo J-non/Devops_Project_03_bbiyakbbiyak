@@ -20,7 +20,7 @@ const TodayAlarmHeader = ({ title, routeName, alarmLength }: any) => {
   const todaysDay = todayDate.getDay();
 
   const formattedDate = `${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일 `;
-  const FormattedToday = `${todayDate.getFullYear()}년 ${todayDate.getMonth()}월 ${todayDate.getDate()}일 `;
+  const FormattedToday = `${todayDate.getFullYear()}년 ${todayDate.getMonth() + 1}월 ${todayDate.getDate()}일 `;
 
   return (
     <>

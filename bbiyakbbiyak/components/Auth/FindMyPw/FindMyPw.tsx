@@ -42,6 +42,10 @@ const FindMyPw = () => {
   });
 
   function searchPW() {
+    if (isCodeVerified !== true) {
+      Alert.alert("요청 실패", "인증을 해주세요.", [{ text: "확인" }]);
+      return null;
+    }
     mutation.mutate(searchUser);
   }
 

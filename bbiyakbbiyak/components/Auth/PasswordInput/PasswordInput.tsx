@@ -75,7 +75,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
       {/* 비밀번호 유효성 검사는 로그인 화면일 때만 적용 */}
       {password && !regPassword.test(password) && isLoginScreen && (
         <AlertComponent style={styles.alert}>
-          영문, 숫자, 특수기호 1개 이상 포함
+          8자 ~ 15자, 영문, 숫자, 특수기호 1개 이상 포함
         </AlertComponent>
       )}
 

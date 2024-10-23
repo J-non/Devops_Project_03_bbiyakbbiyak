@@ -73,6 +73,7 @@ const MyPageTextForm = (props: any) => {
       <CustomInput
         value={name ? name?.name : bbiyakUpdate?.userName}
         style={styles.textInput}
+        placeholder='사용자 이름'
         onChangeText={(text: any) => {
           if (setValueState) {
             if (name) {

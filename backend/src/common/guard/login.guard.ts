@@ -41,7 +41,6 @@ export class TokenGuard implements CanActivate {
       }
       request.user = user;
       request.role = payload.role;
-      request.payload = payload;
     } catch (error) {
       throw new UnauthorizedException('사용할 수 없는 토큰');
     }

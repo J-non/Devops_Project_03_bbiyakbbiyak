@@ -31,7 +31,6 @@ const MyPage = () => {
   const updateInfo = () => {
     navigation.navigate("Logined");
   };
-  // 현재 구글 닉네임 변경안됨 10/17 후에 수정해야됨
   const mutation = useMutation({
     mutationFn: (data: MyPageType | undefined) => updateGoogleUserName(data),
     onSuccess: async (data) => {

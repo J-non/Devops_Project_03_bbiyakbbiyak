@@ -76,8 +76,6 @@ const LoginScreen = () => {
     },
   });
   function handleLogin() {
-    console.log("ID:", stateValue.email);
-    console.log("Password:", stateValue.password);
     // dummyData 나중에 서버에서 응답 받아서 응답받은 데이터로 바꾸기
     mutation.mutate(stateValue);
   }

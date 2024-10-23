@@ -17,7 +17,7 @@ export default ContentDetail
 
 const styles = StyleSheet.create({
   detail: {
-    backgroundColor: '#e6e6e6',
+    backgroundColor: '#eeeeee',
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginVertical: 4,

@@ -1,45 +1,41 @@
 {
-    "expo": {
-        "name": "bbiyakbbiyak",
-        "slug": "bbiyakbbiyak",
-        "version": "1.0.0",
-        "projectId": "dced64aa-76ae-40c8-bb78-8529ab1b887d",
-        "orientation": "portrait",
-        "icon": "./assets/images/logo.png",
-        "userInterfaceStyle": "light",
-        "platforms": [
-            "ios",
-            "android"
-        ],
-        "scheme": "bbiyakbbiyak",
-        "splash": {
-            "image": "./assets/images/logo.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffdf66"
-        },
-        "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "com.bbiyakbbiyak.test"
-        },
-        "android": {
-            "package": "com.bbiyakbbiyak.test",
-            "googleServicesFile": "./android/app/google-services.json",
-            "useNextNotificationsApi": true,
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/images/logo.png",
-                "backgroundColor": "#ffdf66"
-            }
-        },
-        "web": {
-            "favicon": "./assets/favicon.png"
-        },
-        "plugins": [
-            "expo-font"
-        ],
-        "extra": {
-            "eas": {
-                "projectId": "dced64aa-76ae-40c8-bb78-8529ab1b887d"
-            }
-        }
+  "expo": {
+    "name": "bbiyakbbiyak",
+    "slug": "bbiyakbbiyak",
+    "version": "1.0.0",
+    "projectId": "dced64aa-76ae-40c8-bb78-8529ab1b887d",
+    "orientation": "portrait",
+    "icon": "./assets/images/playstore.png",
+    "userInterfaceStyle": "light",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "scheme": "bbiyakbbiyak",
+    "splash": {
+      "image": "./assets/images/centered_padded_logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffdf66"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bbiyakbbiyak.test"
+    },
+    "android": {
+      "package": "com.bbiyakbbiyak.test",
+      "googleServicesFile": "./android/app/google-services.json",
+      "useNextNotificationsApi": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "dced64aa-76ae-40c8-bb78-8529ab1b887d"
+      }
     }
+  }
 }

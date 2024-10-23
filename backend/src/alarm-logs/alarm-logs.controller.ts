@@ -11,7 +11,8 @@ export class AlarmLogsController {
 
   // 헤더에 유저토큰 가져오기 및 타입지정 해야함
   @Get('get_month_log')
-  async getMonthLog(@Query('fk_userId') fk_userId: number, @Query('monthString') monthString: string, @Res() res: Response) {
+  @UseGuards(TokenGuard)
+  async getMonthLog(@Payload('id') fk_userId: number, @Query('monthString') monthString: string, @Res() res: Response) {
     try {
       const data = await this.alarmLogsService.selectAlarmLogsByDate(fk_userId, monthString);
       res.send(data);
@@ -23,7 +24,7 @@ export class AlarmLogsController {
   // 헤더에 유저토큰 가져오기 및 타입지정 해야함
   @Get('get_alarm_logs')
   @UseGuards(TokenGuard)
-  async getAlarmLogs(@Query('category') category: string, @Query('logDate') logDate: string, @Res() res: Response, @Payload('id') fk_userId: number) {
+  async getAlarmLogs(@Payload('id') fk_userId: number, @Query('category') category: string, @Query('logDate') logDate: string, @Res() res: Response) {
     try {
       // 유저 아이디 동적을 받는 로직 추가해야함
       const data = await this.alarmLogsService.selectAlarmLogsByUserId(fk_userId, category, logDate)
@@ -35,6 +36,7 @@ export class AlarmLogsController {
 
   // 헤더에 유저토큰 가져오기 및 타입지정 해야함????
   @Put('alarm_log_Items/is_taken')
+  @UseGuards(TokenGuard)
   async updateAlarmLogItemsIsTaken(@Body() body: { id: number, isTaken: boolean }, @Res() res: Response) {
     try {
       const { id, isTaken } = body;
