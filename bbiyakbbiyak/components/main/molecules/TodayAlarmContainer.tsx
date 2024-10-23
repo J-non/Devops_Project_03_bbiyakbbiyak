@@ -1,57 +1,88 @@
-import React, { useState } from 'react'
-import { FlatList, View } from 'react-native'
+import React, { useCallback, useState } from 'react'
+import { ActivityIndicator, FlatList, View } from 'react-native'
 import { TodayAlarmContainerStyles } from './TodayAlarmContainer.style'
-import { dummyData } from '../dummyData'
 import TodayAlarmHeader from './TodayAlarmHeader'
 import TodayAlarmList from './TodayAlarmList'
 import TodayAlarmEmpty from './TodayAlarmEmpty'
 import AlarmLogEmpty from '../../alarmLogCalendar/molecules/AlarmLogEmpty'
+import { useQuery } from '@tanstack/react-query'
+import { getAlarm, getAlarmLog } from '../../../api'
+import { useFocusEffect } from '@react-navigation/native'
+import { useAtom } from 'jotai'
+import { selectedCalendarDateAtom } from '../../../store/selectedCalendarDateAtom'
+import { categoryAtom, logCategoryAtom } from '../../../store/categoryAtom'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 const TodayAlarmContainer = ({ title, routeName }: any) => {
 
-  const [allSpecifiedTakenByTime, setAllSpecifiedTakenByTime] = useState(false);
-  const [specifiedTaken, setSpecifiedTaken] = useState(false);
+  const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
+  const [queryCategory, setQueryCategory] = useAtom(categoryAtom)
+  const [queryLogCategory, setQueryLogCategory] = useAtom(logCategoryAtom);
 
-  // 모든 알람 완료 체크하는 상태변수 추가해야 함
+  let logDate = selectedDate.dateString;
+
+  const { data: alarmLogData, isSuccess: alarmLogIsSuccess, refetch: alarmLogRefetch, } = useQuery({
+    queryKey: ['alarmLogList'],
+    queryFn: async () => await getAlarmLog({ category: queryLogCategory, logDate }),
+  })
+  const { data: alarmData, isSuccess: alarmIsSuccess, refetch: alarmRefetch, } = useQuery({
+    queryKey: ['alarmList'],
+    queryFn: async () => await getAlarm({ category: queryCategory, logDate }),
+  })
 
 
-  const allTakenHandler = () => {
-    setAllSpecifiedTakenByTime(!allSpecifiedTakenByTime);
-    if (allSpecifiedTakenByTime) {
-      setSpecifiedTaken(true);
-    } else {
-      setSpecifiedTaken(false);
-    };
-  }
+  // 화면이 포커스될 때마다 refetch를 호출
+  useFocusEffect(
+    useCallback(() => {
+      if (!routeName) {
+        alarmRefetch();
+      }
+      if (routeName) {
+        alarmLogRefetch()
+      }
+    }, [alarmRefetch, selectedDate])
+  );
 
-  const takenHandler = () => {
-    setSpecifiedTaken(!specifiedTaken);
+
+
+  if (!alarmIsSuccess || !alarmLogIsSuccess) {
+    return (
+      <View>
+        <ActivityIndicator size="large" color="#999" />
+      </View>
+    )
   }
 
   return (
     <>
       <FlatList
-        data={dummyData}
+        data={routeName ? alarmLogData : alarmData}
         keyExtractor={(item) => item.id}
 
         style={TodayAlarmContainerStyles.container}
 
-        ListHeaderComponent={(<TodayAlarmHeader title={title} routeName={routeName} />)}
+        ListHeaderComponent={(
+          <TodayAlarmHeader
+            title={title}
+            routeName={routeName}
+            alarmLength={routeName ? alarmLogData?.length : alarmData?.length}
+          />
+        )}
         ListHeaderComponentStyle={
           TodayAlarmContainerStyles.header
         }
 
         // 알람이 있을 때
-        renderItem={({ item }) => (
-          <TodayAlarmList item={item} />
-        )}
+        renderItem={({ item }) => {
+          return <TodayAlarmList item={item} routeName={routeName} />
+        }}
 
 
         // 알람이 없을 때
         ListEmptyComponent={(title ? <TodayAlarmEmpty /> : <AlarmLogEmpty />)}
 
-
-
+        // 푸터
         ListFooterComponent={(
           <View></View>
         )}

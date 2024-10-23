@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import { TodayAlarmHeaderStyles } from './TodayAlarmHeader.style'
-import { dummyData } from '../dummyData'
 import { useAtom } from 'jotai'
 import { selectedCalendarDateAtom } from '../../../store/selectedCalendarDateAtom'
 
-const TodayAlarmHeader = ({ title, routeName }: any) => {
+const TodayAlarmHeader = ({ title, routeName, alarmLength }: any) => {
   const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
   const [selectedDay, setSelectedDay] = useState<number>(0);
 
@@ -20,7 +19,8 @@ const TodayAlarmHeader = ({ title, routeName }: any) => {
   const todayDate = new Date();
   const todaysDay = todayDate.getDay();
 
-  const formattedDate = `${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일 `
+  const formattedDate = `${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일 `;
+  const FormattedToday = `${todayDate.getFullYear()}년 ${todayDate.getMonth()}월 ${todayDate.getDate()}일 `;
 
   return (
     <>
@@ -33,7 +33,7 @@ const TodayAlarmHeader = ({ title, routeName }: any) => {
 
       <View style={TodayAlarmHeaderStyles.dateContainer}>
         <Text style={routeName ? TodayAlarmHeaderStyles.dateTextOfCalendar : TodayAlarmHeaderStyles.dateText}>
-          {routeName ? formattedDate : '2024년 10월 2일 '}
+          {routeName ? formattedDate : FormattedToday}
           <Text style={routeName ? TodayAlarmHeaderStyles.daysTextOfCalendar : TodayAlarmHeaderStyles.daysText}>
             {routeName ? days[selectedDay] : days[todaysDay]}
           </Text>
@@ -42,9 +42,9 @@ const TodayAlarmHeader = ({ title, routeName }: any) => {
 
 
       {
-        dummyData.length > 0 &&
+        alarmLength > 0 &&
         <View>
-          <Text style={TodayAlarmHeaderStyles.countText}>총 0/{dummyData.length}개</Text>
+          <Text style={TodayAlarmHeaderStyles.countText}>총 {alarmLength}개</Text>
         </View>
       }
     </>

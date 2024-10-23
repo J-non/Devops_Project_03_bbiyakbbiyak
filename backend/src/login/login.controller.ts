@@ -12,11 +12,11 @@ import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { Request, Response } from 'express';
 import { ExceptionHandler } from 'src/Exception/ExceptionHandler';
-import { LoginPipe } from 'src/pipe/signup.pipe';
+import { LoginPipe } from 'src/common/pipe/signup.pipe';
 
 @Controller('login')
 export class LoginController {
-  constructor(private readonly loginService: LoginService) {}
+  constructor(private readonly loginService: LoginService) { }
 
   @Post()
   @UsePipes(LoginPipe)

@@ -1,27 +1,40 @@
-import { StatusBar } from "expo-status-bar";
+import { StatusBar } from 'expo-status-bar';
+import { Alert, } from 'react-native';
+import { useFonts } from 'expo-font';
+import { useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import * as Notifications from 'expo-notifications';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import axios from 'axios';
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useFonts } from "expo-font";
-import { useEffect, useState } from "react";
-import * as SplashScreen from "expo-splash-screen";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthCheck } from "./components/Auth/AuthCheck/AuthCheck";
 
-const Stack = createNativeStackNavigator();
+Notifications.setNotificationHandler({
+  // 알림 포그라운드에서 어떻게 처리할것인지
+  handleNotification: async () => ({
+    shouldShowAlert: true,    // 알림을 화면에 표시할지 여부
+    shouldPlaySound: true,    // 알림 소리를 재생할지 여부
+    shouldSetBadge: false,    // 배지를 설정할지 여부
+  }),
+});
+
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+      retry: 0
+    }
+  }
+})
 
 export default function App() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: 0,
-      },
-    },
-  });
 
   const [fontLoaded] = useFonts({
     pretendard: require("./assets/fonts/Pretendard-Regular.otf"),
     "pretendard-bold": require("./assets/fonts/Pretendard-Bold.otf"),
   });
+
 
   useEffect(() => {
     const prepare = async () => {

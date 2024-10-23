@@ -16,14 +16,15 @@ export const TodayAlarmListStyles = StyleSheet.create({
     alignItems: 'center',
   },
   iconClock: {
-    paddingRight: 4,
+    paddingRight: 8,
   },
   timeText: {
-    fontSize: 14,
-    fontFamily: 'pretendard',
+    fontSize: 18,
+    fontFamily: 'pretendard-bold',
+    paddingRight: 24
   },
   iconDotContainer: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
   },
   detailFlatListContainer: {
     flex: 30

@@ -1,32 +1,47 @@
 import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { Dialect } from 'sequelize';
+import { JwtModule } from '@nestjs/jwt';
+import { AlarmLogsModule } from './alarm-logs/alarm-logs.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { AlarmModule } from './alarm/alarm.module';
+import { NotificationModule } from './notification/notification.module';
 import { LoginModule } from './login/login.module';
 import { SignupModule } from './signup/signup.module';
-import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { LoginService } from './login/login.service';
-import { APP_FILTER } from '@nestjs/core';
 import { ExceptionHandler } from './Exception/ExceptionHandler';
+import { CommonModule } from './common/common.module';
+
 
 @Module({
   imports: [
-    LoginModule,
-    SignupModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`
+    }),
     SequelizeModule.forRoot({
-      dialect: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'test',
+      dialect: process.env.DB_DIALECT as Dialect,
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       autoLoadModels: true,
       synchronize: true,
-      sync: { force: false },
     }),
+    CommonModule,
+    LoginModule,
+    SignupModule,
+    AlarmLogsModule,
+    NotificationModule,
+    ScheduleModule.forRoot(),// 스케쥴링 모듈
+    AlarmModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService, ExceptionHandler],
 })
-export class AppModule {}
+export class AppModule { }
+
