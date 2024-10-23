@@ -27,7 +27,7 @@ export const createAlarmLogs = async () => {
 
     console.log(`과거 날짜로부터 ${daysDifference}일이 지났습니다.`);
 
-    const { data } = await axios.post('http://192.168.0.82:3000/alarm/create_logs/1', { daysDifference, loggedDate });
+    const { data } = await axios.post('http://192.168.0.252:3000/alarm/create_logs/1', { daysDifference, loggedDate });
     return data
 
   } catch (error) {
@@ -43,7 +43,7 @@ export const getAlarm = async ({ category, logDate }: { category: string, logDat
   const token = await AsyncStorage.getItem('@token');
   const pushDay = new Date().getDay();
   const { data } = await axios.get(
-    `http://192.168.0.82:3000/alarm/get_alarm_list?category=${category}&pushDay=${pushDay}`,
+    `http://192.168.0.252:3000/alarm/get_alarm_list?category=${category}&pushDay=${pushDay}`,
     {
       headers: {
         Authorization: `bearer ${token}`
@@ -56,7 +56,7 @@ export const getAlarm = async ({ category, logDate }: { category: string, logDat
 export const getAlarmLog = async ({ category, logDate }: { category: string, logDate: string }) => {
   const token = await AsyncStorage.getItem('@token');
   const { data } = await axios.get(
-    `http://192.168.0.82:3000/alarm-logs/get_alarm_logs?category=${category}&logDate=${logDate}`,
+    `http://192.168.0.252:3000/alarm-logs/get_alarm_logs?category=${category}&logDate=${logDate}`,
     {
       headers: {
         Authorization: `bearer ${token}`
@@ -69,7 +69,7 @@ export const getAlarmLog = async ({ category, logDate }: { category: string, log
 // 복용 기록 달력 알람 존재 여부
 export const getMonthLog = async (monthString: string) => {
   const id = 1;
-  const { data } = await axios.get(`http://192.168.0.82:3000/alarm-logs/get_month_log?fk_userId=${id}&monthString=${monthString}`)
+  const { data } = await axios.get(`http://192.168.0.252:3000/alarm-logs/get_month_log?fk_userId=${id}&monthString=${monthString}`)
 
   const formattedData = data.reduce((acc, item) => {
     acc[item.logDate] = { marked: true, dotColor: 'blue' };
@@ -82,7 +82,7 @@ export const getMonthLog = async (monthString: string) => {
 // 오늘 알람 복용여부
 export const updateIsTaken = async ({ id, isTaken }: { id: number, isTaken: boolean }) => {
   try {
-    const data = await axios.put('http://192.168.0.82:3000/alarm/items/is_takend', { id, isTaken });
+    const data = await axios.put('http://192.168.0.252:3000/alarm/items/is_takend', { id, isTaken });
     return data
   } catch (error) {
     console.error(error)
@@ -92,7 +92,7 @@ export const updateIsTaken = async ({ id, isTaken }: { id: number, isTaken: bool
 // 복용 기록 복용 여부
 export const updateLogIsTaken = async ({ id, isTaken }: { id: number, isTaken: boolean }) => {
   try {
-    const data = await axios.put('http://192.168.0.82:3000/alarm-logs/alarm_log_Items/is_taken', { id, isTaken })
+    const data = await axios.put('http://192.168.0.252:3000/alarm-logs/alarm_log_Items/is_taken', { id, isTaken })
     return data
   } catch (error) {
     console.error(error)
@@ -103,7 +103,7 @@ export const updateLogIsTaken = async ({ id, isTaken }: { id: number, isTaken: b
 // login====================================================login
 export const signup = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/signup", { data });
+    const response = await axios.post("http://192.168.0.252:3000/signup", { data });
     const _data = response.data;
     return _data;
   } catch (error: any) {
@@ -115,7 +115,7 @@ export const signup = async (data: any) => {
 
 export const signupGoogle = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/signup/google", {
+    const response = await axios.post("http://192.168.0.252:3000/signup/google", {
       data,
     });
     const _data = response.data;
@@ -130,7 +130,7 @@ export const signupGoogle = async (data: any) => {
 
 export const jwtToken = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/signup/jwtToken", {
+    const response = await axios.post("http://192.168.0.252:3000/signup/jwtToken", {
       data,
     });
     const _data = response.data;
@@ -145,7 +145,7 @@ export const jwtToken = async (data: any) => {
 
 export const loginAPI = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/login", { data });
+    const response = await axios.post("http://192.168.0.252:3000/login", { data });
     const _data = response.data;
     return _data;
   } catch (error: any) {
@@ -157,7 +157,7 @@ export const loginAPI = async (data: any) => {
 
 export const emailAPI = async (data: object) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/signup/authCode", {
+    const response = await axios.post("http://192.168.0.252:3000/signup/authCode", {
       data,
     });
     const _data = response.data;
@@ -171,7 +171,7 @@ export const emailAPI = async (data: object) => {
 
 export const findID = async (data: { phone: string } | null) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/login/findID", {
+    const response = await axios.post("http://192.168.0.252:3000/login/findID", {
       data,
     });
     const _data = response.data;
@@ -184,7 +184,7 @@ export const findID = async (data: { phone: string } | null) => {
 };
 export const findPW = async (data: { email: string; phone: string }) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/login/findPW", {
+    const response = await axios.post("http://192.168.0.252:3000/login/findPW", {
       data,
     });
     const _data = response.data;
@@ -198,7 +198,7 @@ export const findPW = async (data: { email: string; phone: string }) => {
 
 export const updatePW = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/login/updatePW", {
+    const response = await axios.post("http://192.168.0.252:3000/login/updatePW", {
       data,
     });
     const _data = response.data;
@@ -212,7 +212,7 @@ export const updatePW = async (data: any) => {
 
 export const getInfo = async (data: any) => {
   try {
-    const url = `http://192.168.0.82:3000/login/getInfo/${data.token ? data.token : data}`;
+    const url = `http://192.168.0.252:3000/login/getInfo/${data.token ? data.token : data}`;
 
     const response = await axios.get(url);
 
@@ -226,7 +226,7 @@ export const getInfo = async (data: any) => {
 export const updateGoogleUserName = async (data: any) => {
   try {
     const response = await axios.post(
-      "http://192.168.0.82:3000/login/getInfo/updateGoogle",
+      "http://192.168.0.252:3000/login/getInfo/updateGoogle",
       { data }
     );
     return response.data;
@@ -246,7 +246,7 @@ export const deleteUser = async (data: string) => {
       },
     };
     const response = await axios.post(
-      "http://192.168.0.82:3000/signup/deleteUser",
+      "http://192.168.0.252:3000/signup/deleteUser",
       {},
       config
     );

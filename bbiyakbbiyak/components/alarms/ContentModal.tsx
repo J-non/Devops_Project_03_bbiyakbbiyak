@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { KeyboardAvoidingView, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import Modal from 'react-native-modal';
 
 // npm i npm install react-native-modal
@@ -12,6 +12,10 @@ const ContentModal = ({ closeModal, visible, modalConfirm }: any) => {
     }
 
     const addHandler = () => {
+        if (inputValue.trim().length === 0) {
+            Alert.alert('입력 오류', '항목을 입력해주세요!')
+            return
+        }
         modalConfirm(inputValue);
         setInputValue('')
     }

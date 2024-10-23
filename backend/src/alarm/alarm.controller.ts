@@ -1,8 +1,10 @@
-import { Controller, Post, Body, Put, Get, Query, Param, Delete, Header, Req, Res } from '@nestjs/common';
+import { Controller, Post, Body, Put, Get, Query, Param, Delete, Header, Req, Res, UseGuards } from '@nestjs/common';
 import { AlarmService } from './alarm.service';
 import { CreateAlarmDto } from './dto/create-alarm.dto';
 import { AlarmLogsService } from 'src/alarm-logs/alarm-logs.service';
 import { Response } from 'express';
+import { TokenGuard } from 'src/common/guard/login.guard';
+import { Payload } from 'src/common/decorator/payload.decorator';
 
 @Controller('alarm')
 export class AlarmController {
@@ -12,36 +14,41 @@ export class AlarmController {
   ) { }
 
   ////////////////////// 알람 조회 (유저아이디)
-  @Post('getall')
-  async getAllAlarmsByUserId(@Body('userId') userId: any) {
-    return await this.alarmService.getAlarmsByUserId(userId);
+  @UseGuards(TokenGuard)
+  @Get('getall')
+  async getAllAlarmsByUserId(@Payload('id') fk_userId: number) {
+    return await this.alarmService.getAlarmsByUserId(fk_userId);
   }
 
   ////////////////////// 알람 등록
+  @UseGuards(TokenGuard)
   @Post('register')
-  async createAlarm(@Body() alarmData: CreateAlarmDto) {
-    return await this.alarmService.createAlarm(alarmData)
+  async createAlarm(@Body() alarmData: CreateAlarmDto, @Payload('id') fk_userId: number) {
+    return await this.alarmService.createAlarm(alarmData, fk_userId)
   }
 
   ////////////////////// 알람 수정
+  @UseGuards(TokenGuard)
   @Put('update/:alarmId')
-  async updateAlarm(@Param('alarmId') alarmId: number, @Body() alarmData: CreateAlarmDto) {
-    return await this.alarmService.updateAlarm(alarmId, alarmData)
+  async updateAlarm(@Param('alarmId') alarmId: number, @Body() alarmData: CreateAlarmDto, @Payload('id') fk_userId: number) {
+    return await this.alarmService.updateAlarm(alarmId, alarmData, fk_userId)
   }
 
   ////////////////////// 알람 삭제
+  @UseGuards(TokenGuard)
   @Delete('delete/:alarmId')
-  async deleteAlarm(@Param('alarmId') alarmId: number, @Body('userIdFromToken') userIdFromToken: any) {
-    return await this.alarmService.deleteAlarm(alarmId, userIdFromToken)
+  async deleteAlarm(@Param('alarmId') alarmId: number, @Payload('id') fk_userId: number) {
+    return await this.alarmService.deleteAlarm(alarmId, fk_userId)
   }
 
   ////////////////////// 토글 요청
+  @UseGuards(TokenGuard)
   @Put('toggle/:alarmId')
-  async toggleAlarm(@Param('alarmId') alarmId: number, @Req() req: Request, @Body('userToken') userToken: number) {
+  async toggleAlarm(@Param('alarmId') alarmId: number, @Payload('id') fk_userId: number) {
+    console.log(12312312312312312)
     console.log(alarmId)
-    console.log(userToken)
-    // console.log(req.headers.authorized)
-    return await this.alarmService.toggleAlarm(alarmId, userToken)
+    console.log(fk_userId)
+    return await this.alarmService.toggleAlarm(alarmId, fk_userId)
   }
 
   ////////////////////// 토큰 저장
