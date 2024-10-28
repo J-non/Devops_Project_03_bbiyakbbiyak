@@ -7,14 +7,14 @@ import TodayAlarmEmpty from './TodayAlarmEmpty'
 import AlarmLogEmpty from '../../alarmLogCalendar/molecules/AlarmLogEmpty'
 import { useQuery } from '@tanstack/react-query'
 import { getAlarm, getAlarmLog } from '../../../api'
-import { useFocusEffect, useRoute } from '@react-navigation/native'
+import { useFocusEffect } from '@react-navigation/native'
 import { useAtom } from 'jotai'
 import { selectedCalendarDateAtom } from '../../../store/selectedCalendarDateAtom'
 import { categoryAtom, logCategoryAtom } from '../../../store/categoryAtom'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const TodayAlarmContainer = ({ title, routeName }: any) => {
-  const route = useRoute<any>();
 
   const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
   const [queryCategory, setQueryCategory] = useAtom(categoryAtom)
@@ -22,25 +22,15 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
 
   let logDate = selectedDate.dateString;
 
-  // let category: string;
-
-  const { data: alarmLogData, isSuccess: alarmLogIsSuccess, refetch: alarmLogRefetch, } = useQuery({
-    queryKey: ['alarmLogList'],
-    queryFn: async () => await getAlarmLog({ category: queryLogCategory, token: '', logDate }),
-  })
-  const { data: alarmData, isSuccess: alarmIsSuccess, refetch: alarmRefetch, } = useQuery({
+  const { data: alarmData, isSuccess: alarmIsSuccess, refetch: alarmRefetch, isRefetching: alarmIsRefetching } = useQuery({
     queryKey: ['alarmList'],
-    queryFn: async () => await getAlarm({ category: queryCategory, token: '', logDate }),
+    queryFn: async () => await getAlarm({ category: queryCategory, logDate }),
+  })
+  const { data: alarmLogData, isSuccess: alarmLogIsSuccess, refetch: alarmLogRefetch, isRefetching: alarmLogIsRefetching } = useQuery({
+    queryKey: ['alarmLogList'],
+    queryFn: async () => await getAlarmLog({ category: queryLogCategory, logDate }),
   })
 
-
-  // useEffect(() => {
-  // if (!route.params?.category) {
-  //   category = 'medicine'
-  // } else {
-  //   category = route.params?.category;
-  // }
-  // }, [queryLogCategory, queryCategory])
 
   // 화면이 포커스될 때마다 refetch를 호출
   useFocusEffect(
@@ -56,34 +46,14 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
 
 
 
-  const [allSpecifiedTakenByTime, setAllSpecifiedTakenByTime] = useState(false);
-  const [specifiedTaken, setSpecifiedTaken] = useState(false);
-
-
-
-
-  // 모든 알람 완료 체크하는 상태변수 추가해야 함
-
-  // const allTakenHandler = () => {
-  //   setAllSpecifiedTakenByTime(!allSpecifiedTakenByTime);
-  //   if (allSpecifiedTakenByTime) {
-  //     setSpecifiedTaken(true);
-  //   } else {
-  //     setSpecifiedTaken(false);
-  //   };
-  // }
-
-  // const takenHandler = () => {
-  //   setSpecifiedTaken(!specifiedTaken);
-  // }
-
-  if (!alarmIsSuccess || !alarmLogIsSuccess) {
+  if (!alarmIsSuccess || !alarmLogIsSuccess || alarmIsRefetching || alarmLogIsRefetching) {
     return (
       <View>
         <ActivityIndicator size="large" color="#999" />
       </View>
     )
   }
+
 
   return (
     <>
@@ -113,8 +83,7 @@ const TodayAlarmContainer = ({ title, routeName }: any) => {
         // 알람이 없을 때
         ListEmptyComponent={(title ? <TodayAlarmEmpty /> : <AlarmLogEmpty />)}
 
-
-
+        // 푸터
         ListFooterComponent={(
           <View></View>
         )}

@@ -5,7 +5,7 @@ import { CalendarHeaderStyles } from './CalendarHeader.style';
 import { useAtom } from 'jotai';
 import { selectedCalendarDateAtom } from '../../../store/selectedCalendarDateAtom';
 
-const CalendarHeader = ({ currentDate, setCurrentDate, today, calendarDataMutate }: any) => {
+const CalendarHeader = ({ currentDate, setCurrentDate, today }: any) => {
 
   const [selectedDate, setSelectedDate] = useAtom(selectedCalendarDateAtom);
   const month = currentDate.month;
@@ -20,7 +20,6 @@ const CalendarHeader = ({ currentDate, setCurrentDate, today, calendarDataMutate
         tempMonth = 12
         tempYear--
       }
-      // calendarDataMutate(`${tempYear}-${tempMonth.toString().padStart(2, '0')}`);
       return { ...prevData, month: tempMonth, year: tempYear }
     })
   };
@@ -34,7 +33,6 @@ const CalendarHeader = ({ currentDate, setCurrentDate, today, calendarDataMutate
         tempMonth = 1
         tempYear++
       }
-      // calendarDataMutate(`${tempYear}-${tempMonth.toString().padStart(2, '0')}`);
       return { ...prevData, month: tempMonth, year: tempYear }
     })
   };
@@ -55,15 +53,6 @@ const CalendarHeader = ({ currentDate, setCurrentDate, today, calendarDataMutate
               {`${year}년 ${month}월`}
             </Text>
           </View>
-
-          {/* <View style={CalendarHeaderStyles.todayButtonWrap}>
-            <Pressable
-              onPress={gotToToday}
-              style={CalendarHeaderStyles.todayButton}
-            >
-              <Text style={CalendarHeaderStyles.todayText}>오늘</Text>
-            </Pressable>
-          </View> */}
 
         </View>
 

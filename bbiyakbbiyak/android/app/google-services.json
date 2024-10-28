@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1072378514835",
+    "project_id": "bbiyakbbiyak-1c653",
+    "storage_bucket": "bbiyakbbiyak-1c653.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072378514835:android:61382334e14fd4ba502c66",
+        "android_client_info": {
+          "package_name": "com.bbiyakbbiyak.test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-D2NhvBQmz85MWqYiELN5QqTi2veSFa0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

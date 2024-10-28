@@ -48,9 +48,6 @@ const LogCalendar = () => {
     calendarDataRefetch();
   }, [currentDate.month])
 
-  // const { data: currentDateData, mutate: currentDateDataMutate } = useMutation({
-  //   mutationFn: getAlarmLog
-  // })
 
   // 선택된 날짜에 기록이 있는지 여부
   let isSelectedDateInCalendarData: boolean;
@@ -75,7 +72,6 @@ const LogCalendar = () => {
             currentDate={currentDate}
             setCurrentDate={setCurrentDate}
             today={initDate}
-            // calendarDataMutate={calendarDataMutate}
             calendarDataRefetch={calendarDataRefetch}
           />
         } // 커스텀 헤더 렌더링
@@ -90,7 +86,6 @@ const LogCalendar = () => {
         }}
         firstDay={0} // 일요일부터 시작 (0이 일요일, 1이 월요일)
 
-        // markingType={'multi-dot'} // 카테고리별 도트
         markedDates={{
           ...calendarData,
           [selectedDate.dateString]: {

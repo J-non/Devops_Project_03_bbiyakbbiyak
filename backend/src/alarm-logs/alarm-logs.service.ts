@@ -5,6 +5,7 @@ import { AlarmLogs } from './models/alarmLogs.model';
 import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { IFormatAlarmDays, IFormatAlarmItems, IFormatAlarms, IFormatLogData } from './dto/alarmLogs.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AlarmLogsService {
@@ -12,8 +13,10 @@ export class AlarmLogsService {
     @InjectModel(AlarmLogItems)
     private readonly AlarmLogItemsModel: typeof AlarmLogItems,
     @InjectModel(AlarmLogs)
-    private readonly AlarmLogsModel: typeof AlarmLogs
-  ) { }
+    private readonly AlarmLogsModel: typeof AlarmLogs,
+    private readonly jwtService: JwtService
+  ) {
+  }
 
 
 
@@ -98,7 +101,6 @@ export class AlarmLogsService {
   async selectAlarmLogsByUserId(fk_userId: number, category: string, logDate: string): Promise<AlarmLogs[]> {
     const data = await this.AlarmLogsModel.findAll({
       where: { fk_userId, logDate, category },
-      // where: { fk_userId, logDate },
       order: [['targetTime', 'ASC']],
       include: [AlarmLogItems]
     })
@@ -151,7 +153,6 @@ export class AlarmLogsService {
     if (!data) {
       throw new NotFoundException("일치하는 데이터 없음.");
     }
-
     return data
   }
 }

@@ -6,6 +6,7 @@ import { Days } from './models/days.model';
 import { Items } from './models/items.model';
 import { Sequelize } from 'sequelize-typescript';
 import { IFormatLogData } from 'src/alarm-logs/dto/alarmLogs.dto';
+import { ExpoPushTokens } from './models/expoPushTokens.model';
 
 
 @Injectable()
@@ -14,14 +15,15 @@ export class AlarmService {
     @InjectModel(Alarms) private readonly alarmsModel: typeof Alarms,
     @InjectModel(Days) private readonly daysModel: typeof Days,
     @InjectModel(Items) private readonly itemsModel: typeof Items,
+    @InjectModel(ExpoPushTokens) private readonly expoPushTokensModel: typeof ExpoPushTokens,
     private readonly sequelize: Sequelize
   ) { }
 
   //////////////////////////////// 유저 인덱스로 알람 읽기
-  async getAlarmsByUserId(userId: number): Promise<Alarms[]> {
-    console.log(userId)
+  async getAlarmsByUserId(fk_userId: number): Promise<Alarms[]> {
+    console.log(fk_userId)
     return this.alarmsModel.findAll({
-      where: { fk_userId: userId },
+      where: { fk_userId: fk_userId },
       include: [
         {
           model: Days,
@@ -40,9 +42,9 @@ export class AlarmService {
     })
   }
   //////////////////////////////// 알람 등록
-  async createAlarm(alarmData: CreateAlarmDto): Promise<Alarms> {
-    const { category, targetTime, pushDay, itemName, deviceToken, pushMessage, userIdFromToken } = alarmData
-    console.log(category, targetTime, pushDay, itemName, deviceToken, pushMessage, userIdFromToken)
+  async createAlarm(alarmData: CreateAlarmDto, fk_userId: number): Promise<Alarms> {
+    const { category, targetTime, pushDay, itemName, pushMessage } = alarmData
+    console.log(category, targetTime, pushDay, itemName, pushMessage)
     // 트랜잭션
     const transaction = await this.sequelize.transaction();
     try {
@@ -50,9 +52,8 @@ export class AlarmService {
         {
           category,
           targetTime,
-          deviceToken,
           pushMessage,
-          fk_userId: userIdFromToken,
+          fk_userId,
           alarmDay: pushDay.map((el) => ({ pushDay: el })),
           alarmItem: itemName.map((el) => ({ itemName: el }))
         },
@@ -67,16 +68,15 @@ export class AlarmService {
   }
 
   /////////////////////////////// 알람 수정
-  async updateAlarm(alarmId: number, alarmData: CreateAlarmDto): Promise<Alarms> {
-    const { category, targetTime, pushDay, itemName, deviceToken, pushMessage, userIdFromToken } = alarmData
+  async updateAlarm(alarmId: number, alarmData: CreateAlarmDto, fk_userId: number): Promise<Alarms> {
+    const { category, targetTime, pushDay, itemName, pushMessage } = alarmData
     const transaction = await this.sequelize.transaction();
     try {
       const updateAlarm = await this.alarmsModel.findOne({ // 찾기
-        where: { id: alarmId, fk_userId: userIdFromToken },
+        where: { id: alarmId, fk_userId: fk_userId },
         include: [Days, Items],
         transaction,
       });
-      // console.log(updateAlarm)
       updateAlarm.category = category,
         updateAlarm.targetTime = targetTime,
         updateAlarm.pushMessage = pushMessage
@@ -86,7 +86,7 @@ export class AlarmService {
       const newDays = pushDay.map((el) => ({ pushDay: el, fk_alarmsId: updateAlarm.id })); // 새로 생성
       await this.daysModel.bulkCreate(newDays, { transaction }) // 여러개의 레코드를 삽입
 
-      await this.itemsModel.destroy({ where: { fk_alarmsId: updateAlarm.id }, transaction })
+      await this.itemsModel.destroy({ where: { fk_alarmsId: updateAlarm.id }, force: true, transaction })
       const newItems = itemName.map((el) => ({ itemName: el, fk_alarmsId: updateAlarm.id }))
       await this.itemsModel.bulkCreate(newItems, { transaction })
 
@@ -98,10 +98,31 @@ export class AlarmService {
     }
   }
   /////////////////////////////// 알람 삭제
-  async deleteAlarm(alarmId: number, userIdFromToken: number): Promise<number> {
-    return await this.alarmsModel.destroy({ where: { id: alarmId, fk_userId: userIdFromToken }, force: true })
+  async deleteAlarm(alarmId: number, fk_userId: number): Promise<number> {
+    return await this.alarmsModel.destroy({ where: { id: alarmId, fk_userId: fk_userId } })
   }
 
+  /////////////////////////////// 알람 토글
+  async toggleAlarm(alarmId: number, fk_userId: number) {
+    await this.alarmsModel.update(
+      { isActive: Sequelize.literal('NOT isActive') }, // 현재 상태를 반전(literal 원시 SQL 구문을 Sequelize 쿼리에 직접 삽입)
+      { where: { id: alarmId, fk_userId: fk_userId } }
+    );
+    return
+  }
+
+  ////////////////////// 토큰 저장
+  async saveUserPushToken(pushToken: string, fk_userId: number) {
+    try {
+      return await this.expoPushTokensModel.create({
+        fk_userId: fk_userId,
+        deviceToken: pushToken
+      })
+    } catch (error) {
+      console.log(error)
+      return
+    }
+  }
 
 
 
@@ -139,13 +160,8 @@ export class AlarmService {
           isTaken: alarmItemData.map((items: any) => {
             return items.dataValues.isTaken
           }),
-          // fk_alarmId: alarmItemData[0].dataValues.fk_alarmId
         }
       })
-      // console.log(alarms);
-      // console.log(alarmDays)
-      // console.log(alarmItems)
-      // fk_alarmsId는 필요 없을지도? 순서 그대로 뽑아오는거라서?
       return { alarms, alarmDays, alarmItems }
     } catch (error) {
       console.error(error)
@@ -197,7 +213,6 @@ export class AlarmService {
     if (!data) {
       throw new NotFoundException("일치하는 데이터 없음.");
     }
-
     return data
   }
 
@@ -209,5 +224,6 @@ export class AlarmService {
     }
     return data
   }
+
 
 }

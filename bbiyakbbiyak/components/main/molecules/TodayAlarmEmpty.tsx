@@ -20,7 +20,7 @@ const TodayAlarmEmpty = () => {
 
           <View style={TodayAlarmEmptyStyles.descriptionContainer}>
             <Text style={TodayAlarmEmptyStyles.descriptionText}>
-              오늘은 등록된 (약)알람이 없어요.
+              오늘은 등록된 알람이 없어요.
             </Text>
             <Text style={TodayAlarmEmptyStyles.descriptionText}>
               새로운 알람을 추가 할까요?

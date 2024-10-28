@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import TodayAlarmContainer from "../molecules/TodayAlarmContainer";
 
 const Medicine = () => (
