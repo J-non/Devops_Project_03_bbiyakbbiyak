@@ -203,7 +203,7 @@ const ManageAlarm = ({ route, navigation }: any) => {
             display='spinner'
             negativeButton={{ label: '취소', textColor: 'red' }}
             positiveButton={{ label: '확인' }}
-            minuteInterval={5}
+          // minuteInterval={5}
           />
         </View>
         {/* **************************요일 박스************************** */}
@@ -312,6 +312,7 @@ const styles = StyleSheet.create({
   },
   daysContainer: {
     // backgroundColor: '#ccc',
+    gap: 4,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },

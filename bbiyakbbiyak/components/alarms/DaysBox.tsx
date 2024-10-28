@@ -14,7 +14,7 @@ const DaysBox = ({ children, isSelected, onPress }: any) => {
   };
 
   return (
-    <Pressable onPress={handlePress}>
+    <Pressable onPress={handlePress} style={styles.container}>
       <Animatable.View
         ref={boxRef} // 컴포넌트의 인스턴스를 참조 (받음/ 이거 크기 키울거임). 선택되면 style적용 false면 {}빈객체 적용
         style={[styles.miniBox, isSelected ? styles.selectedBox : {}]} >
@@ -27,9 +27,14 @@ const DaysBox = ({ children, isSelected, onPress }: any) => {
 export default DaysBox
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   miniBox: {
-    padding: 14,
-    backgroundColor: '#eeeeee',
+    // padding: 14,
+    // backgroundColor: '#eeeeee',
+    borderWidth: 1,
+    borderColor: '#ccc',
     borderRadius: 30,
     aspectRatio: 1,
     alignItems: 'center',
@@ -40,6 +45,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   selectedBox: {
-    backgroundColor: GlobalTheme.colors.primary300
+    backgroundColor: GlobalTheme.colors.primary300,
+    borderWidth: 0,
   }
 })

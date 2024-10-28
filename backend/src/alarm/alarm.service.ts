@@ -82,7 +82,7 @@ export class AlarmService {
         updateAlarm.pushMessage = pushMessage
       await updateAlarm.save({ transaction }); // update해줌
 
-      await this.daysModel.destroy({ where: { fk_alarmsId: updateAlarm.id }, force: true, transaction }) // 기존 컬럼 삭제
+      await this.daysModel.destroy({ where: { fk_alarmsId: updateAlarm.id }, transaction }) // 기존 컬럼 삭제
       const newDays = pushDay.map((el) => ({ pushDay: el, fk_alarmsId: updateAlarm.id })); // 새로 생성
       await this.daysModel.bulkCreate(newDays, { transaction }) // 여러개의 레코드를 삽입
 
@@ -99,7 +99,7 @@ export class AlarmService {
   }
   /////////////////////////////// 알람 삭제
   async deleteAlarm(alarmId: number, fk_userId: number): Promise<number> {
-    return await this.alarmsModel.destroy({ where: { id: alarmId, fk_userId: fk_userId }, force: true })
+    return await this.alarmsModel.destroy({ where: { id: alarmId, fk_userId: fk_userId } })
   }
 
   /////////////////////////////// 알람 토글
@@ -112,15 +112,14 @@ export class AlarmService {
   }
 
   ////////////////////// 토큰 저장
-  async saveUserPushToken(userData: any) {
-    console.log(userData)
-    // const { userId, token } = userData
+  async saveUserPushToken(pushToken: string, fk_userId: number) {
     try {
       return await this.expoPushTokensModel.create({
-        fk_userId: userData.userId,
-        deviceToken: userData.token
+        fk_userId: fk_userId,
+        deviceToken: pushToken
       })
     } catch (error) {
+      console.log(error)
       return
     }
   }

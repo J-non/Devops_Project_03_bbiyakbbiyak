@@ -31,15 +31,18 @@ export class LoginController {
   @UseFilters(new ExceptionHandler())
   async findID(@Body() searchID: CreateLoginDto, @Res() res: Response) {
     const data = await this.loginService.findUserID(searchID, res);
-
-    return data;
   }
 
   @Post('findPW')
   @UseFilters(new ExceptionHandler())
   async findPW(@Body() searchPW: CreateLoginDto, @Res() res: Response) {
-    const data = await this.loginService.findUserPW(searchPW);
+    const data = await this.loginService.findUserPW(searchPW, res);
+  }
 
+  @Post('NavigationPw')
+  @UseFilters(new ExceptionHandler())
+  async NavigationPw(@Body() searchPW: CreateLoginDto, @Res() res: Response) {
+    const data = await this.loginService.navigationPw(searchPW, res);
     res.send(data);
   }
 

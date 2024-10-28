@@ -3,9 +3,9 @@ import { CreateLoginDto } from './dto/create-login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { userSignUp } from 'src/model/user.model';
 import { InjectModel } from '@nestjs/sequelize';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { SolapiMessageService } from 'solapi';
-import { generateRandomNumber } from 'src/config/email';
+import { generateRandomNumber, smtpTransport } from 'src/config/email';
 import { Response } from 'express';
 
 @Injectable()
@@ -69,12 +69,14 @@ export class LoginService {
     const result = await this.userLoginLogic.findOne({
       where: { phone: phone },
     });
+
     if (result === null) {
-      throw new HttpException(
-        '찾을 수 없는 아이디입니다.',
-        HttpStatus.BAD_REQUEST,
-      );
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        ok: false,
+        msg: '찾을 수 없는 아이디입니다.',
+      });
     }
+
     const number = generateRandomNumber(111111, 999999);
 
     const apiKey = process.env.SOLAPI_API;
@@ -82,35 +84,31 @@ export class LoginService {
     const messageService = new SolapiMessageService(apiKey, apiSecret);
 
     const message = {
-      // 문자 내용 (최대 2,000Bytes / 90Bytes 이상 장문문자)
       text: `[삐약삐약] 인증번호 [${number}]`,
-      // 수신번호 (문자 받는 이)
       to: phone,
-      // 발신번호 (문자 보내는 이)
       from: process.env.DEVELOP_PHONE,
     };
 
-    messageService
-      .sendOne(message)
-      .then(
-        res.json({
-          ok: true,
-          type: '핸드폰 인증',
-          msg: '인증코드 발송을 성공하셨습니다.',
-          authNum: number,
-          result: result.email,
-        }),
-      )
-      .catch(
-        res.json({
-          ok: false,
-          msg: '인증코드 전송에 실패하였습니다.',
-        }),
-      );
+    try {
+      await messageService.sendOne(message);
+      return res.json({
+        ok: true,
+        type: '핸드폰 인증',
+        msg: '인증코드 발송을 성공하셨습니다.',
+        authNum: number,
+        result: result.email,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        ok: false,
+        msg: '인증코드 전송에 실패하였습니다.',
+      });
+    }
   }
 
-  async findUserPW(searchID: CreateLoginDto) {
-    const { email, phone } = searchID.data;
+  async findUserPW(searchID: CreateLoginDto, res: any) {
+    const { email, phone, type } = searchID.data;
     const result = await this.userLoginLogic.findOne({
       where: { email: email, phone: phone },
     });
@@ -122,8 +120,80 @@ export class LoginService {
       );
     }
 
-    if (result.isOAuthUser === true)
+    if (result.isOAuthUser === true) {
       throw new HttpException('소셜로그인 유저입니다.', HttpStatus.BAD_REQUEST);
+    }
+
+    const number = generateRandomNumber(111111, 999999);
+
+    try {
+      if (type === 'phone') {
+        const apiKey = process.env.SOLAPI_API;
+        const apiSecret = process.env.SOLAPI_API_SECRET;
+        const messageService = new SolapiMessageService(apiKey, apiSecret);
+
+        const message = {
+          text: `[삐약삐약] 인증번호 [${number}]`,
+          to: phone,
+          from: process.env.DEVELOP_PHONE,
+        };
+
+        // 비동기 호출을 대기하고, 성공 여부를 체크
+        await messageService.sendOne(message);
+
+        return res.json({
+          ok: true,
+          type: '핸드폰 인증',
+          msg: '인증코드 발송을 성공하셨습니다.',
+          authNum: number,
+          result: result.phone,
+        });
+      }
+
+      if (type === 'email') {
+        const mailOptions = {
+          from: 'dkswndgus0506@naver.com',
+          to: email,
+          subject: '약 알람 bbiyakbbiyak 앱 회원 인증 관련 이메일입니다.',
+          html: '<h1>인증번호를 입력해주세요 \n\n\n\n\n\n</h1>' + number,
+        };
+
+        // 비동기 호출을 대기하고, 성공 여부를 체크
+        await smtpTransport.sendMail(mailOptions);
+
+        return res.json({
+          ok: true,
+          type: '이메일 인증',
+          msg: '메일 전송에 성공하셨습니다.',
+          authNum: number,
+        });
+      }
+    } catch (error) {
+      // 오류가 발생하면 catch 블록에서 한 번만 응답 처리
+      return res.json({
+        ok: false,
+        msg: '인증코드 전송에 실패하였습니다.',
+        error: error.message, // 에러 메시지를 추가적으로 전달 가능
+      });
+    }
+  }
+
+  async navigationPw(navigationPw: CreateLoginDto, res: any) {
+    const { email, phone } = navigationPw.data;
+
+    const result = await this.userLoginLogic.findOne({
+      where: {
+        email: email,
+        phone: phone,
+      },
+    });
+
+    if (!result) {
+      throw new HttpException(
+        '찾을 수 없는 요청입니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     return result;
   }
