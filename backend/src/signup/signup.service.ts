@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateEmail, CreateSignupDto } from './dto/create-signup.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { generateRandomNumber, smtpTransport } from 'src/config/email';
 import { Response } from 'express';
 import { InjectModel } from '@nestjs/sequelize';

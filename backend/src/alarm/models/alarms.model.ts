@@ -6,7 +6,6 @@ import { userSignUp } from "src/model/user.model";
 @Table({
   tableName: 'alarms',
   timestamps: true,
-  paranoid: true
 })
 
 export class Alarms extends Model {

@@ -28,6 +28,9 @@ export class NotificationService {
       sound: 'default',
       title: '삐약삐약',
       body: alarm.pushMessage,
+      android: {
+        channelId: 'default'
+      }
     }));
 
     try {
@@ -38,7 +41,7 @@ export class NotificationService {
           }
         })
       )
-      const responses = await Promise.all(pushPromises);
+      const responses = await Promise.allSettled(pushPromises);
 
       // // Expo Push Notification API에 POST 요청을 보내 알림 전송
       // await axios.post('https://exp.host/--/api/v2/push/send', payload, {

@@ -88,6 +88,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         count={count}
         inputAuthCode={inputAuthCode}
         serverAuthCode={serverAuthCode}
+        page="SignUp"
       />
     </View>
   );

@@ -29,7 +29,7 @@ export const createAlarmLogs = async () => {
 
     const userToken = await AsyncStorage.getItem('@token');
 
-    const { data } = await axios.post('http://192.168.0.82:3000/alarm/create_logs', { daysDifference, loggedDate },
+    const { data } = await axios.post('https://sultang.store/alarm/create_logs', { daysDifference, loggedDate },
       {
         headers: {
           Authorization: `bearer ${userToken}`
@@ -51,7 +51,7 @@ export const getAlarm = async ({ category, logDate }: { category: string, logDat
   const userToken = await AsyncStorage.getItem('@token');
   const pushDay = new Date().getDay();
   const { data } = await axios.get(
-    `http://192.168.0.82:3000/alarm/get_alarm_list?category=${category}&pushDay=${pushDay}`,
+    `https://sultang.store/alarm/get_alarm_list?category=${category}&pushDay=${pushDay}`,
     {
       headers: {
         Authorization: `bearer ${userToken}`
@@ -65,7 +65,7 @@ export const getAlarm = async ({ category, logDate }: { category: string, logDat
 export const getAlarmLog = async ({ category, logDate }: { category: string, logDate: string }) => {
   const userToken = await AsyncStorage.getItem('@token');
   const { data } = await axios.get(
-    `http://192.168.0.82:3000/alarm-logs/get_alarm_logs?category=${category}&logDate=${logDate}`,
+    `https://sultang.store/alarm-logs/get_alarm_logs?category=${category}&logDate=${logDate}`,
     {
       headers: {
         Authorization: `bearer ${userToken}`
@@ -80,7 +80,7 @@ export const getAlarmLog = async ({ category, logDate }: { category: string, log
 export const getMonthLog = async (monthString: string) => {
   try {
     const userToken = await AsyncStorage.getItem('@token');
-    const { data } = await axios.get(`http://192.168.0.82:3000/alarm-logs/get_month_log?monthString=${monthString}`,
+    const { data } = await axios.get(`https://sultang.store/alarm-logs/get_month_log?monthString=${monthString}`,
       {
         headers: {
           Authorization: `bearer ${userToken}`
@@ -104,7 +104,7 @@ export const getMonthLog = async (monthString: string) => {
 export const updateIsTaken = async ({ id, isTaken }: { id: number, isTaken: boolean }) => {
   try {
     const userToken = await AsyncStorage.getItem('@token');
-    const data = await axios.put('http://192.168.0.82:3000/alarm/items/is_takend', { id, isTaken },
+    const data = await axios.put('https://sultang.store/alarm/items/is_takend', { id, isTaken },
       {
         headers: {
           Authorization: `bearer ${userToken}`
@@ -121,7 +121,7 @@ export const updateIsTaken = async ({ id, isTaken }: { id: number, isTaken: bool
 export const updateLogIsTaken = async ({ id, isTaken }: { id: number, isTaken: boolean }) => {
   try {
     const userToken = await AsyncStorage.getItem('@token');
-    const data = await axios.put('http://192.168.0.82:3000/alarm-logs/alarm_log_Items/is_taken', { id, isTaken },
+    const data = await axios.put('https://sultang.store/alarm-logs/alarm_log_Items/is_taken', { id, isTaken },
       {
         headers: {
           Authorization: `bearer ${userToken}`
@@ -138,7 +138,7 @@ export const updateLogIsTaken = async ({ id, isTaken }: { id: number, isTaken: b
 // login====================================================login
 export const signup = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/signup", { data });
+    const response = await axios.post("https://sultang.store/signup", { data });
     const _data = response.data;
     return _data;
   } catch (error: any) {
@@ -150,7 +150,7 @@ export const signup = async (data: any) => {
 
 export const signupGoogle = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/signup/google", {
+    const response = await axios.post("https://sultang.store/signup/google", {
       data,
     });
     const _data = response.data;
@@ -165,7 +165,7 @@ export const signupGoogle = async (data: any) => {
 
 export const jwtToken = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/signup/jwtToken", {
+    const response = await axios.post("https://sultang.store/signup/jwtToken", {
       data,
     });
     const _data = response.data;
@@ -180,7 +180,7 @@ export const jwtToken = async (data: any) => {
 
 export const loginAPI = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/login", { data });
+    const response = await axios.post("https://sultang.store/login", { data });
     const _data = response.data;
     return _data;
   } catch (error: any) {
@@ -192,7 +192,7 @@ export const loginAPI = async (data: any) => {
 
 export const emailAPI = async (data: object) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/signup/authCode", {
+    const response = await axios.post("https://sultang.store/signup/authCode", {
       data,
     });
     const _data = response.data;
@@ -206,7 +206,7 @@ export const emailAPI = async (data: object) => {
 
 export const findID = async (data: { phone: string } | null) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/login/findID", {
+    const response = await axios.post("https://sultang.store/login/findID", {
       data,
     });
     const _data = response.data;
@@ -217,9 +217,23 @@ export const findID = async (data: { phone: string } | null) => {
     }
   }
 };
-export const findPW = async (data: { email: string; phone: string }) => {
+export const findPW = async (data: object) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/login/findPW", {
+    const response = await axios.post("https://sultang.store/login/findPW", {
+      data,
+    });
+    const _data = response.data;
+    return _data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+};
+
+export const NavigationPw = async (data: { email: string, phone: string }) => {
+  try {
+    const response = await axios.post("https://sultang.store/login/NavigationPw", {
       data,
     });
     const _data = response.data;
@@ -233,7 +247,7 @@ export const findPW = async (data: { email: string; phone: string }) => {
 
 export const updatePW = async (data: any) => {
   try {
-    const response = await axios.post("http://192.168.0.82:3000/login/updatePW", {
+    const response = await axios.post("https://sultang.store/login/updatePW", {
       data,
     });
     const _data = response.data;
@@ -247,7 +261,7 @@ export const updatePW = async (data: any) => {
 
 export const getInfo = async (data: any) => {
   try {
-    const url = `http://192.168.0.82:3000/login/getInfo/${data.token ? data.token : data}`;
+    const url = `https://sultang.store/login/getInfo/${data.token ? data.token : data}`;
 
     const response = await axios.get(url);
 
@@ -261,7 +275,7 @@ export const getInfo = async (data: any) => {
 export const updateGoogleUserName = async (data: any) => {
   try {
     const response = await axios.post(
-      "http://192.168.0.82:3000/login/getInfo/updateGoogle",
+      "https://sultang.store/login/getInfo/updateGoogle",
       { data }
     );
     return response.data;
@@ -281,7 +295,7 @@ export const deleteUser = async (data: string) => {
       },
     };
     const response = await axios.post(
-      "http://192.168.0.82:3000/signup/deleteUser",
+      "https://sultang.store/signup/deleteUser",
       {},
       config
     );

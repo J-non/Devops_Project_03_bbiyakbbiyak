@@ -1,23 +1,22 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { userSignUp } from "src/model/user.model";
 
 @Table({
     tableName: 'pushTokens',
     timestamps: true,
-    paranoid: true
 })
 
 export class ExpoPushTokens extends Model {
     @Column({
         type: DataType.STRING,
         allowNull: false,
-        unique: true
     })
     deviceToken: string
 
-    // 임시
-    @Column({
-        type: DataType.INTEGER,
-        allowNull: false
-    })
+    @ForeignKey(() => userSignUp)
+    @Column
     fk_userId: number
+
+    @BelongsTo(() => userSignUp)
+    users: userSignUp
 }

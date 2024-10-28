@@ -4,7 +4,7 @@ import Button from "../../UI/Button/Button";
 import { GlobalTheme } from "../../../constants/theme";
 import { styles } from "./VerifyCodeStyle";
 import { useMutation } from "@tanstack/react-query";
-import { emailAPI } from "../../../api";
+import { emailAPI, findPW } from "../../../api";
 import TimerInput from "../../UI/Input/TimerInput";
 import { Valuetype } from "../../../constants/models";
 import AlertComponent from "../../UI/Alert/Alert";
@@ -23,6 +23,7 @@ interface EmailVerificationProps {
   isCodeVerified: boolean;
   setIsCodeVerified: any;
   // styles: customStyle;
+  page: string
 }
 
 // interface customStyle {
@@ -43,6 +44,7 @@ const VerifyCode: React.FC<EmailVerificationProps> = ({
   setCount,
   isCodeVerified,
   setIsCodeVerified,
+  page
 }) => {
   const email = formValues.email;
   const regEmail =
@@ -60,6 +62,18 @@ const VerifyCode: React.FC<EmailVerificationProps> = ({
         setIsAuthCodeSent(true);
         setServerAuthCode(_data.authNum);
       }
+    },
+    onError: (error) => {
+      Alert.alert("요청 실패", error.message, [{ text: "확인" }]);
+    },
+  });
+
+  const findPwMutation = useMutation({
+    mutationFn: (data: object) => findPW(data),
+    onSuccess: (_data) => {
+      Alert.alert(_data.type, _data.msg, [{ text: "확인" }]);
+      setIsAuthCodeSent(true);
+      setServerAuthCode(_data.authNum);
     },
     onError: (error) => {
       Alert.alert("요청 실패", error.message, [{ text: "확인" }]);
@@ -96,7 +110,11 @@ const VerifyCode: React.FC<EmailVerificationProps> = ({
 
   const handleCode = (type: string) => {
     if (!regEmail.test(email) && !regPhone.test(phone)) return;
-    mutation.mutate({ email, phone, type: type });
+    if (page === "FindMyPw") {
+      findPwMutation.mutate({ email, phone, type: type })
+    } else if (page === "SignUp") {
+      mutation.mutate({ email, phone, type: type });
+    }
   };
 
   function setValueState(inputType: Valuetype, value: string | any) {
