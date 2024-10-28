@@ -13,7 +13,7 @@ import {
   valueType,
 } from "../../../constants/models";
 import { useMutation } from "@tanstack/react-query";
-import { findPW } from "../../../api";
+import { findPW, NavigationPw } from "../../../api";
 import VerifyCode from "../VerifyCode/VerifyCode";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
@@ -32,7 +32,7 @@ const FindMyPw = () => {
   const [count, setCount] = useState(300);
 
   const mutation = useMutation({
-    mutationFn: (data: { email: string; phone: string }) => findPW(data),
+    mutationFn: (data: { email: string; phone: string }) => NavigationPw(data),
     onSuccess: () => {
       navigation.navigate("changePW", { data: searchUser.email });
     },
@@ -98,6 +98,7 @@ const FindMyPw = () => {
           count={count}
           inputAuthCode={inputAuthCode}
           serverAuthCode={serverAuthCode}
+          page="FindMyPw"
         />
       </View>
       <View style={styles.buttonContainer}>

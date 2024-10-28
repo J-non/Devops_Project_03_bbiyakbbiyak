@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Alert, } from 'react-native';
+import { Alert, Platform, } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
@@ -18,6 +18,13 @@ Notifications.setNotificationHandler({
   }),
 });
 
+// 알림 채널 설정
+Notifications.setNotificationChannelAsync('default', {
+  name: '삐약삐약 푸시 알림',
+  importance: Notifications.AndroidImportance.MAX,
+  lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+  sound: 'default'
+})
 
 const queryClient = new QueryClient({
   defaultOptions: {

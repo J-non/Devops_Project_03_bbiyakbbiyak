@@ -49,9 +49,11 @@ export class AlarmController {
   }
 
   ////////////////////// 토큰 저장
+  @UseGuards(TokenGuard)
   @Post('savepushtoken')
-  async saveUserPushToken(@Body() userData: any) { // 유저 인덱스 유저 토큰으로 가져아ㅗ야함
-    return await this.alarmService.saveUserPushToken(userData)
+  async saveUserPushToken(@Body('pushToken') pushToken: string, @Payload('id') fk_userId: number) { // 유저 인덱스 유저 토큰으로 가져아ㅗ야함
+    console.log(pushToken, fk_userId)
+    return await this.alarmService.saveUserPushToken(pushToken, fk_userId)
   }
 
 

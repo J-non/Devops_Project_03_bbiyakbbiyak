@@ -6,9 +6,10 @@ import ManageAlarm from "./ManageAlarm";
 import { useMutation } from "@tanstack/react-query";
 import { createAlarmLogs } from "../api";
 import * as Notifications from 'expo-notifications';
-import { ActivityIndicator, Alert, View } from "react-native";
+import { ActivityIndicator, Alert, Linking, View } from "react-native";
 import * as Device from 'expo-device';
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,66 +26,51 @@ export function Logined() {
   }, [])
 
   useEffect(() => {
-    console.log(1)
     const registerForPushNotifications = async () => {
-      try {
-        if (Device.isDevice) {
-          const tokenResponse = await Notifications.getExpoPushTokenAsync({
-            projectId: 'dced64aa-76ae-40c8-bb78-8529ab1b887d', // expo project ID
-          });
-          const token = tokenResponse.data;
-          console.log("Push Token:", token);
-        } else {
-          console.log("푸시 토큰은 실제 디바이스에서만 작동합니다.");
-        }
-      } catch (error) {
-        console.error("Error getting push token:", error);
+      // 푸시 알림 권한 요청 및 토큰 획득
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          '푸시 알림 권한 필요',
+          '푸시 알림 권한이 필요합니다.',
+          [
+            { text: '취소', style: 'cancel' },
+            { text: '설정으로 이동', onPress: () => Linking.openSettings() },
+          ]
+        );
+        return;
       }
+      const pushToken = (await Notifications.getExpoPushTokenAsync()).data; // expo푸시 토큰 가져오기
+      console.log(pushToken)
+      await sendToken(pushToken)
     }
     registerForPushNotifications()
+
+    // 서버에 토큰 전송 함수
+    const sendToken = async (pushToken: string) => {
+      try {
+        const userToken = await AsyncStorage.getItem('@token')
+        await axios.post('https://sultang.store/alarm/savepushtoken',
+          { pushToken },
+          { headers: { Authorization: `bearer ${userToken}` } })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    // // 토큰 갱신 처리 tokenListener
+    // const tokenListener = Notifications.addPushTokenListener(tokenData => {
+    //   const newToken = tokenData.data;
+    //   console.log(`뉴토큰${newToken}`)
+    //   setUserPushToken(newToken);
+    //   // 서버에 새 토큰 전송
+    //   // sendTokenToServer(newToken);
+    // });
+    // return () => {
+    //   tokenListener.remove();
+    // };
+
   }, [])
-
-
-  // useEffect(() => {
-  //   const registerForPushNotifications = async () => {
-  //     // 푸시 알림 권한 요청 및 토큰 획득
-  //     const { status } = await Notifications.requestPermissionsAsync();
-  //     if (status !== 'granted') {
-  //       Alert.alert('푸시 알림 권한이 필요합니다.');
-  //       return;
-  //     }
-  //     console.log(1111)
-  //     const token = (await Notifications.getExpoPushTokenAsync()).data; // expo푸시 토큰 가져오기
-  //     console.log(2222)
-  //     console.log(token)
-  //     const userId = 1
-  //     await sendToken(userId, token)
-  //   }
-  //   registerForPushNotifications()
-
-  //   // 서버에 토큰 전송 함수
-  //   const sendToken = async (userId: number, token: string) => {
-  //     try {
-  //       console.log(userId, token)
-  //       await axios.post('http://192.168.0.252:3000/alarm/savepushtoken', { userId, token })
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-
-  //   // // 토큰 갱신 처리 tokenListener
-  //   // const tokenListener = Notifications.addPushTokenListener(tokenData => {
-  //   //   const newToken = tokenData.data;
-  //   //   console.log(`뉴토큰${newToken}`)
-  //   //   setUserPushToken(newToken);
-  //   //   // 서버에 새 토큰 전송
-  //   //   // sendTokenToServer(newToken);
-  //   // });
-  //   // return () => {
-  //   //   tokenListener.remove();
-  //   // };
-
-  // }, [])
 
   if (!isSuccess) {
     return (

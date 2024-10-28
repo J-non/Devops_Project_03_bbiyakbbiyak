@@ -4,7 +4,6 @@ import { Alarms } from "./alarms.model";
 @Table({
   tableName: 'items',
   timestamps: true,
-  paranoid: true,
 })
 
 export class Items extends Model {
