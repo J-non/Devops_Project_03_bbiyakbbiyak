@@ -58,7 +58,7 @@ React Native를 사용한 약 알람 앱입니다. 오늘의 알람에 대한 �
 :------------: | :-----------: |
  userDB | 사용자의 정보 |
  pushTokens | 디바이스 토큰 |
-alarms | 알람 |
+alarms | 알람 하나의 기초 정보 |
 days | 알람이 울릴 요일 정보 |
 items | 알람 내용 |
 alarmLogs | 복용 기록(날짜 및 시간) |
