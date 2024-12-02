@@ -48,10 +48,9 @@ React Native를 사용한 약 알람 앱입니다. 오늘의 알람에 대한 �
 
 
 ## DB구성
-<!--
-<img src='https://github.com/user-attachments/assets/b4a739d2-5340-41e0-9a1a-e07fe413fdb1' />
--->
-![image](https://github.com/user-attachments/assets/80603910-e1f2-416b-a11a-0e463fd537ef)
+
+<img src='https://github.com/user-attachments/assets/80603910-e1f2-416b-a11a-0e463fd537ef' />
+
 
 
 
